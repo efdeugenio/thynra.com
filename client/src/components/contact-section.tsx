@@ -144,10 +144,10 @@ export default function ContactSection() {
             <Video className="text-white text-4xl" />
           </div>
           <h2 className="text-3xl font-bold mb-4" data-testid="text-contact-title">
-            Book a 15-min intro call
+            🚀 Start Building Your Intelligent Systems
           </h2>
           <p className="text-muted-foreground mb-8" data-testid="text-contact-subtitle">
-            Let's discuss your AI needs and see how we can help transform your business
+            Let's identify where AI can simplify your operations and deliver measurable results.
           </p>
         </motion.div>
 

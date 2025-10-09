@@ -24,17 +24,17 @@ export default function HeroSection() {
             transition={{ duration: 0.6 }}
             data-testid="text-hero-title"
           >
-            Thinking for the new era.
+            AI that understands your business
           </motion.h1>
           
           <motion.p 
-            className="text-xl text-muted-foreground mb-8"
+            className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             data-testid="text-hero-subtitle"
           >
-            Pause or cancel anytime.
+            We build AI solutions that simplify operations and drive smarter decisions
           </motion.p>
           
           <motion.div 
@@ -60,21 +60,11 @@ export default function HeroSection() {
             </Button>
           </motion.div>
           
-          <motion.p 
-            className="text-lg text-muted-foreground mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            data-testid="text-hero-tagline"
-          >
-            One subscription to rule them all.
-          </motion.p>
-          
           <motion.div 
             className="flex justify-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
           >
             <button 
               onClick={scrollToPricing}
@@ -99,10 +89,10 @@ export default function HeroSection() {
               </div>
             </div>
             <h3 className="text-xl font-semibold mb-2" data-testid="text-intro-call-title">
-              Book a 15-min intro call
+              Explore AI opportunities for your business
             </h3>
             <p className="text-muted-foreground mb-4" data-testid="text-intro-call-subtitle">
-              Schedule now
+              Book a 15-minute consultation
             </p>
             <Button 
               className="w-full bg-primary text-primary-foreground py-3 rounded-lg hover:bg-primary/90 transition-colors"
