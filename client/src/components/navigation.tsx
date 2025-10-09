@@ -11,9 +11,12 @@ export default function Navigation() {
     <nav className="bg-card border-b border-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <span className="text-2xl font-bold text-primary" data-testid="logo">
-              Thynra - Thinking for the new era
+          <div className="flex flex-col" data-testid="logo">
+            <span className="text-2xl font-bold text-primary leading-tight">
+              Thynra
+            </span>
+            <span className="text-xs text-muted-foreground">
+              Thinking for the new era
             </span>
           </div>
           <div className="hidden md:flex items-center space-x-6">
