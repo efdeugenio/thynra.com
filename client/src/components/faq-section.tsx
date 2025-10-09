@@ -16,7 +16,7 @@ export default function FAQSection() {
     },
     {
       question: "Who are the AI engineers?",
-      answer: "AIFlow is run by senior AI engineers with 10+ years of experience in machine learning, deep learning, and AI systems. We don't outsource work to junior developers—you'll work directly with experienced professionals throughout your entire experience."
+      answer: "Thynra is run by senior AI engineers with 10+ years of experience in machine learning, deep learning, and AI systems. We don't outsource work to junior developers—you'll work directly with experienced professionals throughout your entire experience."
     },
     {
       question: "What types of AI solutions do you build?",

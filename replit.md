@@ -1,8 +1,13 @@
-# AIFlow - AI Subscription Service
+# Thynra - AI Subscription Service
 
 ## Overview
 
-AIFlow is a modern AI subscription service platform that provides on-demand AI solutions to clients. The application serves as a landing page and customer portal for an AI consulting service that offers fixed monthly pricing for AI projects including chatbots, data analysis, ML models, automation, and other AI-powered solutions.
+Thynra is a modern AI subscription service platform that provides on-demand AI solutions to clients. The application serves as a landing page and customer portal for an AI consulting service that offers fixed monthly pricing for AI projects including chatbots, data analysis, ML models, automation, and other AI-powered solutions.
+
+**Brand Identity:**
+- Company Name: Thynra
+- Domain: Thynra.com
+- Slogan: "Thinking for the new era."
 
 The platform is built as a full-stack TypeScript application with a React frontend and Express.js backend, designed to handle customer inquiries and booking requests through form submissions that are stored in a PostgreSQL database.
 

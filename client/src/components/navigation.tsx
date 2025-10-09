@@ -13,7 +13,7 @@ export default function Navigation() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <span className="text-2xl font-bold text-primary" data-testid="logo">
-              AIFlow
+              Thynra
             </span>
           </div>
           <div className="hidden md:flex items-center space-x-6">

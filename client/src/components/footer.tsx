@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
             <span className="text-2xl font-bold text-primary" data-testid="text-footer-logo">
-              AIFlow
+              Thynra
             </span>
           </div>
           <div className="flex space-x-6 text-muted-foreground" data-testid="nav-footer-links">

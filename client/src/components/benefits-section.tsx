@@ -63,7 +63,7 @@ export default function BenefitsSection() {
             viewport={{ once: true }}
             data-testid="text-benefits-subtitle"
           >
-            AIFlow replaces unreliable freelancers and expensive agencies for one flat monthly fee, 
+            Thynra replaces unreliable freelancers and expensive agencies for one flat monthly fee, 
             with AI solutions delivered so fast you won't want to go anywhere else.
           </motion.p>
         </div>

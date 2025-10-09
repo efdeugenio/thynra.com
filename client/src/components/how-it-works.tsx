@@ -138,8 +138,8 @@ export default function HowItWorks() {
           data-testid="text-company-description"
         >
           <p className="text-muted-foreground">
-            First launched in 2023, AIFlow revolutionized the AI industry with its subscription-based model. 
-            To this day, AIFlow is run entirely by experienced AI engineers. AIFlow doesn't hire junior developers 
+            First launched in 2023, Thynra revolutionized the AI industry with its subscription-based model. 
+            To this day, Thynra is run entirely by experienced AI engineers. Thynra doesn't hire junior developers 
             or outsource work—instead, it focuses on delivering top-notch AI solutions to a limited roster of clients at a time.
           </p>
         </motion.div>

@@ -362,14 +362,14 @@ export default function ContactSection() {
           data-testid="section-email-option"
         >
           <a 
-            href="mailto:hello@aiflow.co" 
+            href="mailto:hello@thynra.com" 
             className="inline-flex items-center text-primary hover:text-accent transition-colors"
             data-testid="link-email"
           >
             <Mail className="text-2xl mr-4" />
             <div className="text-left">
               <p className="font-semibold">Prefer to email?</p>
-              <p className="text-muted-foreground">hello@aiflow.co</p>
+              <p className="text-muted-foreground">hello@thynra.com</p>
             </div>
             <ArrowRight className="ml-4" />
           </a>

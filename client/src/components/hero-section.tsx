@@ -24,7 +24,7 @@ export default function HeroSection() {
             transition={{ duration: 0.6 }}
             data-testid="text-hero-title"
           >
-            AI subscriptions for everyone
+            Thinking for the new era.
           </motion.h1>
           
           <motion.p 
@@ -56,7 +56,7 @@ export default function HeroSection() {
               onClick={scrollToPricing}
               data-testid="button-join-aiflow"
             >
-              Join AIFlow
+              Join Thynra
             </Button>
           </motion.div>
           

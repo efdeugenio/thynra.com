@@ -15,7 +15,7 @@ export default function Testimonials() {
             data-testid="testimonial-1"
           >
             <blockquote className="text-2xl font-semibold text-foreground mb-4">
-              "AIFlow shows that they know the art of AI implementation."
+              "Thynra shows that they know the art of AI implementation."
             </blockquote>
             <div className="flex items-center justify-center md:justify-start">
               <div className="w-12 h-8 bg-muted rounded flex items-center justify-center mr-3">
