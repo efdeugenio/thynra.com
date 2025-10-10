@@ -6,7 +6,7 @@ export default function BenefitsSection() {
     {
       icon: Layers,
       title: "End-to-end expertise",
-      description: "From data connection to intelligent automation.",
+      description: "From integration to real intelligence.",
       color: "bg-blue-500"
     },
     {

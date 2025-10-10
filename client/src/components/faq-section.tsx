@@ -16,19 +16,15 @@ export default function FAQSection() {
     },
     {
       question: "Who are the AI engineers?",
-      answer: "Thynra is run by senior AI engineers with 10+ years of experience in machine learning, deep learning, and AI systems. We don't outsource work to junior developers—you'll work directly with experienced professionals throughout your entire experience."
+      answer: "Thynra is run by senior AI engineers based in Costa Rica, each with over a decade of experience building technology. You'll work directly with experienced professionals — no outsourcing, no handoffs."
     },
     {
       question: "What types of AI solutions do you build?",
-      answer: "We build chatbots, recommendation systems, predictive analytics models, computer vision solutions, natural language processing tools, automation workflows, custom APIs, and much more. If it's AI-related, we can probably build it."
+      answer: "We build AI systems that connect, automate, and assist. From data-driven automation and intelligent chat agents to custom workflows and integrations — if it helps your business think and act smarter, we can build it."
     },
     {
       question: "How does the pause feature work?",
       answer: "We understand you may not have enough AI projects to fill up entire month. Billing cycles are based on 31 day period. If you use the service for 21 days and pause, you'll have 10 days of service remaining to be used anytime in the future."
-    },
-    {
-      question: "Do you provide model training and deployment?",
-      answer: "Yes! Model training and deployment are included with all subscriptions. We handle everything from data preprocessing to model deployment and monitoring. You'll own the trained models and can deploy them however you prefer."
     }
   ];
 
