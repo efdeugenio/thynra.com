@@ -21,12 +21,6 @@ export default function Navigation() {
           </div>
           <div className="hidden md:flex items-center space-x-6">
             <button 
-              className="text-secondary-foreground hover:text-primary transition-colors"
-              data-testid="button-login"
-            >
-              Login
-            </button>
-            <button 
               className="flex items-center text-secondary-foreground hover:text-primary transition-colors"
               onClick={() => window.open('https://calendly.com/efdeugenio/apply-ai', '_blank')}
               data-testid="button-book-call-nav"
