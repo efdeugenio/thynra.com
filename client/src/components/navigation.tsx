@@ -16,7 +16,8 @@ export default function Navigation() {
             <img 
               src={thynraLogo} 
               alt="Thynra" 
-              className="h-10"
+              className="object-contain"
+              style={{ width: '48px', height: '48px' }}
             />
             <span className="text-xs text-muted-foreground mt-1">
               Thinking for the new era
