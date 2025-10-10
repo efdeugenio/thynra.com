@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
+import thynraLogo from "@assets/Thynra_logo_1760134610649.png";
 
 export default function Navigation() {
   const scrollToPricing = () => {
@@ -11,13 +12,12 @@ export default function Navigation() {
     <nav className="bg-card border-b border-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex flex-col" data-testid="logo">
-            <span className="text-2xl font-bold text-primary leading-tight">
-              Thynra
-            </span>
-            <span className="text-xs text-muted-foreground">
-              Thinking for the new era
-            </span>
+          <div className="flex items-center" data-testid="logo">
+            <img 
+              src={thynraLogo} 
+              alt="Thynra" 
+              className="h-8"
+            />
           </div>
           <div className="hidden md:flex items-center space-x-6">
             <button 

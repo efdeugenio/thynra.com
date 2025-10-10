@@ -15,7 +15,6 @@ export default function PricingSection() {
     "Custom AI solution or data workflow design",
     "Integration with your existing tools and APIs",
     "Secure, private implementation (your data stays yours)",
-    "Access for up to 2 collaborators",
     "Pause or cancel anytime"
   ];
 
