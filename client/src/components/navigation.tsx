@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
-import thynraLogo from "@assets/Thynra_logo_1760134610649.png";
+import thynraLogo from "@assets/Thynra logo_1760137533222.png";
 
 export default function Navigation() {
   const scrollToPricing = () => {
@@ -16,8 +16,7 @@ export default function Navigation() {
             <img 
               src={thynraLogo} 
               alt="Thynra" 
-              className="object-contain"
-              style={{ width: '48px', height: '48px' }}
+              className="h-10 w-auto object-contain"
             />
             <span className="text-xs text-muted-foreground mt-1">
               Thinking for the new era
