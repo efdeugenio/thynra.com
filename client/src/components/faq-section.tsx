@@ -8,7 +8,7 @@ export default function FAQSection() {
   const faqs = [
     {
       question: "How fast will I receive my AI solutions?",
-      answer: "On average, most AI projects are completed in just two days or less. However, more complex ML models and integrations can take longer depending on the scope."
+      answer: "We deliver AI solutions in 5–7 business days per milestone. Each milestone represents a complete, functional deliverable. Complex builds are broken into clear milestones so you see progress quickly and can provide feedback along the way."
     },
     {
       question: "How does onboarding work?",

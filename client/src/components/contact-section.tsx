@@ -161,12 +161,8 @@ export default function ContactSection() {
         >
           <div className="bg-muted rounded-lg p-1 flex" data-testid="toggle-form-type">
             <button
-              className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                activeForm === "booking"
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => setActiveForm("booking")}
+              className="px-6 py-2 rounded-md font-medium text-muted-foreground hover:text-foreground transition-colors"
+              onClick={() => window.open('https://calendly.com/efdeugenio/apply-ai', '_blank')}
               data-testid="button-booking-form"
             >
               Book a Call

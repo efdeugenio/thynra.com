@@ -28,6 +28,7 @@ export default function Navigation() {
             </button>
             <button 
               className="flex items-center text-secondary-foreground hover:text-primary transition-colors"
+              onClick={() => window.open('https://calendly.com/efdeugenio/apply-ai', '_blank')}
               data-testid="button-book-call-nav"
             >
               <Phone className="w-4 h-4 mr-2" />

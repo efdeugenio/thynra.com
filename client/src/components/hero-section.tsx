@@ -88,7 +88,7 @@ export default function HeroSection() {
             </p>
             <Button 
               className="w-full bg-primary text-primary-foreground py-3 rounded-lg hover:bg-primary/90 transition-colors"
-              onClick={scrollToContact}
+              onClick={() => window.open('https://calendly.com/efdeugenio/apply-ai', '_blank')}
               data-testid="button-schedule-call"
             >
               Schedule <ArrowRight className="ml-2 w-4 h-4" />
