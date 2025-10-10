@@ -84,7 +84,7 @@ export default function HeroSection() {
               Explore AI opportunities for your business
             </h3>
             <p className="text-muted-foreground mb-4" data-testid="text-intro-call-subtitle">
-              Book a 15-minute consultation
+              Book a 30-minute consultation
             </p>
             <Button 
               className="w-full bg-primary text-primary-foreground py-3 rounded-lg hover:bg-primary/90 transition-colors"
