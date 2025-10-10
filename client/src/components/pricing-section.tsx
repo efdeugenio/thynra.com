@@ -10,12 +10,13 @@ export default function PricingSection() {
   };
 
   const features = [
-    "One AI project at a time",
-    "Avg. 48 hour delivery", 
-    "Unlimited revisions",
-    "Custom ML model training",
-    "API development & integration",
-    "Up to 2 team members",
+    "One active AI build at a time",
+    "Delivery in 5–7 business days per milestone",
+    "Unlimited adjustments within scope",
+    "Custom AI solution or data workflow design",
+    "Integration with your existing tools and APIs",
+    "Secure, private implementation (your data stays yours)",
+    "Access for up to 2 collaborators",
     "Pause or cancel anytime"
   ];
 
@@ -61,13 +62,6 @@ export default function PricingSection() {
             >
               Start today
             </Button>
-            <Button 
-              variant="outline"
-              onClick={scrollToContact}
-              data-testid="button-join-pricing"
-            >
-              Join
-            </Button>
           </motion.div>
         </div>
 
@@ -80,13 +74,6 @@ export default function PricingSection() {
           viewport={{ once: true }}
         >
           <div className="bg-card border-2 border-primary rounded-2xl p-8 relative hover:scale-105 transition-transform" data-testid="card-pricing">
-            {/* Popular Badge */}
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <span className="bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-semibold" data-testid="badge-most-popular">
-                MOST POPULAR
-              </span>
-            </div>
-            
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold mb-2" data-testid="text-plan-name">Monthly Club</h3>
               <p className="text-muted-foreground mb-4" data-testid="text-plan-terms">PAUSE OR CANCEL ANYTIME</p>
@@ -105,11 +92,11 @@ export default function PricingSection() {
 
             <Button 
               className="w-full gradient-bg text-white py-4 rounded-lg font-semibold text-lg hover:scale-105 transition-transform"
-              onClick={scrollToContact}
+              onClick={() => window.open('https://calendly.com/efdeugenio/apply-ai', '_blank')}
               data-testid="button-join-today"
             >
               <Smile className="mr-2 w-5 h-5" />
-              Join today
+              Schedule a call
             </Button>
           </div>
         </motion.div>

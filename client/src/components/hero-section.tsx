@@ -50,14 +50,6 @@ export default function HeroSection() {
             >
               Start today
             </Button>
-            <Button 
-              variant="outline"
-              className="border-border text-foreground px-8 py-3 rounded-lg font-semibold hover:scale-105 transition-transform"
-              onClick={scrollToPricing}
-              data-testid="button-join-aiflow"
-            >
-              Join Thynra
-            </Button>
           </motion.div>
           
           <motion.div 
