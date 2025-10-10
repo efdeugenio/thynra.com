@@ -24,7 +24,7 @@ export default function FAQSection() {
     },
     {
       question: "How does the pause feature work?",
-      answer: "We understand you may not have enough AI projects to fill up entire month. Billing cycles are based on 31 day period. If you use the service for 21 days and pause, you'll have 10 days of service remaining to be used anytime in the future."
+      answer: "We understand you may not have enough AI projects to fill up an entire month. Billing cycles are based on a monthly period. If you use the service for 21 days and pause, the remaining days of service can be used anytime in the future."
     }
   ];
 

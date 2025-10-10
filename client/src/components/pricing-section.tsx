@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Check, Smile } from "lucide-react";
+import { Check, PauseCircle, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
-import { PauseCircle, CheckCircle } from "lucide-react";
 
 export default function PricingSection() {
   const scrollToContact = () => {
@@ -47,22 +46,6 @@ export default function PricingSection() {
           >
             One subscription, endless possibilities
           </motion.h2>
-          
-          <motion.div 
-            className="flex justify-center gap-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-          >
-            <Button 
-              className="gradient-bg text-white px-6 py-2 rounded-lg"
-              onClick={scrollToContact}
-              data-testid="button-start-today-pricing"
-            >
-              Start today
-            </Button>
-          </motion.div>
         </div>
 
         {/* Pricing Card */}
@@ -92,11 +75,10 @@ export default function PricingSection() {
 
             <Button 
               className="w-full gradient-bg text-white py-4 rounded-lg font-semibold text-lg hover:scale-105 transition-transform"
-              onClick={() => window.open('https://calendly.com/efdeugenio/apply-ai', '_blank')}
-              data-testid="button-join-today"
+              onClick={scrollToContact}
+              data-testid="button-get-started"
             >
-              <Smile className="mr-2 w-5 h-5" />
-              Schedule a call
+              Get started
             </Button>
           </div>
         </motion.div>
