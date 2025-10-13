@@ -3,12 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Video, Mail, ArrowRight } from "lucide-react";
+import { Video, Mail, ArrowRight, CreditCard } from "lucide-react";
 import { motion } from "framer-motion";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+import PayPalButton from "./PayPalButton";
 
 const bookingSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -46,7 +47,7 @@ export default function ContactSection() {
     message: "",
   });
 
-  const [activeForm, setActiveForm] = useState<"booking" | "contact">("contact");
+  const [activeForm, setActiveForm] = useState<"booking" | "contact" | "payment">("contact");
   const { toast } = useToast();
 
   const bookingMutation = useMutation({
@@ -159,13 +160,24 @@ export default function ContactSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          <div className="bg-muted rounded-lg p-1 flex" data-testid="toggle-form-type">
+          <div className="bg-muted rounded-lg p-1 flex flex-wrap justify-center gap-1" data-testid="toggle-form-type">
             <button
               className="px-6 py-2 rounded-md font-medium text-muted-foreground hover:text-foreground transition-colors"
               onClick={() => window.open('https://calendly.com/efdeugenio/apply-ai', '_blank')}
               data-testid="button-booking-form"
             >
               Book a Call
+            </button>
+            <button
+              className={`px-6 py-2 rounded-md font-medium transition-colors ${
+                activeForm === "payment"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              onClick={() => setActiveForm("payment")}
+              data-testid="button-payment-form"
+            >
+              Subscribe Now
             </button>
             <button
               className={`px-6 py-2 rounded-md font-medium transition-colors ${
@@ -188,7 +200,50 @@ export default function ContactSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
         >
-          {activeForm === "booking" ? (
+          {activeForm === "payment" ? (
+            <Card className="max-w-2xl mx-auto" data-testid="form-payment">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <CreditCard className="mr-2" />
+                  Subscribe to Monthly Club
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div className="bg-muted p-6 rounded-lg">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-xl font-semibold">Monthly Club</h3>
+                      <div className="text-right">
+                        <p className="text-3xl font-bold">$3,995</p>
+                        <p className="text-sm text-muted-foreground">/month</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      One active AI build at a time • 5-7 business days per milestone • Unlimited adjustments
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      You can pay with PayPal or a credit/debit card (no PayPal account required for card payments).
+                    </p>
+                    
+                    <div className="flex justify-center py-4">
+                      <PayPalButton 
+                        amount="3995.00" 
+                        currency="USD" 
+                        intent="CAPTURE"
+                      />
+                    </div>
+
+                    <p className="text-xs text-muted-foreground text-center">
+                      By subscribing, you agree to our terms. You can pause or cancel anytime.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : activeForm === "booking" ? (
             <Card className="max-w-2xl mx-auto" data-testid="form-booking">
               <CardHeader>
                 <CardTitle className="flex items-center">
