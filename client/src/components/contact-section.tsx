@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -47,8 +47,20 @@ export default function ContactSection() {
     message: "",
   });
 
-  const [activeForm, setActiveForm] = useState<"booking" | "contact" | "payment">("payment");
+  const [activeForm, setActiveForm] = useState<"booking" | "contact" | "payment">("contact");
   const { toast } = useToast();
+
+  useEffect(() => {
+    const handleShowPayment = () => {
+      setActiveForm('payment');
+    };
+
+    window.addEventListener('showPaymentForm', handleShowPayment);
+    
+    return () => {
+      window.removeEventListener('showPaymentForm', handleShowPayment);
+    };
+  }, []);
 
   const bookingMutation = useMutation({
     mutationFn: (data: BookingForm) => apiRequest("POST", "/api/booking", data),

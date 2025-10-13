@@ -6,6 +6,10 @@ export default function PricingSection() {
   const scrollToContact = () => {
     const contactSection = document.getElementById("contact");
     contactSection?.scrollIntoView({ behavior: "smooth" });
+    
+    setTimeout(() => {
+      window.dispatchEvent(new Event('showPaymentForm'));
+    }, 100);
   };
 
   const features = [
