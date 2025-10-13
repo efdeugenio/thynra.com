@@ -47,7 +47,7 @@ export default function ContactSection() {
     message: "",
   });
 
-  const [activeForm, setActiveForm] = useState<"booking" | "contact" | "payment">("contact");
+  const [activeForm, setActiveForm] = useState<"booking" | "contact" | "payment">("payment");
   const { toast } = useToast();
 
   const bookingMutation = useMutation({
