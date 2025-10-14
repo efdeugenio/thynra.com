@@ -105,8 +105,8 @@ export default function PricingSection() {
           <div className="flex items-center bg-card rounded-lg p-4" data-testid="info-trial">
             <CheckCircle className="text-emerald-500 text-2xl mr-4" />
             <div>
-              <h4 className="font-semibold">Full refund</h4>
-              <p className="text-muted-foreground text-sm">Not happy after the first milestone? Get a full refund — no questions asked.</p>
+              <h4 className="font-semibold">Satisfaction guarantee</h4>
+              <p className="text-muted-foreground text-sm">If the first milestone doesn't meet your expectations, we'll refund you in full — no questions asked.</p>
             </div>
           </div>
         </motion.div>
