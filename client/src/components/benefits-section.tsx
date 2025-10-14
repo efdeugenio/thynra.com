@@ -41,7 +41,7 @@ export default function BenefitsSection() {
             viewport={{ once: true }}
             data-testid="text-benefits-title"
           >
-            ⚙️ Why Thynra
+            🧠 Why Thynra
           </motion.h2>
         </div>
 
