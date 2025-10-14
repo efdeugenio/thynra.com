@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, Mail, ArrowRight, CreditCard, Video } from "lucide-react";
+import { Workflow, Mail, ArrowRight, CreditCard, Video } from "lucide-react";
 import { motion } from "framer-motion";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -154,7 +154,7 @@ export default function ContactSection() {
           viewport={{ once: true }}
         >
           <div className="w-32 h-32 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-8">
-            <Brain className="text-white w-16 h-16" />
+            <Workflow className="text-white w-16 h-16" />
           </div>
           <h2 className="text-3xl font-bold mb-4" data-testid="text-contact-title">
             🚀 Start Building Your Intelligent Systems
