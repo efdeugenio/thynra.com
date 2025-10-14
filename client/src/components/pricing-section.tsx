@@ -61,7 +61,7 @@ export default function PricingSection() {
         >
           <div className="bg-card border-2 border-primary rounded-2xl p-8 relative hover:scale-105 transition-transform" data-testid="card-pricing">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold mb-2" data-testid="text-plan-name">Monthly Club</h3>
+              <h3 className="text-2xl font-bold mb-2" data-testid="text-plan-name">Thynra Monthly</h3>
               <p className="text-muted-foreground mb-4" data-testid="text-plan-terms">PAUSE OR CANCEL ANYTIME</p>
               <div className="text-5xl font-bold mb-2" data-testid="text-plan-price">$3,995</div>
               <p className="text-muted-foreground" data-testid="text-plan-period">/month</p>
@@ -105,7 +105,7 @@ export default function PricingSection() {
           <div className="flex items-center bg-card rounded-lg p-4" data-testid="info-trial">
             <CheckCircle className="text-emerald-500 text-2xl mr-4" />
             <div>
-              <h4 className="font-semibold">Try it for a milestone</h4>
+              <h4 className="font-semibold">Full refund</h4>
               <p className="text-muted-foreground text-sm">Not happy after the first milestone? Get a full refund — no questions asked.</p>
             </div>
           </div>

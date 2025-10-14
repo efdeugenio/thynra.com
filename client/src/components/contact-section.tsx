@@ -217,14 +217,14 @@ export default function ContactSection() {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <CreditCard className="mr-2" />
-                  Subscribe to Monthly Club
+                  Subscribe to Thynra Monthly
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
                   <div className="bg-muted p-6 rounded-lg">
                     <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-xl font-semibold">Monthly Club</h3>
+                      <h3 className="text-xl font-semibold">Thynra Monthly</h3>
                       <div className="text-right">
                         <p className="text-3xl font-bold">$3,995</p>
                         <p className="text-sm text-muted-foreground">/month</p>
