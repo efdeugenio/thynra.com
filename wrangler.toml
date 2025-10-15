@@ -1,8 +1,9 @@
 name = "thynra"
 compatibility_date = "2025-10-15"
+main = "worker.js"
 
 [assets]
-directory = "./dist"
+directory = "./dist/public"
 
 # Environment variables (you'll need to set these in Cloudflare dashboard)
 [vars]
