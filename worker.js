@@ -194,11 +194,16 @@ app.post('/paypal/order/:orderID/capture', async (c) => {
 // Debug endpoint to check environment variables
 app.get('/debug/env', async (c) => {
   const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, NODE_ENV } = c.env;
+  const allEnvKeys = Object.keys(c.env);
+  
   return c.json({
     hasPayPalClientId: !!PAYPAL_CLIENT_ID,
     hasPayPalClientSecret: !!PAYPAL_CLIENT_SECRET,
     nodeEnv: NODE_ENV,
-    paypalConfig: getPayPalConfig(c.env)
+    paypalConfig: getPayPalConfig(c.env),
+    allEnvironmentKeys: allEnvKeys,
+    paypalClientIdLength: PAYPAL_CLIENT_ID ? PAYPAL_CLIENT_ID.length : 0,
+    paypalClientSecretLength: PAYPAL_CLIENT_SECRET ? PAYPAL_CLIENT_SECRET.length : 0
   });
 });
 
