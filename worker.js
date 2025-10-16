@@ -19,10 +19,8 @@ const getPayPalConfig = (env) => {
 // Enable CORS
 app.use('*', cors());
 
-// Serve static files from the dist directory
-app.use('*', serveStatic({ 
-  root: './dist/public/'
-}));
+// Note: Static files are served by Cloudflare Pages/Workers automatically
+// We don't need to handle static files in the worker code
 
 // API routes
 app.post('/api/contact', async (c) => {
@@ -205,6 +203,15 @@ app.get('/debug/env', async (c) => {
 });
 
 // Catch-all route to serve the React app
-app.get('*', serveStatic({ path: './dist/public/index.html' }));
+app.get('*', async (c) => {
+  // For API routes, let them pass through
+  if (c.req.path.startsWith('/api/') || c.req.path.startsWith('/paypal/') || c.req.path.startsWith('/debug/')) {
+    return c.text('Not Found', 404);
+  }
+  
+  // For all other routes, let Cloudflare handle static files
+  // The React app will be served by Cloudflare Pages
+  return c.text('React app should be served by Cloudflare Pages', 200);
+});
 
 export default app;
