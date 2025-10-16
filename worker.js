@@ -5,6 +5,17 @@ import { cors } from 'hono/cors';
 
 const app = new Hono();
 
+// PayPal configuration
+const getPayPalConfig = (env) => {
+  const isProduction = env.NODE_ENV === 'production';
+  return {
+    baseUrl: isProduction 
+      ? 'https://api-m.paypal.com' 
+      : 'https://api-m.sandbox.paypal.com',
+    environment: isProduction ? 'production' : 'sandbox'
+  };
+};
+
 // Enable CORS
 app.use('*', cors());
 
@@ -41,10 +52,10 @@ app.get('/paypal/setup', async (c) => {
       return c.json({ error: 'PayPal credentials not configured' }, 500);
     }
 
-    // Generate client token using PayPal SDK
+    const paypalConfig = getPayPalConfig(c.env);
     const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
     
-    const response = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
+    const response = await fetch(`${paypalConfig.baseUrl}/v1/oauth2/token`, {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${auth}`,
@@ -89,8 +100,9 @@ app.post('/paypal/order', async (c) => {
     }
 
     // Get access token
+    const paypalConfig = getPayPalConfig(c.env);
     const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
-    const tokenResponse = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
+    const tokenResponse = await fetch(`${paypalConfig.baseUrl}/v1/oauth2/token`, {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${auth}`,
@@ -115,7 +127,7 @@ app.post('/paypal/order', async (c) => {
       ],
     };
 
-    const orderResponse = await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
+    const orderResponse = await fetch(`${paypalConfig.baseUrl}/v2/checkout/orders`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -143,8 +155,9 @@ app.post('/paypal/order/:orderID/capture', async (c) => {
     }
 
     // Get access token
+    const paypalConfig = getPayPalConfig(c.env);
     const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
-    const tokenResponse = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
+    const tokenResponse = await fetch(`${paypalConfig.baseUrl}/v1/oauth2/token`, {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${auth}`,
@@ -157,7 +170,7 @@ app.post('/paypal/order/:orderID/capture', async (c) => {
     const accessToken = tokenData.access_token;
 
     // Capture the order
-    const captureResponse = await fetch(`https://api-m.sandbox.paypal.com/v2/checkout/orders/${orderID}/capture`, {
+    const captureResponse = await fetch(`${paypalConfig.baseUrl}/v2/checkout/orders/${orderID}/capture`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
