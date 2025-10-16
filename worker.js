@@ -48,8 +48,13 @@ app.get('/paypal/setup', async (c) => {
   try {
     const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = c.env;
     
+    console.log('PayPal setup - checking credentials...');
+    console.log('PAYPAL_CLIENT_ID exists:', !!PAYPAL_CLIENT_ID);
+    console.log('PAYPAL_CLIENT_SECRET exists:', !!PAYPAL_CLIENT_SECRET);
+    
     if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-      return c.json({ error: 'PayPal credentials not configured' }, 500);
+      console.error('PayPal credentials missing');
+      return c.json({ error: 'PayPal credentials not configured. Please add PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET to environment variables.' }, 500);
     }
 
     const paypalConfig = getPayPalConfig(c.env);
