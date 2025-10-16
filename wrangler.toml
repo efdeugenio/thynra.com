@@ -5,10 +5,13 @@ main = "worker.js"
 [assets]
 directory = "./dist/public"
 
-[[routes]]
-pattern = "thynra.com"
-custom_domain = true
-
 # Environment variables (you'll need to set these in Cloudflare dashboard)
 [vars]
 NODE_ENV = "production"
+
+# Observability settings
+[observability.logs]
+enabled = false
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
