@@ -20,7 +20,9 @@ const getPayPalConfig = (env) => {
 app.use('*', cors());
 
 // Serve static files from the dist directory
-app.use('*', serveStatic({ root: './' }));
+app.use('*', serveStatic({ 
+  root: './dist/public/'
+}));
 
 // API routes
 app.post('/api/contact', async (c) => {
@@ -191,7 +193,18 @@ app.post('/paypal/order/:orderID/capture', async (c) => {
   }
 });
 
+// Debug endpoint to check environment variables
+app.get('/debug/env', async (c) => {
+  const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, NODE_ENV } = c.env;
+  return c.json({
+    hasPayPalClientId: !!PAYPAL_CLIENT_ID,
+    hasPayPalClientSecret: !!PAYPAL_CLIENT_SECRET,
+    nodeEnv: NODE_ENV,
+    paypalConfig: getPayPalConfig(c.env)
+  });
+});
+
 // Catch-all route to serve the React app
-app.get('*', serveStatic({ path: './index.html' }));
+app.get('*', serveStatic({ path: './dist/public/index.html' }));
 
 export default app;
