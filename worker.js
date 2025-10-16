@@ -32,18 +32,52 @@ app.post('/api/booking', async (c) => {
   }
 });
 
-// PayPal routes (simplified for now)
+// PayPal routes
 app.get('/paypal/setup', async (c) => {
-  return c.json({ clientToken: 'dummy-token' });
+  try {
+    // For now, return a dummy client token
+    // In production, you'll need to implement proper PayPal client token generation
+    return c.json({ clientToken: 'dummy-client-token-for-testing' });
+  } catch (error) {
+    return c.json({ error: 'Failed to setup PayPal' }, 500);
+  }
 });
 
 app.post('/paypal/order', async (c) => {
-  return c.json({ id: 'dummy-order-id' });
+  try {
+    const body = await c.req.json();
+    const { amount, currency, intent } = body;
+    
+    // For now, return a dummy order ID
+    // In production, you'll need to create actual PayPal orders
+    const orderId = `ORDER-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
+    return c.json({ 
+      id: orderId,
+      status: 'CREATED',
+      amount: amount,
+      currency: currency,
+      intent: intent
+    });
+  } catch (error) {
+    return c.json({ error: 'Failed to create PayPal order' }, 500);
+  }
 });
 
 app.post('/paypal/order/:orderID/capture', async (c) => {
-  const orderID = c.req.param('orderID');
-  return c.json({ id: orderID, status: 'COMPLETED' });
+  try {
+    const orderID = c.req.param('orderID');
+    
+    // For now, return a dummy capture response
+    // In production, you'll need to capture actual PayPal orders
+    return c.json({ 
+      id: orderID, 
+      status: 'COMPLETED',
+      message: 'Payment captured successfully'
+    });
+  } catch (error) {
+    return c.json({ error: 'Failed to capture PayPal order' }, 500);
+  }
 });
 
 // Catch-all route to serve the React app
