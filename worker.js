@@ -32,13 +32,35 @@ app.post('/api/booking', async (c) => {
   }
 });
 
-// PayPal routes
+// PayPal routes - adapted from your working Express.js implementation
 app.get('/paypal/setup', async (c) => {
   try {
-    // For now, return a dummy client token
-    // In production, you'll need to implement proper PayPal client token generation
-    return c.json({ clientToken: 'dummy-client-token-for-testing' });
+    const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = c.env;
+    
+    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+      return c.json({ error: 'PayPal credentials not configured' }, 500);
+    }
+
+    // Generate client token using PayPal SDK
+    const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
+    
+    const response = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'grant_type=client_credentials&response_type=client_token'
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to get PayPal token');
+    }
+
+    const data = await response.json();
+    return c.json({ clientToken: data.access_token });
   } catch (error) {
+    console.error('PayPal setup error:', error);
     return c.json({ error: 'Failed to setup PayPal' }, 500);
   }
 });
@@ -47,19 +69,66 @@ app.post('/paypal/order', async (c) => {
   try {
     const body = await c.req.json();
     const { amount, currency, intent } = body;
+
+    if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
+      return c.json({ error: "Invalid amount. Amount must be a positive number." }, 400);
+    }
+
+    if (!currency) {
+      return c.json({ error: "Invalid currency. Currency is required." }, 400);
+    }
+
+    if (!intent) {
+      return c.json({ error: "Invalid intent. Intent is required." }, 400);
+    }
+
+    const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = c.env;
     
-    // For now, return a dummy order ID
-    // In production, you'll need to create actual PayPal orders
-    const orderId = `ORDER-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    
-    return c.json({ 
-      id: orderId,
-      status: 'CREATED',
-      amount: amount,
-      currency: currency,
-      intent: intent
+    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+      return c.json({ error: 'PayPal credentials not configured' }, 500);
+    }
+
+    // Get access token
+    const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
+    const tokenResponse = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'grant_type=client_credentials'
     });
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+    // Create PayPal order
+    const orderPayload = {
+      intent: intent,
+      purchase_units: [
+        {
+          amount: {
+            currency_code: currency,
+            value: amount,
+          },
+        },
+      ],
+    };
+
+    const orderResponse = await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+        'PayPal-Request-Id': `ORDER-${Date.now()}`,
+      },
+      body: JSON.stringify(orderPayload),
+    });
+
+    const orderData = await orderResponse.json();
+    return c.json(orderData);
   } catch (error) {
+    console.error('PayPal order creation error:', error);
     return c.json({ error: 'Failed to create PayPal order' }, 500);
   }
 });
@@ -67,15 +136,39 @@ app.post('/paypal/order', async (c) => {
 app.post('/paypal/order/:orderID/capture', async (c) => {
   try {
     const orderID = c.req.param('orderID');
+    const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = c.env;
     
-    // For now, return a dummy capture response
-    // In production, you'll need to capture actual PayPal orders
-    return c.json({ 
-      id: orderID, 
-      status: 'COMPLETED',
-      message: 'Payment captured successfully'
+    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+      return c.json({ error: 'PayPal credentials not configured' }, 500);
+    }
+
+    // Get access token
+    const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
+    const tokenResponse = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'grant_type=client_credentials'
     });
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+    // Capture the order
+    const captureResponse = await fetch(`https://api-m.sandbox.paypal.com/v2/checkout/orders/${orderID}/capture`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const captureData = await captureResponse.json();
+    return c.json(captureData);
   } catch (error) {
+    console.error('PayPal capture error:', error);
     return c.json({ error: 'Failed to capture PayPal order' }, 500);
   }
 });
