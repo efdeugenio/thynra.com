@@ -61,14 +61,23 @@ export default function PayPalButton({
     console.log("onApprove", data);
     const orderData = await captureOrder(data.orderId);
     console.log("Capture result", orderData);
+    
+    // Redirect to success page after successful payment
+    if (orderData.status === 'COMPLETED') {
+      window.location.href = '/success';
+    }
   };
 
   const onCancel = async (data: any) => {
     console.log("onCancel", data);
+    // Redirect to cancel page
+    window.location.href = '/cancel';
   };
 
   const onError = async (data: any) => {
     console.log("onError", data);
+    // Redirect to cancel page on error
+    window.location.href = '/cancel';
   };
 
   useEffect(() => {
