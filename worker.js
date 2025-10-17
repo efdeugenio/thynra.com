@@ -43,6 +43,53 @@ app.post('/api/booking', async (c) => {
   }
 });
 
+// Intake form submission for paid customers
+app.post('/api/intake-form', async (c) => {
+  try {
+    const body = await c.req.json();
+    const { 
+      orderId, 
+      customerName, 
+      customerEmail, 
+      projectType, 
+      projectDescription, 
+      timeline, 
+      budget, 
+      additionalRequirements 
+    } = body;
+
+    // Validate required fields
+    if (!orderId || !customerName || !customerEmail || !projectType) {
+      return c.json({ error: 'Missing required fields' }, 400);
+    }
+
+    // TODO: Send to your automation system (n8n/OpenAI)
+    // This is where you'll integrate with your automation workflow
+    console.log('Intake form submitted:', {
+      orderId,
+      customerName,
+      customerEmail,
+      projectType,
+      projectDescription,
+      timeline,
+      budget,
+      additionalRequirements,
+      timestamp: new Date().toISOString()
+    });
+
+    // For now, just return success
+    // In production, you'll send this data to your automation system
+    return c.json({ 
+      success: true, 
+      message: 'Project intake form submitted successfully',
+      orderId: orderId
+    });
+  } catch (error) {
+    console.error('Intake form error:', error);
+    return c.json({ error: 'Failed to submit intake form' }, 500);
+  }
+});
+
 // PayPal routes - adapted from your working Express.js implementation
 app.get('/paypal/setup', async (c) => {
   try {
@@ -130,6 +177,13 @@ app.post('/paypal/order', async (c) => {
           },
         },
       ],
+      application_context: {
+        return_url: "https://thynra.com/success",
+        cancel_url: "https://thynra.com/cancel",
+        brand_name: "Thynra",
+        landing_page: "BILLING",
+        user_action: "PAY_NOW"
+      }
     };
 
     const orderResponse = await fetch(`${paypalConfig.baseUrl}/v2/checkout/orders`, {
@@ -188,6 +242,60 @@ app.post('/paypal/order/:orderID/capture', async (c) => {
   } catch (error) {
     console.error('PayPal capture error:', error);
     return c.json({ error: 'Failed to capture PayPal order' }, 500);
+  }
+});
+
+// PayPal payment validation endpoint
+app.get('/api/validate-payment', async (c) => {
+  try {
+    const { token, PayerID } = c.req.query();
+    
+    if (!token || !PayerID) {
+      return c.json({ error: 'Missing payment parameters' }, 400);
+    }
+
+    const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = c.env;
+    const paypalConfig = getPayPalConfig(c.env);
+    
+    // Get access token
+    const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
+    const tokenResponse = await fetch(`${paypalConfig.baseUrl}/v1/oauth2/token`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'grant_type=client_credentials'
+    });
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+    // Verify the order details
+    const orderResponse = await fetch(`${paypalConfig.baseUrl}/v2/checkout/orders/${token}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const orderData = await orderResponse.json();
+    
+    if (orderData.status === 'COMPLETED' || orderData.status === 'APPROVED') {
+      return c.json({ 
+        valid: true, 
+        orderId: token,
+        status: orderData.status,
+        amount: orderData.purchase_units?.[0]?.amount?.value,
+        currency: orderData.purchase_units?.[0]?.amount?.currency_code
+      });
+    } else {
+      return c.json({ valid: false, error: 'Payment not completed' }, 400);
+    }
+  } catch (error) {
+    console.error('Payment validation error:', error);
+    return c.json({ error: 'Failed to validate payment' }, 500);
   }
 });
 
