@@ -177,6 +177,13 @@ app.post('/paypal/order', async (c) => {
           },
         },
       ],
+      application_context: {
+        return_url: "https://thynra.com/success",
+        cancel_url: "https://thynra.com/cancel",
+        brand_name: "Thynra",
+        landing_page: "BILLING",
+        user_action: "PAY_NOW"
+      }
     };
 
     const orderResponse = await fetch(`${paypalConfig.baseUrl}/v2/checkout/orders`, {
