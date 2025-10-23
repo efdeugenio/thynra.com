@@ -13,6 +13,8 @@ PORT = "8787"
 # Secrets (set these with: wrangler secret put SECRET_NAME)
 # PAYPAL_CLIENT_ID = "your_paypal_client_id"
 # PAYPAL_CLIENT_SECRET = "your_paypal_client_secret"
+# AUTOMATION_WEBHOOK_URL = "your_n8n_or_openai_webhook_url"
+# AUTOMATION_API_KEY = "your_automation_api_key"
 
 # Observability settings
 [observability.logs]
