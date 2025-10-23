@@ -5,9 +5,13 @@ main = "worker.js"
 [assets]
 directory = "./dist/public"
 
-# Environment variables (you'll need to set these in Cloudflare dashboard)
+# Environment variables
 [vars]
-NODE_ENV = "production"
+NODE_ENV = "development"
+
+# Secrets (set these with: wrangler secret put SECRET_NAME)
+# PAYPAL_CLIENT_ID = "your_paypal_client_id"
+# PAYPAL_CLIENT_SECRET = "your_paypal_client_secret"
 
 # Observability settings
 [observability.logs]
