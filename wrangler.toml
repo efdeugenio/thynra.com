@@ -8,6 +8,7 @@ directory = "./dist/public"
 # Environment variables
 [vars]
 NODE_ENV = "development"
+PORT = "8787"
 
 # Secrets (set these with: wrangler secret put SECRET_NAME)
 # PAYPAL_CLIENT_ID = "your_paypal_client_id"
