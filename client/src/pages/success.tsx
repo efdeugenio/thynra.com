@@ -108,14 +108,14 @@ export default function SuccessPage() {
 
       if (result.success) {
         toast({
-          title: "Project intake submitted!",
-          description: "Thank you! We'll start working on your project soon.",
+          title: "Project details received! 🎉",
+          description: "Thank you! We'll analyze your requirements and get back to you within 24 hours.",
         });
         
         // Redirect to home after successful submission
         setTimeout(() => {
           setLocation('/');
-        }, 2000);
+        }, 3000);
       } else {
         throw new Error(result.error || 'Failed to submit form');
       }
@@ -180,12 +180,15 @@ export default function SuccessPage() {
                 <CheckCircle className="h-16 w-16 text-green-600 mx-auto" />
               </motion.div>
               <h1 className="text-3xl font-bold text-green-800 mb-4">
-                Payment Successful! 🎉
+                Welcome to Thynra! 🎉
               </h1>
               <p className="text-lg text-green-700 mb-4">
-                Thank you for your purchase! Your payment of {paymentData.currency} {paymentData.amount} has been processed.
+                Thank you for choosing Thynra! Your payment of {paymentData.currency} {paymentData.amount} has been processed successfully.
               </p>
-              <p className="text-muted-foreground">
+              <p className="text-base text-green-600 mb-2">
+                🚀 We're excited to start working on your project!
+              </p>
+              <p className="text-sm text-muted-foreground">
                 Order ID: {paymentData.orderId}
               </p>
             </CardContent>

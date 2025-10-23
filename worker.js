@@ -63,9 +63,8 @@ app.post('/api/intake-form', async (c) => {
       return c.json({ error: 'Missing required fields' }, 400);
     }
 
-    // TODO: Send to your automation system (n8n/OpenAI)
-    // This is where you'll integrate with your automation workflow
-    console.log('Intake form submitted:', {
+    // Prepare data for automation system
+    const automationData = {
       orderId,
       customerName,
       customerEmail,
@@ -74,14 +73,41 @@ app.post('/api/intake-form', async (c) => {
       timeline,
       budget,
       additionalRequirements,
-      timestamp: new Date().toISOString()
-    });
+      timestamp: new Date().toISOString(),
+      source: 'thynra-website',
+      status: 'new_project'
+    };
 
-    // For now, just return success
-    // In production, you'll send this data to your automation system
+    // Send to automation system (n8n/OpenAI webhook)
+    try {
+      const automationWebhookUrl = c.env.AUTOMATION_WEBHOOK_URL;
+      
+      if (automationWebhookUrl) {
+        const automationResponse = await fetch(automationWebhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${c.env.AUTOMATION_API_KEY || ''}`
+          },
+          body: JSON.stringify(automationData)
+        });
+
+        if (!automationResponse.ok) {
+          console.error('Automation webhook failed:', await automationResponse.text());
+        } else {
+          console.log('Successfully sent to automation system');
+        }
+      } else {
+        console.log('No automation webhook configured, logging data:', automationData);
+      }
+    } catch (error) {
+      console.error('Failed to send to automation system:', error);
+      // Don't fail the request if automation fails
+    }
+
     return c.json({ 
       success: true, 
-      message: 'Project intake form submitted successfully',
+      message: 'Project intake form submitted successfully. We\'ll be in touch soon!',
       orderId: orderId
     });
   } catch (error) {
