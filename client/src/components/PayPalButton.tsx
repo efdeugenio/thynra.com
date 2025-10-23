@@ -62,9 +62,14 @@ export default function PayPalButton({
     const orderData = await captureOrder(data.orderId);
     console.log("Capture result", orderData);
     
+    // Extract PayerID from the data object - try different possible locations
+    const payerID = data.payerID || data.payer?.payer_id || data.payer_id || 'unknown';
+    console.log("Extracted PayerID:", payerID);
+    
     // Redirect to success page with payment details
-    if (orderData && orderData.status === 'COMPLETED') {
-      const successUrl = `/success?token=${data.orderId}&PayerID=${data.payerID}`;
+    if (orderData && (orderData.status === 'COMPLETED' || orderData.status === 'APPROVED')) {
+      const successUrl = `/success?token=${data.orderId}&PayerID=${payerID}`;
+      console.log("Redirecting to:", successUrl);
       window.location.href = successUrl;
     }
   };
