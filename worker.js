@@ -269,8 +269,13 @@ app.get('/api/validate-payment', async (c) => {
   try {
     const { token, PayerID } = c.req.query();
     
-    if (!token || !PayerID) {
-      return c.json({ error: 'Missing payment parameters' }, 400);
+    if (!token) {
+      return c.json({ error: 'Missing payment token' }, 400);
+    }
+    
+    // PayerID is optional for validation - we can validate with just the token
+    if (!PayerID || PayerID === 'unknown') {
+      console.log('PayerID missing or unknown, proceeding with token validation only');
     }
 
     const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = c.env;

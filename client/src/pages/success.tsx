@@ -52,8 +52,12 @@ export default function SuccessPage() {
     const token = urlParams.get('token');
     const PayerID = urlParams.get('PayerID');
 
-    if (token && PayerID) {
+    if (token && PayerID && PayerID !== 'unknown') {
       validatePayment(token, PayerID);
+    } else if (token) {
+      // If we have a token but no valid PayerID, still try to validate
+      // This handles cases where PayerID extraction failed
+      validatePayment(token, PayerID || 'unknown');
     } else {
       setIsValidating(false);
       toast({
