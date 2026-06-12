@@ -5,17 +5,6 @@ import { cors } from 'hono/cors';
 
 const app = new Hono();
 
-// PayPal configuration
-const getPayPalConfig = (env) => {
-  const isProduction = env.NODE_ENV === 'production';
-  return {
-    baseUrl: isProduction 
-      ? 'https://api-m.paypal.com' 
-      : 'https://api-m.sandbox.paypal.com',
-    environment: isProduction ? 'production' : 'sandbox'
-  };
-};
-
 // Enable CORS
 app.use('*', cors());
 
@@ -44,311 +33,343 @@ app.post('/api/booking', async (c) => {
 });
 
 // Intake form submission for paid customers
-app.post('/api/intake-form', async (c) => {
+// ============================================================================
+// Onvo Pay self-serve checkout — proxies to the receptionist app's internal
+// endpoints (authed with THYNRA_INTERNAL_KEY shared secret).
+//
+// Flow:
+//   1. Customer fills email + clicks "Pagar" on the pricing section.
+//   2. Browser POSTs /api/checkout/start to this Worker.
+//   3. Worker forwards to receptionist /api/internal/checkout/start-subscription.
+//   4. Receptionist orchestrates (ensure business + Onvo Customer + Subscription)
+//      and returns { subscription_id, checkout_path }.
+//   5. Browser navigates to checkout_path (/checkout/sub/:id, served by the
+//      SPA which mounts the OnvoCheckout React component).
+//   6. The component fetches /api/checkout/config/:id to get the PaymentIntent
+//      id + publishable key, then mounts the Onvo SDK widget.
+//
+// We never expose THYNRA_INTERNAL_KEY or ONVO_SECRET_KEY to the browser.
+// The publishable key is fetched per-checkout via the config endpoint.
+// ============================================================================
+
+function getReceptionistBase(env) {
+  const base = env.RECEPTIONIST_BASE_URL;
+  if (!base) return null;
+  return base.endsWith('/') ? base.slice(0, -1) : base;
+}
+
+// Map of plan names → Onvo Price ids. Per-plan env vars so test / live
+// environments use different Onvo Prices without code changes. The React
+// app POSTs a plan NAME (e.g. "receptionist_monthly"); we resolve to the
+// concrete Onvo price ids here so the browser never sees them.
+//
+// Required wrangler secrets per plan (run scripts/sync-onvo-prices.mjs):
+//   ONVO_PRICE_RECEPTIONIST_MONTHLY     (recurring, NET — export customers)
+//   ONVO_PRICE_RECEPTIONIST_MONTHLY_CR  (recurring, +13% IVA included — CR)
+//   ONVO_PRICE_RECEPTIONIST_ANNUAL      (recurring, NET — export customers)
+//   ONVO_PRICE_RECEPTIONIST_ANNUAL_CR   (recurring, +13% IVA included — CR)
+//   ONVO_PRICE_SETUP_FEE                (one-time, NET; bundled with monthly.
+//                                        The receptionist grosses it up +13%
+//                                        for CR customers at charge time —
+//                                        PaymentIntents take arbitrary
+//                                        amounts, so no CR variant needed.)
+//
+// Why per-country price ids: Onvo has no tax engine — it charges a Price
+// as-is. CR-consumed services carry 13% IVA; exports of services are 0%
+// (Ley 9635). Onvo Subscriptions charge an immutable Price, so the IVA-
+// inclusive CR amounts need their own catalog Prices.
+//
+// We only know IDs at this layer; the receptionist looks up each Price in
+// Onvo at checkout-start to derive amount/currency/interval. That keeps Onvo
+// as the single source of truth — change a Price in Onvo's dashboard and
+// the next checkout uses the new amount automatically, no Worker redeploy.
+// product_name is display copy (Spanish marketing-side) so it stays here.
+function resolvePlan(plan, env, country) {
+  const isCR = country === 'CR';
+  switch (plan) {
+    case 'receptionist_monthly': {
+      const monthly = isCR
+        ? env.ONVO_PRICE_RECEPTIONIST_MONTHLY_CR
+        : env.ONVO_PRICE_RECEPTIONIST_MONTHLY;
+      const setup = env.ONVO_PRICE_SETUP_FEE;
+      if (!monthly || !setup) return { ok: false };
+      return {
+        ok: true,
+        product_name: 'AI Receptionist — Plan Mensual',
+        recurring_price_ids: [monthly],
+        one_time_price_ids: [setup],
+      };
+    }
+    case 'receptionist_annual': {
+      const annual = isCR
+        ? env.ONVO_PRICE_RECEPTIONIST_ANNUAL_CR
+        : env.ONVO_PRICE_RECEPTIONIST_ANNUAL;
+      if (!annual) return { ok: false };
+      return {
+        ok: true,
+        product_name: 'AI Receptionist — Plan Anual',
+        recurring_price_ids: [annual],
+        one_time_price_ids: [],
+      };
+    }
+    default:
+      return { ok: false };
+  }
+}
+
+// Geo hint for the pricing page's country selector. Cloudflare resolves the
+// visitor's country at the edge (request.cf.country). This is a UX default
+// only — the customer can override, and the tax decision uses what they
+// SUBMIT, never the IP.
+app.get('/api/geo', (c) => {
+  const country = c.req.raw?.cf?.country;
+  return c.json({ country: typeof country === 'string' ? country : null });
+});
+
+app.post('/api/checkout/start', async (c) => {
+  const base = getReceptionistBase(c.env);
+  if (!base) {
+    return c.json({ error: 'checkout_not_configured', message: 'RECEPTIONIST_BASE_URL not set.' }, 503);
+  }
+  if (!c.env.THYNRA_INTERNAL_KEY) {
+    return c.json({ error: 'checkout_not_configured', message: 'THYNRA_INTERNAL_KEY not set.' }, 503);
+  }
+  let body;
   try {
-    const body = await c.req.json();
-    const { 
-      orderId, 
-      customerName, 
-      customerEmail, 
-      projectType, 
-      projectDescription, 
-      timeline, 
-      budget, 
-      additionalRequirements 
-    } = body;
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: 'invalid_json' }, 400);
+  }
+  if (!body || typeof body !== 'object' || typeof body.email !== 'string' || typeof body.plan !== 'string') {
+    return c.json({ error: 'invalid_body', message: 'email and plan are required.' }, 400);
+  }
 
-    // Validate required fields
-    if (!orderId || !customerName || !customerEmail || !projectType) {
-      return c.json({ error: 'Missing required fields' }, 400);
-    }
+  // Business name + tax id are REQUIRED — both go on the factura
+  // electrónica (and the tax/VAT id doubles as reverse-charge evidence
+  // for export sales). The pricing page enforces this too; this is the
+  // server-side backstop.
+  const business_name =
+    typeof body.business_name === 'string' && body.business_name.trim().length >= 2
+      ? body.business_name.trim().slice(0, 120)
+      : undefined;
+  if (!business_name) {
+    return c.json({ error: 'invalid_body', message: 'business_name is required (it appears on the invoice).' }, 400);
+  }
+  const tax_id =
+    typeof body.tax_id === 'string' && body.tax_id.trim().length >= 3
+      ? body.tax_id.trim().slice(0, 40)
+      : undefined;
+  if (!tax_id) {
+    return c.json({ error: 'invalid_body', message: 'tax_id is required (it appears on the invoice).' }, 400);
+  }
 
-    // Prepare data for automation system
-    const automationData = {
-      orderId,
-      customerName,
-      customerEmail,
-      projectType,
-      projectDescription,
-      timeline,
-      budget,
-      additionalRequirements,
-      timestamp: new Date().toISOString(),
-      source: 'thynra-website',
-      status: 'new_project'
-    };
+  // Billing country decides which Onvo Price set we charge (CR = IVA-
+  // inclusive variants, elsewhere = net/export). Default CR — the safe
+  // (over-taxed) failure mode if the client ever omits it.
+  const country =
+    typeof body.country === 'string' && /^[A-Za-z]{2}$/.test(body.country)
+      ? body.country.toUpperCase()
+      : 'CR';
 
-    // Send to automation system (n8n/OpenAI webhook)
-    try {
-      const automationWebhookUrl = c.env.AUTOMATION_WEBHOOK_URL;
-      
-      if (automationWebhookUrl) {
-        const automationResponse = await fetch(automationWebhookUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${c.env.AUTOMATION_API_KEY || ''}`
-          },
-          body: JSON.stringify(automationData)
-        });
+  const resolved = resolvePlan(body.plan, c.env, country);
+  if (!resolved.ok) {
+    return c.json({ error: 'unknown_plan', message: `Plan "${body.plan}" is not configured (check ONVO_PRICE_* secrets).` }, 400);
+  }
 
-        if (!automationResponse.ok) {
-          console.error('Automation webhook failed:', await automationResponse.text());
-        } else {
-          console.log('Successfully sent to automation system');
-        }
-      } else {
-        console.log('No automation webhook configured, logging data:', automationData);
-      }
-    } catch (error) {
-      console.error('Failed to send to automation system:', error);
-      // Don't fail the request if automation fails
-    }
-
-    return c.json({ 
-      success: true, 
-      message: 'Project intake form submitted successfully. We\'ll be in touch soon!',
-      orderId: orderId
+  try {
+    const upstream = await fetch(`${base}/api/internal/checkout/start-subscription`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Internal-Key': c.env.THYNRA_INTERNAL_KEY,
+      },
+      body: JSON.stringify({
+        email: body.email,
+        business_name,
+        country,
+        tax_id,
+        product_sku: 'ai_receptionist',
+        product_name: resolved.product_name,
+        recurring_price_ids: resolved.recurring_price_ids,
+        one_time_price_ids: resolved.one_time_price_ids,
+      }),
     });
-  } catch (error) {
-    console.error('Intake form error:', error);
-    return c.json({ error: 'Failed to submit intake form' }, 500);
+    const text = await upstream.text();
+    const data = text ? JSON.parse(text) : null;
+    return c.json(data, upstream.status);
+  } catch (err) {
+    console.error('checkout/start upstream error', err);
+    return c.json({ error: 'upstream_unreachable' }, 502);
   }
 });
 
-// PayPal routes - adapted from your working Express.js implementation
-app.get('/paypal/setup', async (c) => {
-  try {
-    const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = c.env;
-    
-    console.log('PayPal setup - checking credentials...');
-    console.log('PAYPAL_CLIENT_ID exists:', !!PAYPAL_CLIENT_ID);
-    console.log('PAYPAL_CLIENT_SECRET exists:', !!PAYPAL_CLIENT_SECRET);
-    
-    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-      console.error('PayPal credentials missing');
-      return c.json({ error: 'PayPal credentials not configured. Please add PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET to environment variables.' }, 500);
-    }
+// ============================================================================
+// Self-serve onboarding form — proxies to receptionist's internal endpoint.
+// The business_id in the URL IS the unguessable token (issued by checkout
+// and emailed to the customer in the welcome email). No customer session;
+// internal-key gates the Worker→receptionist hop.
+// ============================================================================
 
-    const paypalConfig = getPayPalConfig(c.env);
-    const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
-    
-    const response = await fetch(`${paypalConfig.baseUrl}/v1/oauth2/token`, {
+// Public endpoint — customer enters their email to receive their
+// onboarding link again. The receptionist always returns { ok: true }
+// to prevent enumeration of valid customer emails; we forward verbatim.
+// Defined BEFORE the parameterized routes below so the static segment
+// wins matching regardless of Hono's router internals.
+app.post('/api/onboarding/resend-link', async (c) => {
+  const base = getReceptionistBase(c.env);
+  if (!base || !c.env.THYNRA_INTERNAL_KEY) {
+    return c.json({ error: 'onboarding_not_configured' }, 503);
+  }
+  let body;
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: 'invalid_json' }, 400);
+  }
+  try {
+    const upstream = await fetch(`${base}/api/internal/onboarding/resend-link`, {
       method: 'POST',
       headers: {
-        'Authorization': `Basic ${auth}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
+        'X-Internal-Key': c.env.THYNRA_INTERNAL_KEY,
       },
-      body: 'grant_type=client_credentials&response_type=client_token'
+      body: JSON.stringify(body),
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to get PayPal token');
-    }
-
-    const data = await response.json();
-    return c.json({ clientToken: data.access_token });
-  } catch (error) {
-    console.error('PayPal setup error:', error);
-    return c.json({ error: 'Failed to setup PayPal' }, 500);
+    const text = await upstream.text();
+    const data = text ? JSON.parse(text) : null;
+    return c.json(data, upstream.status);
+  } catch (err) {
+    console.error('onboarding resend-link upstream error', err);
+    return c.json({ error: 'upstream_unreachable' }, 502);
   }
 });
 
-app.post('/paypal/order', async (c) => {
+app.get('/api/onboarding/:business_id', async (c) => {
+  const base = getReceptionistBase(c.env);
+  if (!base || !c.env.THYNRA_INTERNAL_KEY) {
+    return c.json({ error: 'onboarding_not_configured' }, 503);
+  }
+  const id = c.req.param('business_id');
   try {
-    const body = await c.req.json();
-    const { amount, currency, intent } = body;
-
-    if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
-      return c.json({ error: "Invalid amount. Amount must be a positive number." }, 400);
-    }
-
-    if (!currency) {
-      return c.json({ error: "Invalid currency. Currency is required." }, 400);
-    }
-
-    if (!intent) {
-      return c.json({ error: "Invalid intent. Intent is required." }, 400);
-    }
-
-    const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = c.env;
-    
-    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-      return c.json({ error: 'PayPal credentials not configured' }, 500);
-    }
-
-    // Get access token
-    const paypalConfig = getPayPalConfig(c.env);
-    const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
-    const tokenResponse = await fetch(`${paypalConfig.baseUrl}/v1/oauth2/token`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${auth}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const upstream = await fetch(
+      `${base}/api/internal/onboarding/${encodeURIComponent(id)}`,
+      {
+        method: 'GET',
+        headers: { 'X-Internal-Key': c.env.THYNRA_INTERNAL_KEY },
       },
-      body: 'grant_type=client_credentials'
-    });
+    );
+    const text = await upstream.text();
+    const data = text ? JSON.parse(text) : null;
+    return c.json(data, upstream.status);
+  } catch (err) {
+    console.error('onboarding GET upstream error', err);
+    return c.json({ error: 'upstream_unreachable' }, 502);
+  }
+});
 
-    const tokenData = await tokenResponse.json();
-    const accessToken = tokenData.access_token;
-
-    // Create PayPal order
-    const orderPayload = {
-      intent: intent,
-      purchase_units: [
-        {
-          amount: {
-            currency_code: currency,
-            value: amount,
-          },
+app.post('/api/onboarding/:business_id', async (c) => {
+  const base = getReceptionistBase(c.env);
+  if (!base || !c.env.THYNRA_INTERNAL_KEY) {
+    return c.json({ error: 'onboarding_not_configured' }, 503);
+  }
+  const id = c.req.param('business_id');
+  let body;
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: 'invalid_json' }, 400);
+  }
+  try {
+    const upstream = await fetch(
+      `${base}/api/internal/onboarding/${encodeURIComponent(id)}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Internal-Key': c.env.THYNRA_INTERNAL_KEY,
         },
-      ],
-    };
-
-    const orderResponse = await fetch(`${paypalConfig.baseUrl}/v2/checkout/orders`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-        'PayPal-Request-Id': `ORDER-${Date.now()}`,
+        body: JSON.stringify(body),
       },
-      body: JSON.stringify(orderPayload),
-    });
-
-    const orderData = await orderResponse.json();
-    return c.json(orderData);
-  } catch (error) {
-    console.error('PayPal order creation error:', error);
-    return c.json({ error: 'Failed to create PayPal order' }, 500);
+    );
+    const text = await upstream.text();
+    const data = text ? JSON.parse(text) : null;
+    return c.json(data, upstream.status);
+  } catch (err) {
+    console.error('onboarding POST upstream error', err);
+    return c.json({ error: 'upstream_unreachable' }, 502);
   }
 });
 
-app.post('/paypal/order/:orderID/capture', async (c) => {
+// After the SDK confirms the subscription on the browser, we charge any
+// one-time extras (e.g. setup fee) using the same PaymentMethod. Browser
+// calls this with {subscription_id, payment_method_id}.
+app.post('/api/checkout/finalize-extras', async (c) => {
+  const base = getReceptionistBase(c.env);
+  if (!base) {
+    return c.json({ error: 'checkout_not_configured' }, 503);
+  }
+  if (!c.env.THYNRA_INTERNAL_KEY) {
+    return c.json({ error: 'checkout_not_configured' }, 503);
+  }
+  let body;
   try {
-    const orderID = c.req.param('orderID');
-    const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = c.env;
-    
-    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-      return c.json({ error: 'PayPal credentials not configured' }, 500);
-    }
-
-    // Get access token
-    const paypalConfig = getPayPalConfig(c.env);
-    const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
-    const tokenResponse = await fetch(`${paypalConfig.baseUrl}/v1/oauth2/token`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${auth}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: 'grant_type=client_credentials'
-    });
-
-    const tokenData = await tokenResponse.json();
-    const accessToken = tokenData.access_token;
-
-    // Capture the order
-    const captureResponse = await fetch(`${paypalConfig.baseUrl}/v2/checkout/orders/${orderID}/capture`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const captureData = await captureResponse.json();
-    return c.json(captureData);
-  } catch (error) {
-    console.error('PayPal capture error:', error);
-    return c.json({ error: 'Failed to capture PayPal order' }, 500);
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: 'invalid_json' }, 400);
   }
-});
-
-// PayPal payment validation endpoint
-app.get('/api/validate-payment', async (c) => {
+  if (!body || typeof body.subscription_id !== 'string' || typeof body.payment_method_id !== 'string') {
+    return c.json({ error: 'invalid_body', message: 'subscription_id and payment_method_id required.' }, 400);
+  }
   try {
-    const { token, PayerID } = c.req.query();
-    
-    if (!token) {
-      return c.json({ error: 'Missing payment token' }, 400);
-    }
-    
-    // PayerID is optional for validation - we can validate with just the token
-    if (!PayerID || PayerID === 'unknown') {
-      console.log('PayerID missing or unknown, proceeding with token validation only');
-    }
-
-    const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = c.env;
-    const paypalConfig = getPayPalConfig(c.env);
-    
-    // Get access token
-    const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
-    const tokenResponse = await fetch(`${paypalConfig.baseUrl}/v1/oauth2/token`, {
+    const upstream = await fetch(`${base}/api/internal/checkout/finalize-extras`, {
       method: 'POST',
       headers: {
-        'Authorization': `Basic ${auth}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: 'grant_type=client_credentials'
-    });
-
-    const tokenData = await tokenResponse.json();
-    const accessToken = tokenData.access_token;
-
-    // Verify the order details
-    const orderResponse = await fetch(`${paypalConfig.baseUrl}/v2/checkout/orders/${token}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
+        'X-Internal-Key': c.env.THYNRA_INTERNAL_KEY,
       },
+      body: JSON.stringify(body),
     });
-
-    const orderData = await orderResponse.json();
-    
-    if (orderData.status === 'COMPLETED' || orderData.status === 'APPROVED') {
-      return c.json({ 
-        valid: true, 
-        orderId: token,
-        status: orderData.status,
-        amount: orderData.purchase_units?.[0]?.amount?.value,
-        currency: orderData.purchase_units?.[0]?.amount?.currency_code
-      });
-    } else {
-      return c.json({ valid: false, error: 'Payment not completed' }, 400);
-    }
-  } catch (error) {
-    console.error('Payment validation error:', error);
-    return c.json({ error: 'Failed to validate payment' }, 500);
+    const text = await upstream.text();
+    const data = text ? JSON.parse(text) : null;
+    return c.json(data, upstream.status);
+  } catch (err) {
+    console.error('checkout/finalize-extras upstream error', err);
+    return c.json({ error: 'upstream_unreachable' }, 502);
   }
 });
 
-// Debug endpoint to check environment variables
-app.get('/debug/env', async (c) => {
-  const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, NODE_ENV } = c.env;
-  const allEnvKeys = Object.keys(c.env);
-  
-  return c.json({
-    hasPayPalClientId: !!PAYPAL_CLIENT_ID,
-    hasPayPalClientSecret: !!PAYPAL_CLIENT_SECRET,
-    nodeEnv: NODE_ENV,
-    paypalConfig: getPayPalConfig(c.env),
-    allEnvironmentKeys: allEnvKeys,
-    paypalClientIdLength: PAYPAL_CLIENT_ID ? PAYPAL_CLIENT_ID.length : 0,
-    paypalClientSecretLength: PAYPAL_CLIENT_SECRET ? PAYPAL_CLIENT_SECRET.length : 0
-  });
+app.get('/api/checkout/config/:id', async (c) => {
+  const base = getReceptionistBase(c.env);
+  if (!base) {
+    return c.json({ error: 'checkout_not_configured' }, 503);
+  }
+  const id = c.req.param('id');
+  // The local subscription id (10 random chars after the "sub_" prefix) IS
+  // the unguessable token; no extra auth needed for the config endpoint.
+  // Receptionist returns 410 once the subscription is no longer pending.
+  try {
+    const upstream = await fetch(`${base}/api/billing/onvo/checkout-config/${encodeURIComponent(id)}`);
+    const text = await upstream.text();
+    const data = text ? JSON.parse(text) : null;
+    return c.json(data, upstream.status);
+  } catch (err) {
+    console.error('checkout/config upstream error', err);
+    return c.json({ error: 'upstream_unreachable' }, 502);
+  }
 });
+
 
 // Catch-all route to serve the React app
 app.get('*', async (c) => {
   // For API routes, let them pass through
-  if (c.req.path.startsWith('/api/') || c.req.path.startsWith('/paypal/') || c.req.path.startsWith('/debug/')) {
+  if (c.req.path.startsWith('/api/')) {
     return c.text('Not Found', 404);
   }
-  
-  // For all other routes, let Cloudflare handle static files
-  // The React app will be served by Cloudflare Pages
-  return c.text('React app should be served by Cloudflare Pages', 200);
+
+  // Serve index.html for all other routes so React Router handles client-side navigation
+  const url = new URL(c.req.url);
+  url.pathname = '/index.html';
+  return c.env.ASSETS.fetch(new Request(url.toString()));
 });
 
 export default app;

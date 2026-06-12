@@ -1,9 +1,12 @@
 name = "thynra"
+account_id = "4ecdddf6bb6855de77c779d67f4dfbcf"
 compatibility_date = "2025-10-15"
 main = "worker.js"
 
 [assets]
 directory = "./dist/public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
 
 # Environment variables
 [vars]
@@ -11,10 +14,15 @@ NODE_ENV = "development"
 PORT = "8787"
 
 # Secrets (set these with: wrangler secret put SECRET_NAME)
-# PAYPAL_CLIENT_ID = "your_paypal_client_id"
-# PAYPAL_CLIENT_SECRET = "your_paypal_client_secret"
-# AUTOMATION_WEBHOOK_URL = "your_n8n_or_openai_webhook_url"
-# AUTOMATION_API_KEY = "your_automation_api_key"
+#
+# Onvo Pay self-serve checkout (proxies to receptionist.thynra.com):
+# RECEPTIONIST_BASE_URL  e.g. https://receptionist.thynra.com (no trailing slash)
+# THYNRA_INTERNAL_KEY    same value set as a secret on the receptionist Fly app
+#
+# Onvo Price ids per plan SKU (create these in the Onvo dashboard first):
+# ONVO_PRICE_RECEPTIONIST_MONTHLY  recurring $129/mo
+# ONVO_PRICE_RECEPTIONIST_ANNUAL   recurring $1188/yr (effectively $99/mo)
+# ONVO_PRICE_SETUP_FEE             one-time $499 (bundled with monthly plan only)
 
 # Observability settings
 [observability.logs]

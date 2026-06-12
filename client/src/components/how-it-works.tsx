@@ -1,112 +1,100 @@
-import { Database, Bot, BookOpen, BarChart3, ArrowRight } from "lucide-react";
+import { Phone, Map, Wrench } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function HowItWorks() {
-  const focusAreas = [
+  const steps = [
     {
-      icon: Database,
-      title: "Data Integration & Automation",
-      description: "We connect your scattered data — from tools, spreadsheets, or apps — into a single flow that keeps everything updated automatically.",
-      highlight: "No more manual exports or copy-paste chaos.",
-      color: "bg-blue-500"
+      icon: Phone,
+      number: "01",
+      title: "Discovery call",
+      duration: "30 minutes · free",
+      description:
+        "We talk about your business, where customers come in, where they fall out, and what front-office AI could plausibly fix in your specific case. No pitch deck.",
     },
     {
-      icon: Bot,
-      title: "AI Assistants & Agents",
-      description: "We design custom AI agents that understand your operations and act on your data.",
-      highlight: "From answering team questions to triggering workflows and generating reports — all automatically.",
-      color: "bg-purple-500"
+      icon: Map,
+      number: "02",
+      title: "Diagnostic",
+      duration: "1 to 2 weeks",
+      description:
+        "We map your current customer journey, identify the highest-leverage front-office gap, and propose a system, not a single tool. You get a written diagnosis whether or not we work together.",
     },
     {
-      icon: BookOpen,
-      title: "Knowledge Systems",
-      description: "We build secure, private knowledge bases where your data becomes searchable, conversational, and useful.",
-      highlight: "Empower your team to get instant answers from internal documents, chats, or client data.",
-      color: "bg-emerald-500"
+      icon: Wrench,
+      number: "03",
+      title: "Build & ship",
+      duration: "scoped per project",
+      description:
+        "Real implementation, real integrations, real production tests. Honest about what is working and what isn't. You own everything we build.",
     },
-    {
-      icon: BarChart3,
-      title: "Analytics & Insights Layer",
-      description: "We turn your unified data into clear insights and dashboards your team can actually use.",
-      highlight: "Track performance, monitor trends, and make informed decisions without the technical overhead.",
-      color: "bg-orange-500"
-    }
   ];
 
   return (
-    <section className="py-20 bg-background">
+    <section id="how" className="py-20 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* What We Do Section */}
         <div className="text-center mb-16">
-          <motion.h2 
-            className="text-4xl font-bold text-foreground mb-6"
+          <motion.span
+            className="inline-block text-xs font-semibold uppercase tracking-wider text-primary/70 mb-3"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            data-testid="text-how-it-works-title"
           >
-            💡 What We Do
+            How we work
+          </motion.span>
+          <motion.h2
+            className="text-4xl font-bold text-foreground mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+            data-testid="text-how-title"
+          >
+            Three steps. No surprises.
           </motion.h2>
-          <motion.p 
-            className="text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed"
+          <motion.p
+            className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            data-testid="text-what-we-do-description"
           >
-            Thynra helps businesses apply AI in practical ways — connecting information, automating processes, and turning data into intelligent action.
-            <br />
-            We focus on building reliable systems that grow with you, not just quick demos or experiments.
+            Owner-operators don&apos;t have time to be sold. So this isn&apos;t
+            a sales process. It&apos;s an engineering one.
           </motion.p>
         </div>
-        
-        {/* Focus Areas Section */}
-        <div className="mb-20">
-          <motion.h3 
-            className="text-3xl font-bold text-foreground text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            data-testid="text-focus-areas-title"
-          >
-            ⚙️ Our Focus Areas
-          </motion.h3>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            {focusAreas.map((area, index) => {
-              const IconComponent = area.icon;
-              return (
-                <motion.div 
-                  key={area.title}
-                  className="bg-card border border-border rounded-xl p-8 hover:border-primary/50 transition-all"
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  data-testid={`card-focus-area-${index}`}
-                >
-                  <div className={`w-14 h-14 ${area.color} rounded-lg flex items-center justify-center mb-4`}>
-                    <IconComponent className="text-white w-7 h-7" />
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <motion.div
+                key={step.number}
+                className="bg-card border border-border rounded-xl p-8 hover:border-primary/50 transition-all"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                data-testid={`card-step-${step.number}`}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Icon className="w-6 h-6 text-primary" />
                   </div>
-                  <h4 className="text-xl font-bold mb-3" data-testid={`text-focus-area-title-${index}`}>
-                    {index + 1}. {area.title}
-                  </h4>
-                  <p className="text-muted-foreground mb-3 leading-relaxed" data-testid={`text-focus-area-description-${index}`}>
-                    {area.description}
-                  </p>
-                  <div className="flex items-start gap-2">
-                    <ArrowRight className="text-primary mt-1 flex-shrink-0" />
-                    <p className="text-primary font-medium" data-testid={`text-focus-area-highlight-${index}`}>
-                      {area.highlight}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+                  <span className="text-3xl font-bold text-muted-foreground/30">
+                    {step.number}
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold mb-1">{step.title}</h3>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">
+                  {step.duration}
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  {step.description}
+                </p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
