@@ -109,8 +109,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   heroText: { marginLeft: 18, flex: 1 },
-  levelName: { fontFamily: "Helvetica-Bold", fontSize: 19, color: INK },
-  levelRange: { color: BRAND, fontSize: 10, marginTop: 2, marginBottom: 6 },
+  // react-pdf doesn't inherit the page's lineHeight, so a large fontSize with no
+  // lineHeight gets a line box shorter than the glyphs and the next line overlaps it.
+  levelName: { fontFamily: "Helvetica-Bold", fontSize: 19, lineHeight: 1.25, color: INK },
+  levelRange: { color: BRAND, fontSize: 10, lineHeight: 1.3, marginTop: 3, marginBottom: 6 },
   headline: { color: "#374151", fontSize: 9.5 },
   sectionTitle: {
     fontFamily: "Helvetica-Bold",
