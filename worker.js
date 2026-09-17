@@ -980,6 +980,13 @@ const OG_LOCALE = { en: 'en_US', es: 'es_LA' };
 // One URL per page: the SPA shell's file name is never the canonical address.
 app.get('/index.html', (c) => c.redirect('/', 301));
 
+// Google Search Console ownership verification for https://thynra.com/.
+// Served from here (not as a static file) so it can't be lost in a rebuild:
+// Google re-checks it periodically and unverifies the property if it 404s.
+app.get('/googleca86378b494e1767.html', (c) =>
+  c.text('google-site-verification: googleca86378b494e1767.html'),
+);
+
 app.get('*', async (c) => {
   // For API routes, let them pass through
   if (c.req.path.startsWith('/api/')) {
