@@ -7,6 +7,12 @@ main = "worker.js"
 directory = "./dist/public"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
+# Every request except hashed build files reaches the Worker first. Without this,
+# Cloudflare answers browser navigations with index.html straight from assets
+# (skipping the per-locale <head> rewriting: lang, canonical, hreflang, widget
+# language), and a POST to /api/* can get 405 from the asset layer.
+# The Worker hands real files back to ASSETS (see the catch-all in worker.js).
+run_worker_first = ["/*", "!/assets/*"]
 
 # Environment variables
 [vars]

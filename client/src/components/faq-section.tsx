@@ -1,57 +1,115 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { defineCopy, useCopy } from "@/i18n";
+
+const copy = defineCopy({
+  en: {
+    title: "Frequently asked questions",
+    faqs: [
+      {
+        question: "What exactly do you do?",
+        answer:
+          "We build AI that handles the moments where you win or lose customers: getting found in search and reviews, answering calls and messages fast, following up, and winning back customers who drifted away — plus the reporting behind it. The parts that touch your customers and your revenue. Not bookkeeping, not internal-ops tools, not generic productivity AI.",
+      },
+      {
+        question: "What's the AI readiness check?",
+        answer:
+          "A 2-minute scorecard. You answer six questions about how you handle customers today, and you get an instant diagnosis of the three stages where SMBs win or lose — awareness, conversion, and retention — plus which gap is costing you the most. No cost, no signup beyond your email to see the result. It's the fastest way to see where to start.",
+      },
+      {
+        question: "Who is this for?",
+        answer:
+          "Owner-operated SMBs that have customer demand but can't keep up with it. Service businesses where the owner is still answering the phone. Teams where the front desk is the bottleneck. Most of our work is with service businesses where missed conversations directly cost revenue.",
+      },
+      {
+        question: "What's not in scope?",
+        answer:
+          "Anything back-office. Bookkeeping, HR, internal automation, dev tooling, generic AI strategy decks. We don't sell single-feature tools either. We build systems where the customer's first call, first message, first form, and first follow-up all work together.",
+      },
+      {
+        question: "What does it cost?",
+        answer:
+          "Most engagements are a fixed-price sprint to automate one workflow in about two weeks, with an optional monthly retainer to keep it running and add improvements. We scope exact pricing on the call, after we've diagnosed which workflow to start with — so you're pricing a specific outcome, not an open-ended hourly project.",
+      },
+      {
+        question: "Are you taking new clients right now?",
+        answer:
+          "Yes. We're actively engaging new clients, with a focus on service businesses where missed calls, slow follow-up, and lapsed customers are costing measurable revenue. The fastest way to find out if there's a fit is the free 2-minute readiness check, then a 30-minute call to turn the result into a plan.",
+      },
+      {
+        question: "How is this different from the AI tools I've already tried?",
+        answer:
+          "Most AI tools you've tried are point solutions. A chatbot. A voice agent. A scheduler. Each solves one problem. Ours is a system: voice, chat, web, follow-up, and reviews working together. The compounding effect is the point.",
+      },
+      {
+        question: "Do you build custom or use off-the-shelf vendors?",
+        answer:
+          "Both. The honest test we apply: if an off-the-shelf vendor solves the problem in week one, buy it. If you spend more than a day fighting their defaults, build. Most engagements end up as a mix.",
+      },
+      {
+        question: "Where are you based and which markets do you serve?",
+        answer:
+          "Thynra is based in Costa Rica and serves clients across LATAM and the US. Our solutions are built bilingual (English and Spanish) from day one, with more languages available on request.",
+      },
+    ],
+  },
+  es: {
+    title: "Preguntas frecuentes",
+    faqs: [
+      {
+        question: "¿Qué hacen exactamente?",
+        answer:
+          "Creamos IA que se encarga de los momentos en que ganas o pierdes clientes: que te encuentren en búsquedas y reseñas, contestar llamadas y mensajes rápido, dar seguimiento y recuperar a los clientes que se alejaron, más los reportes que hay detrás. Las partes que tocan a tus clientes y tus ingresos. No contabilidad, no herramientas de operación interna, no IA genérica de productividad.",
+      },
+      {
+        question: "¿Qué es el Diagnóstico de IA?",
+        answer:
+          "Una evaluación de 2 minutos. Respondes seis preguntas sobre cómo atiendes hoy a tus clientes y recibes al instante un diagnóstico de las tres etapas donde los negocios ganan o pierden clientes (visibilidad, conversión y fidelización), y de qué punto te está costando más. Sin costo y sin registro: solo pedimos tu correo para mostrarte el resultado. Es la forma más rápida de saber por dónde empezar.",
+      },
+      {
+        question: "¿Para quién es?",
+        answer:
+          "Para negocios manejados por sus dueños que tienen clientes interesados pero no dan abasto. Negocios de servicios donde el dueño todavía contesta el teléfono. Equipos donde la recepción es el cuello de botella. La mayor parte de nuestro trabajo es con negocios de servicios donde cada conversación perdida cuesta dinero directamente.",
+      },
+      {
+        question: "¿Qué no incluye?",
+        answer:
+          "Nada de la administración interna. Contabilidad, recursos humanos, automatización interna, herramientas para programadores, presentaciones genéricas de estrategia de IA. Tampoco vendemos herramientas de una sola función. Construimos sistemas donde la primera llamada, el primer mensaje, el primer formulario y el primer seguimiento del cliente funcionan juntos.",
+      },
+      {
+        question: "¿Cuánto cuesta?",
+        answer:
+          "La mayoría de los proyectos son un sprint de automatización a precio fijo para automatizar un proceso en unas dos semanas, con un mantenimiento mensual opcional para que siga funcionando y sumar mejoras. Definimos el precio exacto en la llamada, después de identificar con qué proceso empezar. Así pagas por un resultado concreto, no por un proyecto por horas sin final.",
+      },
+      {
+        question: "¿Están aceptando clientes nuevos?",
+        answer:
+          "Sí. Estamos tomando clientes nuevos, sobre todo negocios de servicios donde las llamadas perdidas, el seguimiento lento y los clientes que dejaron de venir están costando dinero que se puede medir. La forma más rápida de saber si encajamos es el Diagnóstico de IA gratis de 2 minutos y, después, una llamada de 30 minutos para convertir el resultado en un plan.",
+      },
+      {
+        question: "¿En qué se diferencia de las herramientas de IA que ya probé?",
+        answer:
+          "La mayoría de las herramientas de IA que has probado resuelven una sola cosa. Un chatbot. Un agente de voz. Una agenda. Cada una resuelve un problema. Lo nuestro es un sistema: voz, chat, web, seguimiento y reseñas funcionando juntos. Ahí está la diferencia: cada parte potencia a las demás.",
+      },
+      {
+        question: "¿Lo construyen a la medida o usan herramientas existentes?",
+        answer:
+          "Las dos cosas. La regla honesta que aplicamos: si una herramienta ya hecha resuelve el problema en la primera semana, se compra. Si pasas más de un día peleando con cómo viene configurada, se construye. La mayoría de los proyectos terminan siendo una mezcla.",
+      },
+      {
+        question: "¿Dónde están y a qué mercados atienden?",
+        answer:
+          "Thynra está en Costa Rica y atiende clientes en toda Latinoamérica y Estados Unidos. Nuestras soluciones son bilingües (inglés y español) desde el primer día, y podemos sumar más idiomas si los necesitas.",
+      },
+    ],
+  },
+});
 
 export default function FAQSection() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  const faqs = [
-    {
-      question: "What exactly do you do?",
-      answer:
-        "We build AI that handles the moments where you win or lose customers: getting found in search and reviews, answering calls and messages fast, following up, and winning back customers who drifted away — plus the reporting behind it. The parts that touch your customers and your revenue. Not bookkeeping, not internal-ops tools, not generic productivity AI.",
-    },
-    {
-      question: "What's the AI readiness check?",
-      answer:
-        "A 2-minute scorecard. You answer six questions about how you handle customers today, and you get an instant diagnosis of the three stages where SMBs win or lose — awareness, conversion, and retention — plus which gap is costing you the most. No cost, no signup beyond your email to see the result. It's the fastest way to see where to start.",
-    },
-    {
-      question: "Who is this for?",
-      answer:
-        "Owner-operated SMBs that have customer demand but can't keep up with it. Service businesses where the owner is still answering the phone. Teams where the front desk is the bottleneck. Most of our work is with service businesses where missed conversations directly cost revenue.",
-    },
-    {
-      question: "What's not in scope?",
-      answer:
-        "Anything back-office. Bookkeeping, HR, internal automation, dev tooling, generic AI strategy decks. We don't sell single-feature tools either. We build systems where the customer's first call, first message, first form, and first follow-up all work together.",
-    },
-    {
-      question: "What does it cost?",
-      answer:
-        "Most engagements are a fixed-price sprint to automate one workflow in about two weeks, with an optional monthly retainer to keep it running and add improvements. We scope exact pricing on the call, after we've diagnosed which workflow to start with — so you're pricing a specific outcome, not an open-ended hourly project.",
-    },
-    {
-      question: "Are you taking new clients right now?",
-      answer:
-        "Yes. We're actively engaging new clients, with a focus on service businesses where missed calls, slow follow-up, and lapsed customers are costing measurable revenue. The fastest way to find out if there's a fit is the free 2-minute readiness check, then a 30-minute call to turn the result into a plan.",
-    },
-    {
-      question: "How is this different from the AI tools I've already tried?",
-      answer:
-        "Most AI tools you've tried are point solutions. A chatbot. A voice agent. A scheduler. Each solves one problem. Ours is a system: voice, chat, web, follow-up, and reviews working together. The compounding effect is the point.",
-    },
-    {
-      question: "Do you build custom or use off-the-shelf vendors?",
-      answer:
-        "Both. The honest test we apply: if an off-the-shelf vendor solves the problem in week one, buy it. If you spend more than a day fighting their defaults, build. Most engagements end up as a mix.",
-    },
-    {
-      question: "Where are you based and which markets do you serve?",
-      answer:
-        "Thynra is based in Costa Rica and serves clients across LATAM and the US. Our solutions are built bilingual (English and Spanish) from day one, with more languages available on request.",
-    },
-  ];
+  const t = useCopy(copy);
+  const faqs = t.faqs;
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -68,7 +126,7 @@ export default function FAQSection() {
           viewport={{ once: true }}
           data-testid="text-faq-title"
         >
-          Frequently asked questions
+          {t.title}
         </motion.h2>
 
         <div className="space-y-4">

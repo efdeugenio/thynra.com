@@ -6,50 +6,99 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { defineCopy, useCopy } from "@/i18n";
+
+const copy = defineCopy({
+  en: {
+    eyebrow: "Where SMBs lose customers",
+    title: "Five places customers walk away before you even know.",
+    subtitle:
+      "These are the five gaps where customers slip away. Pick the one that's costing you the most. That's where we start.",
+    pains: [
+      {
+        stage: "Awareness",
+        title: "Invisible where they search",
+        description:
+          "When prospects search Google, ask ChatGPT, or scan your reviews for a business like yours, you don't show up. Reviews and local presence decide who does.",
+      },
+      {
+        stage: "Conversion",
+        title: "Missed calls",
+        description:
+          "Most small-business calls go unanswered. Every miss is a customer choosing your competitor.",
+      },
+      {
+        stage: "Conversion",
+        title: "Slow follow-up",
+        description:
+          "Leads contacted within five minutes convert dramatically better. Most owners reply in 42 hours. By then, the lead is gone.",
+      },
+      {
+        stage: "Retention",
+        title: "Lapsed customers",
+        description:
+          "Past customers and abandoned leads sit in your records. Most owners never follow up. The revenue is sitting there, waiting to be reactivated.",
+      },
+      {
+        stage: "Trust",
+        title: "The embarrassing-AI trauma",
+        description:
+          "Every prospect has been burned by a bad AI demo. They aren't buying capability. They are buying \"this won't happen to me again.\"",
+      },
+    ],
+  },
+  es: {
+    eyebrow: "Dónde pierden clientes los negocios",
+    title: "Cinco puntos donde se van los clientes sin que te enteres.",
+    subtitle:
+      "Estos son los cinco puntos por donde se te escapan los clientes. Elige el que más te está costando. Ahí empezamos.",
+    pains: [
+      {
+        stage: "Visibilidad",
+        title: "Invisible donde te buscan",
+        description:
+          "Cuando alguien busca en Google, le pregunta a ChatGPT o revisa reseñas buscando un negocio como el tuyo, no apareces. Las reseñas y la presencia local deciden quién aparece.",
+      },
+      {
+        stage: "Conversión",
+        title: "Llamadas perdidas",
+        description:
+          "La mayoría de las llamadas a pequeños negocios quedan sin respuesta. Cada llamada perdida es un cliente que elige a tu competencia.",
+      },
+      {
+        stage: "Conversión",
+        title: "Seguimiento lento",
+        description:
+          "Los clientes potenciales que reciben respuesta en menos de cinco minutos compran mucho más. La mayoría de los dueños responde en 42 horas. Para entonces, ese cliente ya se fue.",
+      },
+      {
+        stage: "Fidelización",
+        title: "Clientes que dejaron de venir",
+        description:
+          "Tus clientes anteriores y los contactos que se quedaron a medias están en tus registros. La mayoría de los dueños nunca les da seguimiento. Ese dinero está ahí, esperando que lo recuperes.",
+      },
+      {
+        stage: "Confianza",
+        title: "El mal recuerdo de la IA",
+        description:
+          "Casi todos ya tuvieron una mala experiencia con una demo de IA que salió mal. No están comprando funciones. Están comprando \"esto no me va a volver a pasar\".",
+      },
+    ],
+  },
+});
+
+// Paired with copy.pains by index.
+const painConfig = [
+  { icon: EyeOff, stageColor: "text-blue-500" },
+  { icon: PhoneOff, stageColor: "text-purple-500" },
+  { icon: Clock, stageColor: "text-purple-500" },
+  { icon: ArchiveX, stageColor: "text-emerald-500" },
+  { icon: AlertTriangle, stageColor: "text-amber-500" },
+];
 
 export default function PainSection() {
-  const pains = [
-    {
-      icon: EyeOff,
-      stage: "Awareness",
-      stageColor: "text-blue-500",
-      title: "Invisible where they search",
-      description:
-        "When prospects search Google, ask ChatGPT, or scan your reviews for a business like yours, you don't show up. Reviews and local presence decide who does.",
-    },
-    {
-      icon: PhoneOff,
-      stage: "Conversion",
-      stageColor: "text-purple-500",
-      title: "Missed calls",
-      description:
-        "Most small-business calls go unanswered. Every miss is a customer choosing your competitor.",
-    },
-    {
-      icon: Clock,
-      stage: "Conversion",
-      stageColor: "text-purple-500",
-      title: "Slow follow-up",
-      description:
-        "Leads contacted within five minutes convert dramatically better. Most owners reply in 42 hours. By then, the lead is gone.",
-    },
-    {
-      icon: ArchiveX,
-      stage: "Retention",
-      stageColor: "text-emerald-500",
-      title: "Lapsed customers",
-      description:
-        "Past customers and abandoned leads sit in your records. Most owners never follow up. The revenue is sitting there, waiting to be reactivated.",
-    },
-    {
-      icon: AlertTriangle,
-      stage: "Trust",
-      stageColor: "text-amber-500",
-      title: "The embarrassing-AI trauma",
-      description:
-        "Every prospect has been burned by a bad AI demo. They aren't buying capability. They are buying \"this won't happen to me again.\"",
-    },
-  ];
+  const t = useCopy(copy);
+  const pains = t.pains.map((text, index) => ({ ...painConfig[index], ...text }));
 
   return (
     <section className="py-20 bg-background">
@@ -62,7 +111,7 @@ export default function PainSection() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            Where SMBs lose customers
+            {t.eyebrow}
           </motion.span>
           <motion.h2
             className="text-4xl font-bold text-foreground mb-4"
@@ -72,7 +121,7 @@ export default function PainSection() {
             viewport={{ once: true }}
             data-testid="text-pain-title"
           >
-            Five places customers walk away before you even know.
+            {t.title}
           </motion.h2>
           <motion.p
             className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed"
@@ -81,8 +130,7 @@ export default function PainSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            These are the five gaps where customers slip away. Pick the one
-            that&apos;s costing you the most. That&apos;s where we start.
+            {t.subtitle}
           </motion.p>
         </div>
 

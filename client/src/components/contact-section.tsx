@@ -14,18 +14,102 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+import { defineCopy, useCopy, useLocale } from "@/i18n";
+import { withLeadContext } from "@/lib/attribution";
 
-const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email"),
-  company: z.string().optional(),
-  phone: z.string().optional(),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+const copy = defineCopy({
+  en: {
+    title: "Want to see if this fits your business?",
+    subtitle: "Talk to Sofia now, or send a message. We usually reply within a day.",
+    sofiaTitle: "Talk to Sofia now",
+    sofiaBody:
+      "Live AI receptionist. No callback wait. Tell her about your business and she'll book a discovery call with the team if it's a fit.",
+    sofiaCta: "Start the call",
+    emailTitle: "Email us",
+    emailBody:
+      "hello@thynra.com. Tell us about your business and what you're trying to solve. We read every message.",
+    emailCta: "Open mail",
+    formTitle: "Or send a message right here",
+    nameLabel: "Name *",
+    namePlaceholder: "Your full name",
+    emailLabel: "Email *",
+    emailPlaceholder: "your@email.com",
+    companyLabel: "Company",
+    companyPlaceholder: "Your company",
+    phoneLabel: "Phone",
+    phonePlaceholder: "Optional",
+    messageLabel: "What are you trying to solve? *",
+    messagePlaceholder:
+      "Where are customers slipping through? What have you tried? Any context helps.",
+    submit: "Send message",
+    sending: "Sending...",
+    successTitle: "Message sent.",
+    successDescription: "We'll respond within a day.",
+    errorTitle: "Something went wrong.",
+    errorDescription: "Please try again or email hello@thynra.com directly.",
+    validationTitle: "Validation error",
+    validation: {
+      name: "Name must be at least 2 characters",
+      email: "Please enter a valid email",
+      message: "Message must be at least 10 characters",
+    },
+  },
+  es: {
+    title: "¿Quieres ver si esto le sirve a tu negocio?",
+    subtitle: "Habla con Sofia ahora o envíanos un mensaje. Normalmente respondemos en un día.",
+    sofiaTitle: "Habla con Sofia ahora",
+    sofiaBody:
+      "Recepcionista con IA en vivo. Sin esperar a que te devuelvan la llamada. Cuéntale sobre tu negocio y, si encajamos, te agenda una llamada inicial con el equipo.",
+    sofiaCta: "Iniciar la llamada",
+    emailTitle: "Escríbenos",
+    emailBody:
+      "hello@thynra.com. Cuéntanos sobre tu negocio y qué quieres resolver. Leemos todos los mensajes.",
+    emailCta: "Abrir correo",
+    formTitle: "O envíanos un mensaje aquí mismo",
+    nameLabel: "Nombre *",
+    namePlaceholder: "Tu nombre completo",
+    emailLabel: "Correo *",
+    emailPlaceholder: "tu@correo.com",
+    companyLabel: "Empresa",
+    companyPlaceholder: "Tu empresa",
+    phoneLabel: "Teléfono",
+    phonePlaceholder: "Opcional",
+    messageLabel: "¿Qué quieres resolver? *",
+    messagePlaceholder:
+      "¿Dónde se te están escapando clientes? ¿Qué has probado? Cualquier detalle ayuda.",
+    submit: "Enviar mensaje",
+    sending: "Enviando...",
+    successTitle: "Mensaje enviado.",
+    successDescription: "Te responderemos en un día.",
+    errorTitle: "Algo salió mal.",
+    errorDescription: "Inténtalo de nuevo o escríbenos directamente a hello@thynra.com.",
+    validationTitle: "Revisa tus datos",
+    validation: {
+      name: "El nombre debe tener al menos 2 caracteres",
+      email: "Ingresa un correo válido",
+      message: "El mensaje debe tener al menos 10 caracteres",
+    },
+  },
 });
 
-type ContactForm = z.infer<typeof contactSchema>;
+type ContactCopy = (typeof copy)["en"];
+
+function makeContactSchema(messages: ContactCopy["validation"]) {
+  return z.object({
+    name: z.string().min(2, messages.name),
+    email: z.string().email(messages.email),
+    company: z.string().optional(),
+    phone: z.string().optional(),
+    message: z.string().min(10, messages.message),
+  });
+}
+
+type ContactForm = z.infer<ReturnType<typeof makeContactSchema>>;
 
 export default function ContactSection() {
+  const t = useCopy(copy);
+  const locale = useLocale();
+  const contactSchema = makeContactSchema(t.validation);
   const [contactForm, setContactForm] = useState<ContactForm>({
     name: "",
     email: "",
@@ -37,11 +121,11 @@ export default function ContactSection() {
 
   const contactMutation = useMutation({
     mutationFn: (data: ContactForm) =>
-      apiRequest("POST", "/api/contact", data),
+      apiRequest("POST", "/api/contact", withLeadContext({ ...data, kind: "contact" }, locale)),
     onSuccess: () => {
       toast({
-        title: "Message sent.",
-        description: "We'll respond within a day.",
+        title: t.successTitle,
+        description: t.successDescription,
       });
       setContactForm({
         name: "",
@@ -53,9 +137,8 @@ export default function ContactSection() {
     },
     onError: () => {
       toast({
-        title: "Something went wrong.",
-        description:
-          "Please try again or email hello@thynra.com directly.",
+        title: t.errorTitle,
+        description: t.errorDescription,
         variant: "destructive",
       });
     },
@@ -69,7 +152,7 @@ export default function ContactSection() {
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast({
-          title: "Validation error",
+          title: t.validationTitle,
           description: error.errors[0].message,
           variant: "destructive",
         });
@@ -88,10 +171,10 @@ export default function ContactSection() {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl font-bold mb-4" data-testid="text-contact-title">
-            Want to see if this fits your business?
+            {t.title}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Talk to Sofia now, or send a message. We usually reply within a day.
+            {t.subtitle}
           </p>
         </motion.div>
 
@@ -111,15 +194,13 @@ export default function ContactSection() {
           >
             <div className="flex items-center mb-4">
               <Phone className="w-8 h-8 text-primary mr-3" />
-              <h3 className="text-2xl font-bold">Talk to Sofia now</h3>
+              <h3 className="text-2xl font-bold">{t.sofiaTitle}</h3>
             </div>
             <p className="text-muted-foreground mb-4 leading-relaxed">
-              Live AI receptionist. No callback wait. Tell her about your
-              business and she&apos;ll book a discovery call with the team if
-              it&apos;s a fit.
+              {t.sofiaBody}
             </p>
             <span className="text-primary font-medium inline-flex items-center">
-              Start the call
+              {t.sofiaCta}
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </span>
           </button>
@@ -131,14 +212,13 @@ export default function ContactSection() {
           >
             <div className="flex items-center mb-4">
               <Mail className="w-8 h-8 text-primary mr-3" />
-              <h3 className="text-2xl font-bold">Email us</h3>
+              <h3 className="text-2xl font-bold">{t.emailTitle}</h3>
             </div>
             <p className="text-muted-foreground mb-4 leading-relaxed">
-              hello@thynra.com. Tell us about your business and what
-              you&apos;re trying to solve. We read every message.
+              {t.emailBody}
             </p>
             <span className="text-primary font-medium inline-flex items-center">
-              Open mail
+              {t.emailCta}
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </span>
           </a>
@@ -154,7 +234,7 @@ export default function ContactSection() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Mail className="mr-2 w-5 h-5" />
-                Or send a message right here
+                {t.formTitle}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -162,21 +242,21 @@ export default function ContactSection() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Name *
+                      {t.nameLabel}
                     </label>
                     <Input
                       value={contactForm.name}
                       onChange={(e) =>
                         setContactForm({ ...contactForm, name: e.target.value })
                       }
-                      placeholder="Your full name"
+                      placeholder={t.namePlaceholder}
                       required
                       data-testid="input-contact-name"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Email *
+                      {t.emailLabel}
                     </label>
                     <Input
                       type="email"
@@ -184,7 +264,7 @@ export default function ContactSection() {
                       onChange={(e) =>
                         setContactForm({ ...contactForm, email: e.target.value })
                       }
-                      placeholder="your@email.com"
+                      placeholder={t.emailPlaceholder}
                       required
                       data-testid="input-contact-email"
                     />
@@ -194,7 +274,7 @@ export default function ContactSection() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Company
+                      {t.companyLabel}
                     </label>
                     <Input
                       value={contactForm.company}
@@ -204,13 +284,13 @@ export default function ContactSection() {
                           company: e.target.value,
                         })
                       }
-                      placeholder="Your company"
+                      placeholder={t.companyPlaceholder}
                       data-testid="input-contact-company"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Phone
+                      {t.phoneLabel}
                     </label>
                     <Input
                       value={contactForm.phone}
@@ -220,7 +300,7 @@ export default function ContactSection() {
                           phone: e.target.value,
                         })
                       }
-                      placeholder="Optional"
+                      placeholder={t.phonePlaceholder}
                       data-testid="input-contact-phone"
                     />
                   </div>
@@ -228,7 +308,7 @@ export default function ContactSection() {
 
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    What are you trying to solve? *
+                    {t.messageLabel}
                   </label>
                   <Textarea
                     value={contactForm.message}
@@ -238,7 +318,7 @@ export default function ContactSection() {
                         message: e.target.value,
                       })
                     }
-                    placeholder="Where are customers slipping through? What have you tried? Any context helps."
+                    placeholder={t.messagePlaceholder}
                     rows={5}
                     required
                     data-testid="textarea-contact-message"
@@ -251,7 +331,7 @@ export default function ContactSection() {
                   disabled={contactMutation.isPending}
                   data-testid="button-submit-contact"
                 >
-                  {contactMutation.isPending ? "Sending..." : "Send message"}
+                  {contactMutation.isPending ? t.sending : t.submit}
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </form>

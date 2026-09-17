@@ -45,6 +45,8 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+    // `npm run dev:web` (3310) forwards API calls to `npm run dev:worker` (3311).
+    proxy: { "/api": "http://127.0.0.1:3311" },
     fs: {
       strict: true,
       deny: ["**/.*"],

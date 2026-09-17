@@ -2,9 +2,32 @@ import { Button } from "@/components/ui/button";
 import { Phone, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
+import { defineCopy, useCopy } from "@/i18n";
+
+const copy = defineCopy({
+  en: {
+    eyebrow: "AI that wins & keeps customers",
+    title: "Most service businesses lose customers in the same three places. Find yours in 2 minutes.",
+    subtitle:
+      "The lead nobody called back. The customer who never came back. The reviews nobody answers. Take the free 2-minute readiness check to see which gap is costing you the most — then we automate it.",
+    primaryCta: "Start the 2-min check",
+    secondaryCta: "Talk to Sofia now",
+    subline: "Free · 2 minutes · instant results",
+  },
+  es: {
+    eyebrow: "IA para conseguir y conservar clientes",
+    title: "Casi todos los negocios de servicios pierden clientes en los mismos tres puntos. Descubre dónde los pierde el tuyo en 2 minutos.",
+    subtitle:
+      "El cliente al que nadie le devolvió el mensaje. El que nunca volvió. Las reseñas que nadie responde. Haz el diagnóstico gratis de 2 minutos para ver qué punto te está costando más, y lo automatizamos.",
+    primaryCta: "Empezar el diagnóstico",
+    secondaryCta: "Habla con Sofia ahora",
+    subline: "Gratis · 2 minutos · resultados al instante",
+  },
+});
 
 export default function HeroSection() {
   const [, navigate] = useLocation();
+  const t = useCopy(copy);
   const talkToSofia = () =>
     (window as any).thynra?.startCall?.({ context: "screening" });
 
@@ -18,7 +41,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6 }}
           data-testid="text-hero-eyebrow"
         >
-          AI that wins &amp; keeps customers
+          {t.eyebrow}
         </motion.span>
 
         <motion.h1
@@ -28,8 +51,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6 }}
           data-testid="text-hero-title"
         >
-          Most service businesses lose customers in the same three places. Find
-          yours in 2 minutes.
+          {t.title}
         </motion.h1>
 
         <motion.p
@@ -39,9 +61,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           data-testid="text-hero-subtitle"
         >
-          The lead nobody called back. The customer who never came back. The
-          reviews nobody answers. Take the free 2-minute readiness check to see
-          which gap is costing you the most — then we automate it.
+          {t.subtitle}
         </motion.p>
 
         <motion.div
@@ -55,7 +75,7 @@ export default function HeroSection() {
             className="gradient-bg text-white px-5 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-transform"
             data-testid="button-take-quiz-hero"
           >
-            Start the 2-min check
+            {t.primaryCta}
             <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
           <Button
@@ -65,7 +85,7 @@ export default function HeroSection() {
             data-testid="button-talk-to-sofia-hero"
           >
             <Phone className="mr-2 w-4 h-4" />
-            Talk to Sofia now
+            {t.secondaryCta}
           </Button>
         </motion.div>
 
@@ -76,7 +96,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.6 }}
           data-testid="text-hero-subline"
         >
-          Free · 2 minutes · instant results
+          {t.subline}
         </motion.p>
       </div>
     </section>

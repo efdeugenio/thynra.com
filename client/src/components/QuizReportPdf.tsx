@@ -4,7 +4,9 @@
 // (b) base64-encoded and attached to the prospect's confirmation email.
 //
 // Uses only the built-in Helvetica family — no external font fetch, so it
-// renders reliably offline and inside the Worker email flow.
+// renders reliably offline and inside the Worker email flow. Helvetica is
+// WinAnsi-encoded: Spanish accents, ñ, ¿ ¡ and the — – · • punctuation used
+// below are safe; arrows, check marks, ≈ etc. are not.
 
 import {
   Document,
@@ -15,16 +17,61 @@ import {
   Svg,
   Circle,
 } from "@react-pdf/renderer";
+import { defineCopy, type Locale } from "@/i18n";
 import {
-  ACTION_PLAN,
-  INDUSTRY_STATS,
-  LEVELS,
-  SOURCES_NOTE,
-  STAGE_INSIGHT,
-  STAGE_META,
+  STAGE_HEX,
   STAGE_ORDER,
+  reportCopy,
   type ReportData,
 } from "@/lib/quizReport";
+
+const pdfCopy = defineCopy({
+  en: {
+    documentTitle: "AI Readiness Report",
+    documentSubject: "AI Readiness",
+    kicker: "AI Readiness Report",
+    preparedFor: (who: string) => `Prepared for ${who}`,
+    breakdownTitle: "Your stage-by-stage breakdown",
+    startHere: "START HERE",
+    numbersTitle: "Why this matters — by the numbers",
+    planTitle: (stage: string) => `Your 30 / 60 / 90-day plan — start with ${stage}`,
+    ctaTitle: "Want a second set of eyes on this?",
+    ctaBody:
+      "Talk to Sofia, our AI receptionist — she'll walk through your result, pinpoint the one fix with the fastest payback, and book a free discovery call if it's worth it for your business.",
+    ctaLink: "thynra.com/quiz  ·  hello@thynra.com",
+    // Phrased for a leave-behind document (vs. the on-screen recommendation).
+    recoInline: {
+      awareness:
+        "This is your softest stage. Customers can't choose you if they can't find you — so the plan below makes your presence consistent before chasing anything else.",
+      conversion:
+        "This is your softest stage and usually the most expensive gap. The plan below closes your response-time window first, because it's the fastest win available to you.",
+      retention:
+        "This is your softest stage. You've already paid to win these customers — the plan below turns one-time buyers into repeat revenue and referrals without more ad spend.",
+    },
+  },
+  es: {
+    documentTitle: "Reporte del Diagnóstico de IA",
+    documentSubject: "Diagnóstico de IA",
+    kicker: "Reporte del Diagnóstico de IA",
+    preparedFor: (who: string) => `Preparado para ${who}`,
+    breakdownTitle: "Tu resultado por etapa",
+    startHere: "EMPIEZA AQUÍ",
+    numbersTitle: "Por qué importa: los números",
+    planTitle: (stage: string) => `Tu plan de 30 / 60 / 90 días — empieza por ${stage}`,
+    ctaTitle: "¿Quieres una segunda opinión?",
+    ctaBody:
+      "Habla con Sofia, nuestra recepcionista con IA. Revisa tu resultado contigo, identifica la mejora que se paga más rápido y, si vale la pena para tu negocio, te agenda una llamada inicial gratuita.",
+    ctaLink: "thynra.com/es/quiz  ·  hello@thynra.com",
+    recoInline: {
+      awareness:
+        "Esta es tu etapa más débil. Los clientes no pueden elegirte si no te encuentran, así que el plan de abajo empieza por hacer que tu presencia sea constante, antes que cualquier otra cosa.",
+      conversion:
+        "Esta es tu etapa más débil y suele ser la brecha más cara. El plan de abajo empieza por reducir tu tiempo de respuesta, porque es la mejora más rápida que tienes a tu alcance.",
+      retention:
+        "Esta es tu etapa más débil. Ya pagaste por ganar a estos clientes: el plan de abajo convierte a quienes compraron una vez en ventas repetidas y recomendaciones, sin gastar más en anuncios.",
+    },
+  },
+});
 
 const BRAND = "#4F46E5"; // primary indigo (hsl 238 75% 59%)
 const ACCENT = "#8B5CF6"; // violet accent
@@ -176,28 +223,38 @@ function Gauge({ pct }: { pct: number }) {
   );
 }
 
-export function QuizReportPdf({ data, dateLabel }: { data: ReportData; dateLabel: string }) {
-  const lvl = LEVELS[data.levelKey];
-  const plan = ACTION_PLAN[data.weakest];
+export function QuizReportPdf({
+  data,
+  dateLabel,
+  locale,
+}: {
+  data: ReportData;
+  dateLabel: string;
+  locale: Locale;
+}) {
+  const rc = reportCopy[locale];
+  const t = pdfCopy[locale];
+  const lvl = rc.levels[data.levelKey];
+  const plan = rc.actionPlan[data.weakest];
   const preparedFor = [data.name, data.company].filter(Boolean).join(" · ");
 
   return (
     <Document
-      title="AI Readiness Report"
+      title={t.documentTitle}
       author="Thynra"
-      subject="AI Readiness"
+      subject={t.documentSubject}
     >
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <View style={styles.headerRow}>
           <Text style={styles.wordmark}>THYNRA</Text>
           <View style={{ alignItems: "flex-end" }}>
-            <Text style={styles.kicker}>AI Readiness Report</Text>
+            <Text style={styles.kicker}>{t.kicker}</Text>
             <Text style={{ fontSize: 8, color: MUTED, marginTop: 2 }}>{dateLabel}</Text>
           </View>
         </View>
         {preparedFor ? (
-          <Text style={{ fontSize: 9, color: MUTED, marginBottom: 12 }}>Prepared for {preparedFor}</Text>
+          <Text style={{ fontSize: 9, color: MUTED, marginBottom: 12 }}>{t.preparedFor(preparedFor)}</Text>
         ) : null}
 
         {/* Hero: score + level */}
@@ -212,23 +269,24 @@ export function QuizReportPdf({ data, dateLabel }: { data: ReportData; dateLabel
         <Text style={{ fontSize: 9.5, color: "#4B5563", marginBottom: 4 }}>{lvl.body}</Text>
 
         {/* Stage breakdown */}
-        <Text style={styles.sectionTitle}>Your stage-by-stage breakdown</Text>
+        <Text style={styles.sectionTitle}>{t.breakdownTitle}</Text>
         {STAGE_ORDER.map((st) => {
-          const meta = STAGE_META[st];
+          const meta = rc.stages[st];
+          const hex = STAGE_HEX[st];
           const score = data.scores[st];
           const pct = Math.round((score / 8) * 100);
           const strong = score >= 6;
-          const ins = STAGE_INSIGHT[st];
+          const ins = rc.insights[st];
           return (
             <View key={st} style={styles.stageCard} wrap={false}>
               <View style={styles.stageHead}>
-                <View style={[styles.dot, { backgroundColor: meta.hex }]} />
+                <View style={[styles.dot, { backgroundColor: hex }]} />
                 <Text style={styles.stageLabel}>{meta.label}</Text>
-                {st === data.weakest ? <Text style={styles.startBadge}>START HERE</Text> : null}
+                {st === data.weakest ? <Text style={styles.startBadge}>{t.startHere}</Text> : null}
                 <Text style={styles.stageScore}>{score}/8</Text>
               </View>
               <View style={styles.barTrack}>
-                <View style={[styles.barFill, { width: `${pct}%`, backgroundColor: meta.hex }]} />
+                <View style={[styles.barFill, { width: `${pct}%`, backgroundColor: hex }]} />
               </View>
               <Text style={styles.stageInsight}>{strong ? ins.strong : ins.weak}</Text>
               {ins.stat ? (
@@ -242,9 +300,9 @@ export function QuizReportPdf({ data, dateLabel }: { data: ReportData; dateLabel
         })}
 
         {/* Benchmarks */}
-        <Text style={styles.sectionTitle}>Why this matters — by the numbers</Text>
+        <Text style={styles.sectionTitle}>{t.numbersTitle}</Text>
         <View style={styles.grid}>
-          {INDUSTRY_STATS.map((s) => (
+          {rc.industryStats.map((s) => (
             <View key={s.value} style={styles.statCard} wrap={false}>
               <Text style={styles.statVal}>{s.value}</Text>
               <Text style={styles.statLbl}>{s.label}</Text>
@@ -258,10 +316,10 @@ export function QuizReportPdf({ data, dateLabel }: { data: ReportData; dateLabel
       {/* Page 2 — the action plan + CTA */}
       <Page size="A4" style={styles.page}>
         <Text style={styles.sectionTitle}>
-          Your 30 / 60 / 90-day plan — start with {STAGE_META[data.weakest].label}
+          {t.planTitle(rc.stages[data.weakest].label)}
         </Text>
         <Text style={{ fontSize: 9.5, color: "#4B5563", marginBottom: 10 }}>
-          {STAGE_RECO_INLINE[data.weakest]}
+          {t.recoInline[data.weakest]}
         </Text>
 
         {plan.map((block) => (
@@ -279,28 +337,14 @@ export function QuizReportPdf({ data, dateLabel }: { data: ReportData; dateLabel
 
         {/* CTA */}
         <View style={styles.cta}>
-          <Text style={styles.ctaTitle}>Want a second set of eyes on this?</Text>
-          <Text style={styles.ctaBody}>
-            Talk to Sofia, our AI receptionist — she'll walk through your result, pinpoint the one fix with the
-            fastest payback, and book a free discovery call if it's worth it for your business.
-          </Text>
-          <Text style={styles.ctaLink}>thynra.com/quiz  ·  hello@thynra.com</Text>
+          <Text style={styles.ctaTitle}>{t.ctaTitle}</Text>
+          <Text style={styles.ctaBody}>{t.ctaBody}</Text>
+          <Text style={styles.ctaLink}>{t.ctaLink}</Text>
         </View>
 
-        <Text style={styles.footnote}>{SOURCES_NOTE}</Text>
+        <Text style={styles.footnote}>{rc.sourcesNote}</Text>
         <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} fixed />
       </Page>
     </Document>
   );
 }
-
-// Inlined here (rather than importing STAGE_RECO) to keep the PDF's intro line
-// phrased for a leave-behind document.
-const STAGE_RECO_INLINE: Record<ReportData["weakest"], string> = {
-  awareness:
-    "This is your softest stage. Customers can't choose you if they can't find you — so the plan below makes your presence consistent before chasing anything else.",
-  conversion:
-    "This is your softest stage and usually the most expensive gap. The plan below closes your response-time window first, because it's the fastest win available to you.",
-  retention:
-    "This is your softest stage. You've already paid to win these customers — the plan below turns one-time buyers into repeat revenue and referrals without more ad spend.",
-};
