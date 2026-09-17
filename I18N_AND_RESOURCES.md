@@ -68,8 +68,8 @@ Use `utm_medium=pinned_comment` for the pinned comment and `utm_medium=card` for
 
   Until they exist the Worker falls back to the original properties and then to a bare contact, so leads are never lost, but the new tags aren't stored.
 - **Optional segment:** `wrangler secret put RESEND_RESOURCE_SEGMENT_ID` for resource leads.
-- **Cloudflare Web Analytics:** create a site in the dashboard, then set the var `CF_WEB_ANALYTICS_TOKEN` (the Worker injects the beacon).
-- **Google Search Console:** submit `https://thynra.com/sitemap.xml`.
+- **Cloudflare Web Analytics: already on, leave `CF_WEB_ANALYTICS_TOKEN` unset.** thynra.com uses Cloudflare's automatic setup ("Enable excluding visitor data in the EU"), so the beacon is injected at the edge. Setting the var would load a second beacon and double-count every visit. The var stays as an escape hatch in case automatic injection is ever turned off.
+- **Google Search Console: done (2026-09-17).** Property `https://thynra.com/` is verified for efdeugenio@gmail.com and `sitemap.xml` is submitted. Verification uses the HTML-file method, served by the Worker at `/googleca86378b494e1767.html` — **don't remove that route**; Google re-checks it and unverifies the property if it 404s.
 
 ## Local development (ports per `~/.claude/ports.json`)
 
