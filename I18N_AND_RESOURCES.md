@@ -59,7 +59,14 @@ Use `utm_medium=pinned_comment` for the pinned comment and `utm_medium=card` for
 
 ## One-time setup outside the code
 
-- **Resend → Contacts → Properties:** create `locale`, `utm_source`, `utm_medium`, `utm_campaign`, `first_utm_source`, `first_utm_campaign`, `referrer`, `resource`. Until then the Worker falls back to the original properties so leads are never lost, but the new tags won't be stored.
+- **Resend contact properties:** they cannot be created from the dashboard (there it only sets a value on an existing contact: Contacts → ⋯ → Edit Contact). Create them through the API, once:
+
+  ```bash
+  RESEND_API_KEY=re_xxx node scripts/resend-setup-properties.mjs --dry-run   # what's missing
+  RESEND_API_KEY=re_xxx node scripts/resend-setup-properties.mjs             # create them
+  ```
+
+  Until they exist the Worker falls back to the original properties and then to a bare contact, so leads are never lost, but the new tags aren't stored.
 - **Optional segment:** `wrangler secret put RESEND_RESOURCE_SEGMENT_ID` for resource leads.
 - **Cloudflare Web Analytics:** create a site in the dashboard, then set the var `CF_WEB_ANALYTICS_TOKEN` (the Worker injects the beacon).
 - **Google Search Console:** submit `https://thynra.com/sitemap.xml`.
