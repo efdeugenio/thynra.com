@@ -7,3 +7,10 @@ vite.config.ts.*
 
 # Deployment scripts (keep local)
 deploy.sh
+
+# Environment variables (never commit secrets)
+.env
+.env.local
+.env.*.local
+# wrangler dev local state
+.wrangler/

@@ -1,9 +1,18 @@
 name = "thynra"
+account_id = "4ecdddf6bb6855de77c779d67f4dfbcf"
 compatibility_date = "2025-10-15"
 main = "worker.js"
 
 [assets]
 directory = "./dist/public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+# Every request except hashed build files reaches the Worker first. Without this,
+# Cloudflare answers browser navigations with index.html straight from assets
+# (skipping the per-locale <head> rewriting: lang, canonical, hreflang, widget
+# language), and a POST to /api/* can get 405 from the asset layer.
+# The Worker hands real files back to ASSETS (see the catch-all in worker.js).
+run_worker_first = ["/*", "!/assets/*"]
 
 # Environment variables
 [vars]
@@ -11,10 +20,22 @@ NODE_ENV = "development"
 PORT = "8787"
 
 # Secrets (set these with: wrangler secret put SECRET_NAME)
-# PAYPAL_CLIENT_ID = "your_paypal_client_id"
-# PAYPAL_CLIENT_SECRET = "your_paypal_client_secret"
-# AUTOMATION_WEBHOOK_URL = "your_n8n_or_openai_webhook_url"
-# AUTOMATION_API_KEY = "your_automation_api_key"
+#
+# Onvo Pay self-serve checkout (proxies to receptionist.thynra.com):
+# RECEPTIONIST_BASE_URL  e.g. https://receptionist.thynra.com (no trailing slash)
+# THYNRA_INTERNAL_KEY    same value set as a secret on the receptionist Fly app
+#
+# Email + lead nurture (Resend):
+# RESEND_API_KEY          Resend API key (sending domain thynra.com is verified)
+# RESEND_QUIZ_SEGMENT_ID  id of the "Quiz leads" Segment; quiz leads are added to it
+#                         (optional — without it, contacts are still created + tagged)
+# CONTACT_FROM_EMAIL      optional, default "Thynra <hello@thynra.com>"
+# OPERATOR_NOTIFY_EMAIL   optional, default "hello@thynra.com" (where leads land)
+#
+# Onvo Price ids per plan SKU (create these in the Onvo dashboard first):
+# ONVO_PRICE_RECEPTIONIST_MONTHLY  recurring $129/mo
+# ONVO_PRICE_RECEPTIONIST_ANNUAL   recurring $1188/yr (effectively $99/mo)
+# ONVO_PRICE_SETUP_FEE             one-time $499 (bundled with monthly plan only)
 
 # Observability settings
 [observability.logs]

@@ -1,114 +1,91 @@
-# Thynra AI Agency - Design Guidelines
+# Thynra — Design Guidelines (Front-office AI)
 
-## Design Approach
-**Reference-Based**: Inspired by Designjoy's clean professionalism + Linear's precision typography + Stripe's trustworthy aesthetic. Focus on conversion-optimized layouts that communicate expertise and reliability.
+_Updated 2026-05-09 with the Solutions section + team-voice pass. Replaces both the prior "AI subscription service" framing and the build-in-public posture from the first rebrand._
 
-**Core Principle**: Business credibility through visual restraint and strategic emphasis on results.
+## Brand
+- **Company name**: Thynra
+- **Category**: Front-office AI for SMBs
+- **Buyer line**: AI for every part of your business that talks to a customer.
+- **Voice**: team. "we", "Thynra", "our". Never "I" anywhere on the site. (LinkedIn personal-brand voice is the opposite — see `voice_split_web_vs_linkedin.md` in personal-brand memory.)
+- **Posture**: productized solutions. The site presents Thynra as a small, credible studio with three named offerings. Build-in-public framing belongs on LinkedIn, not on the web.
 
-## Color Palette
+## Voice rules
+- Use "we", "Thynra", or "our". Never "I", "my", "me" in body copy.
+- Direct. Engineering-credible without being dev-only.
+- Owner-operator audience first; peer practitioners second.
+- Periods over compound clauses. Avoid em-dashes in load-bearing copy.
+- No buzzword openers. No generic CTAs.
+- Don't manufacture client outcomes, metrics, or testimonials. If a number is on the site, it must be sourceable.
 
-**Light Mode:**
-- Primary: 240 15% 15% (Deep charcoal - headlines/primary text)
-- Secondary: 240 8% 45% (Muted slate - body text)
-- Accent: 210 100% 45% (Professional blue - CTAs, links)
-- Background: 0 0% 99% (Soft white)
-- Surface: 240 10% 96% (Light gray cards)
+## Site IA (home page sections, top to bottom)
+1. **Hero** — category eyebrow + buyer-line headline + "Book a call" + "See our solutions"
+2. **What front-office AI covers** (`#what`) — three stages: Awareness / Conversion / Retention
+3. **Where SMBs lose customers** — five pain tiles
+4. **Solutions** (`#solutions`) — three productized offerings:
+   - **AI Receptionist** — voice + chat + WhatsApp + SMS, bilingual EN/ES (customer-initiated touchpoints)
+   - **AI Front-Office Assistant** — owner-delegated drafting, follow-up, and outbound (owner-initiated touchpoints, paired with the Receptionist as the same AI persona in two roles)
+   - **AI-Powered Web Subscription** — unlimited pages, AI-drafted updates live within 48 hours, hosting account and domain stay in the client's name
+5. **How we work** (`#how`) — three-step engagement flow (discovery → diagnostic → build & ship)
+6. **FAQ** — seven questions covering scope, fit, methodology, geography
+7. **Contact** (`#contact`) — book a call (Calendly), email us, or send a message via the form
+8. **Footer**
 
-**Dark Mode:**
-- Primary: 0 0% 98% (Off-white text)
-- Secondary: 240 5% 75% (Light gray body)
-- Accent: 210 100% 55% (Brighter blue)
-- Background: 240 15% 8% (Rich dark)
-- Surface: 240 10% 12% (Elevated cards)
+## Color & typography
+Unchanged from prior guidelines.
+- Inter (body) and Space Grotesk (headings) via Google Fonts.
+- Light/dark mode supported.
+- Primary blue accent. Charcoal text in light mode, off-white in dark.
+- Section padding `py-20 lg:py-24`. Container `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`.
 
-## Typography
-**Fonts**: Inter (primary), Space Grotesk (headings/accents) via Google Fonts
-- Hero H1: 4xl-6xl, font-bold, Space Grotesk, tracking-tight
-- Section H2: 3xl-5xl, font-bold, tight leading
-- H3: xl-2xl, font-semibold
-- Body: base-lg, leading-relaxed, Inter
-- Accents: uppercase tracking-wide for labels
+## Component patterns
+- shadcn/ui (Radix) primitives, Tailwind utilities, Framer Motion for entrance animations.
+- Card: `bg-card border border-border rounded-xl`, hover state `hover:border-primary/50`.
+- Eyebrow label: `text-xs font-semibold uppercase tracking-wider text-primary/70`.
+- Section heading: `text-4xl font-bold text-foreground` with a max-width supporting paragraph beneath.
+- CTA hierarchy: one primary `Book a call` per page region, secondary `Send a message`/`Email us`.
 
-## Layout System
-**Spacing Units**: Primarily 4, 8, 12, 16, 20, 24, 32 (tailwind units)
-- Section padding: py-24 md:py-32 lg:py-40
-- Container: max-w-7xl, consistent px-6 md:px-12
-- Content blocks: gap-12 to gap-20
-- Micro-spacing: p-4, p-6, p-8 for cards
+## What got removed across the two rebrand passes
+- "500+ AI implementations", "98% Client Retention", "40% Cost Reduction" — manufactured metrics.
+- John Doe testimonials, TechCorp awards — manufactured social proof.
+- "$3,995/month subscription" PayPal flow — `pricing-section.tsx` and `PayPalButton.tsx` are no longer imported from `home.tsx`. Routes `/success` and `/cancel` still exist.
+- Generic "Data Integration / AI Agents / Knowledge Systems / Analytics" services grid.
+- "Currently building Sofia" hero tease and the "build-in-public" section — removed entirely. Build-in-public is implicit on LinkedIn, never on the web.
+- Founder-"I" voice — replaced with team-"we" voice across hero, how-we-work, FAQ, contact, and footer.
 
-## Core Sections & Components
+## Conversion path
+Single primary CTA across the site: **Book a call** → Calendly (`https://calendly.com/efdeugenio/apply-ai`).
+- Secondary: email `hello@thynra.com`.
+- Tertiary: send a message via the contact form (POSTs to `/api/contact`, persisted in `contact_requests` table via Drizzle).
 
-### Hero Section
-Full-viewport impactful header (min-h-screen) with:
-- Large hero image (right 60%): Abstract AI visualization - neural networks, data flows, or futuristic workspace (high-quality, professional photography with blue/purple tech tones)
-- Left content area (40%): Headline "Thinking for the new era" + subheading about AI solutions + dual CTA (primary "View Plans" + outline "See Case Studies" with backdrop-blur-sm bg-white/10)
-- Floating trust indicators: "500+ AI implementations" badge
+## Solutions list (keep current)
+The `client/src/components/solutions.tsx` component lists current productized offerings. Update as solutions are added or sunset:
+- **AI Receptionist** — voice/chat/WhatsApp/SMS, bilingual EN/ES, books and qualifies. Customer-initiated. Backed by the AI receptionist project (`/Users/eugeniofernandez/projects/AI receptionist`).
+- **AI Front-Office Assistant** — owner-delegated drafting (emails, DMs, replies), follow-ups on leads/quotes/messages, scheduling and outbound coordination. Owner-initiated. Same AI persona as the Receptionist; web copy says so explicitly to anchor the pairing. Backed internally by a Hermes-based messaging-agent framework (do not name Hermes publicly on the site per the voice-split memory).
+- **AI-Powered Web Subscription** — modern stack deployed to the *client's own* hosting account (typically Cloudflare, Vercel, or Netlify free tier; do not name a specific provider publicly on the site — provider-agnostic in marketing copy). AI-drafted updates, human-reviewed, most go live within 48 hours. **Client owns the hosting account and the domain from day one; Thynra is the dev layer on top, not a middleman.** Backed by the work in `/Users/eugeniofernandez/projects/thynra.com` and `/Users/eugeniofernandez/projects/carolinaugalde.com/website`.
 
-### Subscription Plans (Designjoy-inspired)
-Two-column comparison (lg:grid-cols-2):
-- **Standard Plan** card: Clean white/dark surface, includes list of deliverables, pause/cancel anytime notice, monthly pricing
-- **Premium Plan** card: Subtle gradient border (accent color), "Most Popular" badge, enhanced features, priority support
-- Each card: large pricing display, bullet features with checkmarks, prominent CTA button
+**Three explicit guardrails on this offering's marketing copy:**
+1. **No specific hosting provider named on the site.** Cloudflare/Vercel/Netlify are internal delivery choices. Public copy says "modern infrastructure" or "modern stack."
+2. **48-hour delivery framing, not same-day.** "Most updates live within 48 hours" leaves operational flex. Eugenio's internal target is 1–2 days; the public commit is the longer end of that range so we under-promise and over-deliver.
+3. **Client owns hosting + domain.** This is a load-bearing trust signal against the agency-hostage pattern SMBs have been burned by. Always preserve it.
 
-### Services Grid
-3-column grid (lg:grid-cols-3):
-- Data Integration, AI Agents, Knowledge Systems, Analytics cards
-- Each: icon placeholder (<!-- CUSTOM ICON: service-specific -->), title, 2-3 line description
-- Hover: subtle lift with shadow-lg transition
+**On the Receptionist + Assistant pairing**: these are deliberately framed as one AI in two roles, not two separate products. The website copy makes that explicit ("One AI persona, two roles") so a buyer reading both cards sees a complete front-office system, not two competing offerings. The dividing line is direction of communication:
+- *Customer-initiated* → Receptionist (autonomous, real-time, public)
+- *Owner-initiated* → Assistant (delegated, supervised, drafts for approval)
 
-### Results/Metrics Section
-4-column stats bar (lg:grid-cols-4):
-- "500+ Implementations", "98% Client Retention", "40% Cost Reduction", "24/7 AI Support"
-- Large numbers (4xl-5xl) with labels below
+## Files to know
+- `client/src/pages/home.tsx` — top-level section composition.
+- `client/src/components/hero-section.tsx` — hero copy.
+- `client/src/components/benefits-section.tsx` — three-stage explainer (Awareness / Conversion / Retention).
+- `client/src/components/pain-section.tsx` — five-pain tile section.
+- `client/src/components/solutions.tsx` — three productized solutions.
+- `client/src/components/how-it-works.tsx` — three-step engagement flow.
+- `client/src/components/faq-section.tsx` — Q&A.
+- `client/src/components/contact-section.tsx` — book-a-call card + email card + contact form (no PayPal).
+- `client/src/components/navigation.tsx` — sticky top nav with section anchors.
+- `client/src/components/footer.tsx` — minimal footer with section anchors + legal links.
+- `client/src/components/build-in-public.tsx` — REMOVED in the second pass.
 
-### Case Studies
-Alternating image-text layout:
-- Row 1: Image left (client dashboard screenshot) + results right
-- Row 2: Results left + image right (AI visualization)
-- Each: client logo, key metrics, testimonial quote
-
-### Process/How It Works
-Horizontal timeline (3 steps):
-- Step numbers in accent circles, connecting lines
-- Subscribe → Integrate → Scale phases
-- Brief description under each
-
-### FAQ Accordion
-Single column, max-w-3xl centered:
-- Clean expansion panels, plus/minus icons
-- Focus on business concerns: ROI, implementation time, security
-
-### Final CTA Section
-Centered, contained:
-- Bold headline "Ready to Transform Your Business?"
-- Supporting text about risk-free trial
-- Primary CTA "Start Your Subscription"
-- Small print: "No contracts, pause anytime"
-
-### Footer
-3-column (md:grid-cols-3):
-- Brand + tagline
-- Quick links (Services, Pricing, Case Studies)
-- Contact + LinkedIn/Twitter icons
-
-## Interactions
-- Minimal, purposeful animations only
-- CTAs: scale-105 on hover, shadow enhancements
-- Cards: translate-y-1 subtle lift
-- NO distracting scroll effects or background animations
-
-## Images Strategy
-
-**Hero Image**: Right-aligned (60% width on desktop), abstract AI/neural network visualization or modern tech workspace - high-quality stock from Unsplash (search: "artificial intelligence abstract" or "data visualization blue")
-
-**Case Study Images** (2-3): Product dashboard screenshots or AI system interfaces - clean, professional screenshots showing real implementations
-
-**All images**: Professional, blue-toned color grading, optimized for web, subtle overlays for text readability where needed
-
-## Trust Elements
-- Client logos strip below hero (grayscale, hover color)
-- Security badges in footer
-- "As featured in" media mentions
-- Real metrics with sources
-
-This creates a conversion-optimized, professional AI agency site that builds trust through visual clarity and strategic emphasis on business results.
+## Notes for future edits
+- Any change to positioning copy must keep the awareness/conversion/retention matrix intact unless the niche is being repositioned.
+- Solutions list is the source of truth for what Thynra offers. Update when offerings change.
+- If a future request introduces founder-"I" voice or build-in-public framing on the web, push back — that's LinkedIn territory per `voice_split_web_vs_linkedin.md` in personal-brand memory.
