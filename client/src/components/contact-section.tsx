@@ -88,7 +88,7 @@ export default function ContactSection() {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl font-bold mb-4" data-testid="text-contact-title">
-            Want to see if front-office AI fits your business?
+            Want to see if this fits your business?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Talk to Sofia now, or send a message. We usually reply within a day.

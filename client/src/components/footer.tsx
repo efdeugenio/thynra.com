@@ -10,7 +10,7 @@ export default function Footer() {
               Thynra
             </span>
             <span className="text-xs text-muted-foreground">
-              Front-office AI for SMBs
+              AI that helps you get and keep more customers
             </span>
           </div>
           <div
@@ -29,6 +29,13 @@ export default function Footer() {
             <a href="#how" className="hover:text-primary transition-colors">
               How
             </a>
+            <Link
+              href="/quiz"
+              className="hover:text-primary transition-colors"
+              data-testid="link-footer-quiz"
+            >
+              AI Readiness Check
+            </Link>
             <a href="#contact" className="hover:text-primary transition-colors">
               Contact
             </a>

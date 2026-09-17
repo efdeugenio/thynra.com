@@ -1,8 +1,10 @@
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Phone } from "lucide-react";
+import { Phone, Sparkles } from "lucide-react";
 import thynraLogo from "@assets/Thynra logo_1760137533222.png";
 
 export default function Navigation() {
+  const [, navigate] = useLocation();
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -43,24 +45,32 @@ export default function Navigation() {
             >
               How
             </button>
-            <Button
+            <button
               onClick={talkToSofia}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              className="text-secondary-foreground hover:text-primary transition-colors text-sm inline-flex items-center"
               data-testid="button-talk-to-sofia-nav"
             >
-              <Phone className="w-4 h-4 mr-2" />
+              <Phone className="w-4 h-4 mr-1.5" />
               Talk to Sofia
+            </button>
+            <Button
+              onClick={() => navigate("/quiz")}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              data-testid="nav-quiz"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              AI Readiness Check
             </Button>
           </div>
           <div className="md:hidden">
             <Button
-              onClick={talkToSofia}
+              onClick={() => navigate("/quiz")}
               size="sm"
               className="bg-primary text-primary-foreground"
-              data-testid="button-talk-to-sofia-mobile"
+              data-testid="nav-quiz-mobile"
             >
-              <Phone className="w-4 h-4 mr-2" />
-              Sofia
+              <Sparkles className="w-4 h-4 mr-2" />
+              Readiness Check
             </Button>
           </div>
         </div>

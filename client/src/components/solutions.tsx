@@ -1,49 +1,72 @@
-import { Phone, Send, Globe } from "lucide-react";
+import { Phone, Star, Repeat, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 
 export default function Solutions() {
+  const [, navigate] = useLocation();
   const trySofiaLive = () =>
     (window as any).thynra?.startCall?.({ context: "receptionist_demo" });
+
   const solutions = [
     {
+      icon: Star,
+      stage: "Awareness",
+      stageColor: "text-blue-500",
+      name: "Reputation & Local Presence",
+      tagline: "Get found and trusted before the first call.",
+      description:
+        "We turn reviews and your Google Business Profile into a steady engine that lifts your local ranking — plus a fast website you actually own. When someone searches for a business like yours, you're the one that shows up, with the reviews to back it.",
+      bullets: [
+        "Review monitoring with on-brand responses, ready to approve",
+        "Post-visit review nudges that lift your local map-pack ranking",
+        "Google Business Profile audit, fixes, and weekly posts",
+        "A fast website you own — hosting and domain in your name, updated in 48h",
+      ],
+    },
+    {
       icon: Phone,
+      stage: "Conversion",
+      stageColor: "text-purple-500",
       name: "AI Receptionist",
-      tagline: "Voice, chat, and messaging — 24/7, bilingual.",
+      tagline: "Answer and book in the next five minutes — then follow up for you.",
       description:
-        "An AI front desk that picks up the phone, replies on web chat, and handles WhatsApp or SMS in English or Spanish. It books appointments, qualifies leads, answers common questions, and routes to a human only when the conversation needs it.",
+        "An AI front desk that picks up the phone, web chat, WhatsApp, and SMS in English or Spanish. It books appointments, qualifies leads, and routes to a human only when needed. The same AI also drafts your follow-ups, quotes, and replies in your voice — for your approval. One persona, two roles.",
       bullets: [
-        "Phone, web chat, WhatsApp, and SMS — one consistent persona",
-        "English and Spanish out of the box, more languages on request",
-        "Books appointments and captures leads on every channel",
-        "Built for owner-operated businesses that can't catch every call",
+        "Phone, web chat, WhatsApp, and SMS — one bilingual persona, 24/7",
+        "Books appointments and qualifies leads on every channel",
+        "Drafts your follow-ups, quotes, and replies in your voice for approval",
+        "Appointment reminders and no-show recovery that run themselves",
       ],
     },
     {
-      icon: Send,
-      name: "AI Front-Office Assistant",
-      tagline: "The other side of your AI Receptionist. The side you delegate to.",
+      icon: Repeat,
+      stage: "Retention",
+      stageColor: "text-emerald-500",
+      name: "Recall & Reactivation",
+      tagline: "Win back the customers you already paid to earn.",
       description:
-        "After the AI Receptionist answers a call, captures a lead, or takes a message, your Front-Office Assistant picks up the thread. You delegate the next step. A follow-up email. A contract to send. A prospect to schedule. A DM to reply to. It executes in your voice, for your approval. One AI persona, two roles.",
+        "Your past customers and abandoned leads are sitting in your records. We reactivate them automatically — overdue clients, patients due for a visit, quotes that went cold — with personalized, on-brand messages that bring them back without more ad spend.",
       bullets: [
-        "Picks up where the receptionist hands off — leads, quotes, and messages",
-        "Drafts emails, DMs, and replies in your voice for your approval",
-        "Schedules with prospects, sends contracts, prepares outbound on your behalf",
-        "One AI persona, two roles: receptionist for your customers, assistant for you",
+        "Wins back lapsed customers and patients automatically",
+        "Reactivation campaigns that run on your existing data",
+        "Personalized follow-ups in your voice — not generic blasts",
+        "Turns one-time buyers into repeat revenue and referrals",
       ],
     },
     {
-      icon: Globe,
-      name: "AI-Powered Web Subscription",
-      tagline: "Unlimited pages. Live in 48 hours. Not weeks.",
+      icon: BarChart3,
+      stage: "Operations",
+      stageColor: "text-amber-500",
+      name: "Owner's Weekly Report",
+      tagline: "Run it without drowning in spreadsheets.",
       description:
-        "Migrate off slow agencies and expensive hosting. We build your site on a modern stack and use AI to draft updates in minutes. We review and test before shipping, and most updates go live within 48 hours, often faster. Your hosting account and domain stay in your name. We're the dev layer on top, not a middleman. Flat monthly fee covers unlimited pages and updates.",
+        "The numbers that actually run your business — leads, bookings, no-shows, revenue — pulled from your scattered tools into one weekly report that lands in your inbox. Built on a data-engineering backbone, so it works with the messy data you already have.",
       bullets: [
-        "Modern stack on infrastructure that scales without surprise bills",
-        "Most updates live within 48 hours, not six-week agency cycles",
-        "AI-drafted, human-reviewed, tested before every ship",
-        "You own the hosting account and the domain. No agency lock-in.",
-        "Unlimited pages and updates included in the subscription",
+        "A weekly owner's report auto-generated from your scattered data",
+        "The numbers that matter, without the manual spreadsheet work",
+        "Spot what's working and what's leaking before it costs you",
+        "A data-engineering backbone competitors can't copy",
       ],
     },
   ];
@@ -69,7 +92,7 @@ export default function Solutions() {
             viewport={{ once: true }}
             data-testid="text-solutions-title"
           >
-            Three productized systems we build for SMBs.
+            The workflows we automate — mapped to where you lose customers.
           </motion.h2>
           <motion.p
             className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed"
@@ -78,12 +101,13 @@ export default function Solutions() {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Each one solves a specific front-office gap. Pick the one that&apos;s
-            costing you the most. Combine them when the system compounds.
+            Awareness, conversion, retention, and the operations behind them.
+            Start with the gap that&apos;s costing you the most — the 2-minute
+            readiness check tells you which one.
           </motion.p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 gap-6">
           {solutions.map((solution, index) => {
             const Icon = solution.icon;
             return (
@@ -96,8 +120,15 @@ export default function Solutions() {
                 viewport={{ once: true }}
                 data-testid={`card-solution-${index}`}
               >
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                  <Icon className="w-6 h-6 text-primary" />
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <span
+                    className={`text-xs font-semibold uppercase tracking-wider ${solution.stageColor}`}
+                  >
+                    {solution.stage}
+                  </span>
                 </div>
                 <h3 className="text-2xl font-bold mb-1">{solution.name}</h3>
                 <p className="text-primary text-sm font-medium mb-4">
@@ -128,6 +159,25 @@ export default function Solutions() {
             );
           })}
         </div>
+
+        <motion.div
+          className="text-center mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <p className="text-muted-foreground mb-4">
+            Not sure which gap is costing you the most?
+          </p>
+          <Button
+            onClick={() => navigate("/quiz")}
+            className="gradient-bg text-white px-8 py-3 rounded-lg font-semibold hover:scale-105 transition-transform"
+            data-testid="button-solutions-quiz"
+          >
+            Start the 2-min check
+          </Button>
+        </motion.div>
       </div>
     </section>
   );

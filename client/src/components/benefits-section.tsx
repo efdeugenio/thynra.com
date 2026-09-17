@@ -1,4 +1,4 @@
-import { Search, MessagesSquare, Repeat } from "lucide-react";
+import { Search, MessagesSquare, Repeat, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function BenefitsSection() {
@@ -6,13 +6,13 @@ export default function BenefitsSection() {
     {
       icon: Search,
       label: "Awareness",
-      tagline: "How customers find you in 2026.",
+      tagline: "How customers find you.",
       description:
-        "When someone searches Google, asks ChatGPT, or scrolls past a comment thread looking for a business like yours.",
+        "When someone searches Google, asks ChatGPT, or checks your reviews looking for a business like yours.",
       bullets: [
-        "Reviews, AI-search visibility, structured presence",
-        "Content that consistently shows up in your voice",
-        "Comment and DM engagement at scale",
+        "Reviews monitored and answered on-brand",
+        "Higher local map-pack ranking from review velocity",
+        "Google Business Profile and a fast site you own",
       ],
       color: "bg-blue-500",
     },
@@ -42,6 +42,19 @@ export default function BenefitsSection() {
       ],
       color: "bg-emerald-500",
     },
+    {
+      icon: BarChart3,
+      label: "Operations",
+      tagline: "What keeps the promises you make.",
+      description:
+        "The admin behind every customer — scheduling, reminders, reporting — that eats your team's hours and quietly caps how much you can grow.",
+      bullets: [
+        "Repetitive admin automated end to end",
+        "A weekly owner's report from your scattered data",
+        "Scale to more customers without more headcount",
+      ],
+      color: "bg-amber-500",
+    },
   ];
 
   return (
@@ -55,7 +68,7 @@ export default function BenefitsSection() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            What front-office AI covers
+            What we cover
           </motion.span>
           <motion.h2
             className="text-4xl font-bold text-foreground mb-4"
@@ -65,7 +78,8 @@ export default function BenefitsSection() {
             viewport={{ once: true }}
             data-testid="text-stages-title"
           >
-            Three stages. One thing in common.
+            Three stages where you win customers — plus the operations behind
+            them.
           </motion.h2>
           <motion.p
             className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed"
@@ -74,13 +88,13 @@ export default function BenefitsSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Front-office means every part of your business that touches a
-            customer. The back-office runs on its own software. The front-office
-            is where AI changes how you compete.
+            We handle every point where you win or lose a customer — getting
+            found, answering fast, and keeping them coming back — plus the
+            operations behind them. That&apos;s where AI changes how you compete.
           </motion.p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stages.map((stage, index) => {
             const Icon = stage.icon;
             return (

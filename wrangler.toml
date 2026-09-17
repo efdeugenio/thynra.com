@@ -19,6 +19,13 @@ PORT = "8787"
 # RECEPTIONIST_BASE_URL  e.g. https://receptionist.thynra.com (no trailing slash)
 # THYNRA_INTERNAL_KEY    same value set as a secret on the receptionist Fly app
 #
+# Email + lead nurture (Resend):
+# RESEND_API_KEY          Resend API key (sending domain thynra.com is verified)
+# RESEND_QUIZ_SEGMENT_ID  id of the "Quiz leads" Segment; quiz leads are added to it
+#                         (optional — without it, contacts are still created + tagged)
+# CONTACT_FROM_EMAIL      optional, default "Thynra <hello@thynra.com>"
+# OPERATOR_NOTIFY_EMAIL   optional, default "hello@thynra.com" (where leads land)
+#
 # Onvo Price ids per plan SKU (create these in the Onvo dashboard first):
 # ONVO_PRICE_RECEPTIONIST_MONTHLY  recurring $129/mo
 # ONVO_PRICE_RECEPTIONIST_ANNUAL   recurring $1188/yr (effectively $99/mo)

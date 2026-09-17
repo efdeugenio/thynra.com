@@ -1,31 +1,39 @@
-import { Phone, Map, Wrench } from "lucide-react";
+import { Sparkles, Map, Wrench, Repeat } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function HowItWorks() {
   const steps = [
     {
-      icon: Phone,
+      icon: Sparkles,
       number: "01",
-      title: "Discovery call",
-      duration: "30 minutes · free",
+      title: "Take the readiness check",
+      duration: "2 minutes · free",
       description:
-        "We talk about your business, where customers come in, where they fall out, and what front-office AI could plausibly fix in your specific case. No pitch deck.",
+        "Answer six questions about how you handle customers today. You get an instant diagnosis of the three stages where SMBs win or lose, and which gap is costing you the most.",
     },
     {
       icon: Map,
       number: "02",
-      title: "Diagnostic",
-      duration: "1 to 2 weeks",
+      title: "Audit & plan",
+      duration: "30-minute call",
       description:
-        "We map your current customer journey, identify the highest-leverage front-office gap, and propose a system, not a single tool. You get a written diagnosis whether or not we work together.",
+        "We turn your result into a concrete plan: the one workflow to automate first, what it saves you, and what it costs to build. You leave with the roadmap whether or not we build it.",
     },
     {
       icon: Wrench,
       number: "03",
-      title: "Build & ship",
-      duration: "scoped per project",
+      title: "Sprint",
+      duration: "2 weeks · fixed price",
       description:
-        "Real implementation, real integrations, real production tests. Honest about what is working and what isn't. You own everything we build.",
+        "We build, test, and hand over one working automation. Real integrations, real production tests. No open-ended hourly bills. You own everything we build.",
+    },
+    {
+      icon: Repeat,
+      number: "04",
+      title: "Keep it running",
+      duration: "optional · monthly",
+      description:
+        "We maintain the automation, fix anything that breaks, and add one improvement a month. The compounding layer — most clients start one workflow and expand from there.",
     },
   ];
 
@@ -50,7 +58,8 @@ export default function HowItWorks() {
             viewport={{ once: true }}
             data-testid="text-how-title"
           >
-            Three steps. No surprises.
+            You don&apos;t need an AI transformation. You need one workflow off
+            your plate.
           </motion.h2>
           <motion.p
             className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed"
@@ -59,12 +68,13 @@ export default function HowItWorks() {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Owner-operators don&apos;t have time to be sold. So this isn&apos;t
-            a sales process. It&apos;s an engineering one.
+            So we don&apos;t sell you a transformation. We find the one workflow
+            costing you the most, automate it for a fixed price, and keep it
+            running.
           </motion.p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {steps.map((step, index) => {
             const Icon = step.icon;
             return (

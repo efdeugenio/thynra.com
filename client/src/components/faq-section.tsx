@@ -7,9 +7,14 @@ export default function FAQSection() {
 
   const faqs = [
     {
-      question: 'What does "front-office AI" actually mean?',
+      question: "What exactly do you do?",
       answer:
-        "Front-office is every part of your business that talks to a customer. The phone. The DM. The form-fill. The website. The follow-up email. Front-office AI is AI that runs those touchpoints. It's not bookkeeping AI, not internal-ops AI, not generic productivity AI.",
+        "We build AI that handles the moments where you win or lose customers: getting found in search and reviews, answering calls and messages fast, following up, and winning back customers who drifted away — plus the reporting behind it. The parts that touch your customers and your revenue. Not bookkeeping, not internal-ops tools, not generic productivity AI.",
+    },
+    {
+      question: "What's the AI readiness check?",
+      answer:
+        "A 2-minute scorecard. You answer six questions about how you handle customers today, and you get an instant diagnosis of the three stages where SMBs win or lose — awareness, conversion, and retention — plus which gap is costing you the most. No cost, no signup beyond your email to see the result. It's the fastest way to see where to start.",
     },
     {
       question: "Who is this for?",
@@ -22,14 +27,19 @@ export default function FAQSection() {
         "Anything back-office. Bookkeeping, HR, internal automation, dev tooling, generic AI strategy decks. We don't sell single-feature tools either. We build systems where the customer's first call, first message, first form, and first follow-up all work together.",
     },
     {
+      question: "What does it cost?",
+      answer:
+        "Most engagements are a fixed-price sprint to automate one workflow in about two weeks, with an optional monthly retainer to keep it running and add improvements. We scope exact pricing on the call, after we've diagnosed which workflow to start with — so you're pricing a specific outcome, not an open-ended hourly project.",
+    },
+    {
       question: "Are you taking new clients right now?",
       answer:
-        "Yes. We're actively engaging new clients, with a focus on service businesses where front-office gaps are costing measurable revenue. The fastest way to find out if there's a fit is a 30-minute discovery call.",
+        "Yes. We're actively engaging new clients, with a focus on service businesses where missed calls, slow follow-up, and lapsed customers are costing measurable revenue. The fastest way to find out if there's a fit is the free 2-minute readiness check, then a 30-minute call to turn the result into a plan.",
     },
     {
       question: "How is this different from the AI tools I've already tried?",
       answer:
-        "Most AI tools you've tried are point solutions. A chatbot. A voice agent. A scheduler. Each solves one problem. Front-office AI is a system: voice, chat, web, follow-up, and reviews working together. The compounding effect is the point.",
+        "Most AI tools you've tried are point solutions. A chatbot. A voice agent. A scheduler. Each solves one problem. Ours is a system: voice, chat, web, follow-up, and reviews working together. The compounding effect is the point.",
     },
     {
       question: "Do you build custom or use off-the-shelf vendors?",

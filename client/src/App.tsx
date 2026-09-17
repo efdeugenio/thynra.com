@@ -13,11 +13,14 @@ import CheckoutSuccessPage from "@/pages/checkout-success";
 import PricingPage from "@/pages/pricing";
 import OnboardingPage from "@/pages/onboarding";
 import OnboardingResendPage from "@/pages/onboarding-resend";
+import QuizPage from "@/pages/quiz";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/quiz" component={QuizPage} />
+      <Route path="/assessment" component={() => <Redirect to="/quiz" />} />
       <Route path="/pricing" component={() => <Redirect to="/pricing/ai-receptionist" />} />
       <Route path="/pricing/ai-receptionist" component={PricingPage} />
       <Route path="/checkout/sub/:id" component={CheckoutSubscriptionPage} />

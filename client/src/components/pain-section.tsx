@@ -10,31 +10,41 @@ import { motion } from "framer-motion";
 export default function PainSection() {
   const pains = [
     {
+      icon: EyeOff,
+      stage: "Awareness",
+      stageColor: "text-blue-500",
+      title: "Invisible where they search",
+      description:
+        "When prospects search Google, ask ChatGPT, or scan your reviews for a business like yours, you don't show up. Reviews and local presence decide who does.",
+    },
+    {
       icon: PhoneOff,
+      stage: "Conversion",
+      stageColor: "text-purple-500",
       title: "Missed calls",
       description:
         "Most small-business calls go unanswered. Every miss is a customer choosing your competitor.",
     },
     {
-      icon: ArchiveX,
-      title: "Dead database",
-      description:
-        "Past customers and abandoned leads sit in your CRM. Most owners never follow up. The revenue is sitting there.",
-    },
-    {
       icon: Clock,
+      stage: "Conversion",
+      stageColor: "text-purple-500",
       title: "Slow follow-up",
       description:
         "Leads contacted within five minutes convert dramatically better. Most owners reply in 42 hours. By then, the lead is gone.",
     },
     {
-      icon: EyeOff,
-      title: "AI-search invisibility",
+      icon: ArchiveX,
+      stage: "Retention",
+      stageColor: "text-emerald-500",
+      title: "Lapsed customers",
       description:
-        "When prospects ask ChatGPT or Perplexity for a business like yours, you don't show up. Reviews and structured presence decide who does.",
+        "Past customers and abandoned leads sit in your records. Most owners never follow up. The revenue is sitting there, waiting to be reactivated.",
     },
     {
       icon: AlertTriangle,
+      stage: "Trust",
+      stageColor: "text-amber-500",
       title: "The embarrassing-AI trauma",
       description:
         "Every prospect has been burned by a bad AI demo. They aren't buying capability. They are buying \"this won't happen to me again.\"",
@@ -71,7 +81,7 @@ export default function PainSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Front-office AI exists because of these five gaps. Pick the one
+            These are the five gaps where customers slip away. Pick the one
             that&apos;s costing you the most. That&apos;s where we start.
           </motion.p>
         </div>
@@ -89,8 +99,15 @@ export default function PainSection() {
                 viewport={{ once: true }}
                 data-testid={`card-pain-${index}`}
               >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                  <Icon className="w-5 h-5 text-primary" />
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <span
+                    className={`text-xs font-semibold uppercase tracking-wider ${pain.stageColor}`}
+                  >
+                    {pain.stage}
+                  </span>
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{pain.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
