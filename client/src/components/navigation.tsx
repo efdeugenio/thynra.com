@@ -7,19 +7,19 @@ import { LanguageSuggestion, LanguageSwitcher } from "@/components/language-swit
 
 const copy = defineCopy({
   en: {
-    what: "What",
-    solutions: "Solutions",
-    how: "How",
+    solutions: "What we fix",
+    how: "How we start",
+    staircase: "The staircase",
     talkToSofia: "Talk to Sofia",
-    quiz: "AI Readiness Check",
-    quizMobile: "Readiness Check",
+    quiz: "Free 2-min check",
+    quizMobile: "Free check",
   },
   es: {
-    what: "Qué hacemos",
-    solutions: "Soluciones",
-    how: "Cómo trabajamos",
+    solutions: "Qué arreglamos",
+    how: "Cómo empezamos",
+    staircase: "La escalera",
     talkToSofia: "Habla con Sofia",
-    quiz: "Diagnóstico de IA",
+    quiz: "Diagnóstico gratis",
     quizMobile: "Diagnóstico",
   },
 });
@@ -49,13 +49,6 @@ export default function Navigation() {
             </div>
             <div className="hidden md:flex items-center space-x-6">
               <button
-                onClick={() => scrollTo("what")}
-                className="text-secondary-foreground hover:text-primary transition-colors text-sm"
-                data-testid="nav-what"
-              >
-                {t.what}
-              </button>
-              <button
                 onClick={() => scrollTo("solutions")}
                 className="text-secondary-foreground hover:text-primary transition-colors text-sm"
                 data-testid="nav-solutions"
@@ -68,6 +61,13 @@ export default function Navigation() {
                 data-testid="nav-how"
               >
                 {t.how}
+              </button>
+              <button
+                onClick={() => scrollTo("staircase")}
+                className="text-secondary-foreground hover:text-primary transition-colors text-sm"
+                data-testid="nav-staircase"
+              >
+                {t.staircase}
               </button>
               <button
                 onClick={talkToSofia}
