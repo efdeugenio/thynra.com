@@ -29,6 +29,7 @@ import {
   levelForScore,
   reportCopy,
   reportSummaryText,
+  stageSequence,
   type Stage,
 } from "@/lib/quizReport";
 import { sofiaConfigured, talkToSofia, chatWithSofia, type QuizContext } from "@/lib/sofiaWidget";
@@ -128,6 +129,11 @@ const copy = defineCopy<{
   peerAutonomous: string;
   peerOther: string;
   breakdownTitle: string;
+  sequenceIntro: string;
+  /** "Stage one / two / three" — the rung, not a grade. */
+  rankLabels: [string, string, string];
+  rankHints: [string, string, string];
+  levelStripTitle: string;
   startHere: string;
   numbersTitle: string;
   whereWeStart: (stage: string) => string;
@@ -145,9 +151,9 @@ const copy = defineCopy<{
 }>({
   en: {
     headerLabel: "AI Readiness Check",
-    introTitle: "How ready is your business to grow with AI?",
+    introTitle: "Which problem should you fix first?",
     introBody:
-      "Six questions, about two minutes. You'll get your readiness level across the three stages where SMBs win or lose customers: Awareness, Conversion, and Retention.",
+      "Six questions, about two minutes. You get back the three stages where SMBs win or lose customers — Awareness, Conversion, Retention — put in the order we'd fix them, so you know what stage one is.",
     questionOf: (n, total) => `Question ${n} of ${total}`,
     back: "Back",
     questions: {
@@ -210,7 +216,7 @@ const copy = defineCopy<{
     gateToastBody: "Add your name and email to see your results.",
     gateTitle: "Your results are ready.",
     gateBody:
-      "Tell us where to send your readiness breakdown, and we'll show it to you right now.",
+      "Tell us where to send your plan, and we'll show it to you right now.",
     nameLabel: "Name *",
     namePlaceholder: "Your full name",
     emailLabel: "Email *",
@@ -228,7 +234,16 @@ const copy = defineCopy<{
       "You're ahead of the roughly 9% of SMBs that have fully integrated AI across their business.",
     peerOther:
       "Most SMBs land in the Reactive and Responsive range. Only about 9% have fully integrated AI across their business, so closing your gaps now is a real edge.",
-    breakdownTitle: "Your stage-by-stage breakdown",
+    breakdownTitle: "Your plan, in order",
+    sequenceIntro:
+      "This isn't a grade. It's the order we'd fix things in — weakest first, because that's where the money is leaking fastest. You don't do all three. You do stage one.",
+    rankLabels: ["Stage one", "Stage two", "Stage three"],
+    rankHints: [
+      "What we'd build first",
+      "Once stage one is running",
+      "Last, and cheaper by then",
+    ],
+    levelStripTitle: "Where you're starting from",
     startHere: "Start here",
     numbersTitle: "Why this matters — by the numbers",
     whereWeStart: (stage) => `Where we'd start: ${stage}`,
@@ -245,10 +260,10 @@ const copy = defineCopy<{
         ],
       },
       conversion: {
-        name: "AI Receptionist",
+        name: "Answering and follow-up",
         tagline: "Answer and book in the next five minutes — then follow up for you.",
         bullets: [
-          "Phone, web chat, WhatsApp, and SMS — one bilingual persona, 24/7",
+          "Phone, web chat, WhatsApp, and SMS answered 24/7, in English and Spanish",
           "Books appointments and qualifies leads on every channel",
           "Drafts your follow-ups, quotes, and replies in your voice for approval",
           "Appointment reminders and no-show recovery that run themselves",
@@ -279,9 +294,9 @@ const copy = defineCopy<{
   },
   es: {
     headerLabel: "Diagnóstico de IA",
-    introTitle: "¿Qué tan listo está tu negocio para crecer con IA?",
+    introTitle: "¿Qué problema deberías arreglar primero?",
     introBody:
-      "Seis preguntas, unos dos minutos. Vas a conocer tu nivel de preparación en las tres etapas donde los negocios ganan o pierden clientes: Visibilidad, Conversión y Fidelización.",
+      "Seis preguntas, unos dos minutos. Te devolvemos las tres etapas donde los negocios ganan o pierden clientes (Visibilidad, Conversión y Fidelización) puestas en el orden en que las arreglaríamos, para que sepas cuál es tu etapa uno.",
     questionOf: (n, total) => `Pregunta ${n} de ${total}`,
     back: "Atrás",
     questions: {
@@ -344,7 +359,7 @@ const copy = defineCopy<{
     gateToastBody: "Agrega tu nombre y correo para ver tus resultados.",
     gateTitle: "Tus resultados están listos.",
     gateBody:
-      "Dinos a dónde enviarte tu resultado detallado y te lo mostramos ahora mismo.",
+      "Dinos a dónde enviarte tu plan y te lo mostramos ahora mismo.",
     nameLabel: "Nombre *",
     namePlaceholder: "Tu nombre completo",
     emailLabel: "Correo *",
@@ -362,7 +377,16 @@ const copy = defineCopy<{
       "Estás por delante de ese 9% aproximado de pymes que ya integró la IA por completo en su negocio.",
     peerOther:
       "La mayoría de las pymes queda entre Negocio reactivo y Negocio que responde. Solo alrededor del 9% ha integrado la IA por completo en su negocio, así que cerrar tus brechas ahora es una ventaja real.",
-    breakdownTitle: "Tu resultado por etapa",
+    breakdownTitle: "Tu plan, en orden",
+    sequenceIntro:
+      "Esto no es una nota. Es el orden en que lo arreglaríamos: primero lo más débil, porque es por donde se te está yendo el dinero más rápido. No haces las tres. Haces la etapa uno.",
+    rankLabels: ["Etapa uno", "Etapa dos", "Etapa tres"],
+    rankHints: [
+      "Lo que construiríamos primero",
+      "Cuando la etapa uno esté funcionando",
+      "Al final, y para entonces más barata",
+    ],
+    levelStripTitle: "Desde dónde arrancas",
     startHere: "Empieza aquí",
     numbersTitle: "Por qué importa: los números",
     whereWeStart: (stage) => `Por dónde empezaríamos: ${stage}`,
@@ -379,10 +403,10 @@ const copy = defineCopy<{
         ],
       },
       conversion: {
-        name: "Recepcionista con IA",
+        name: "Respuesta y seguimiento",
         tagline: "Responde y agenda en los próximos cinco minutos, y después da seguimiento por ti.",
         bullets: [
-          "Teléfono, chat web, WhatsApp y SMS: una sola recepcionista bilingüe, 24/7",
+          "Teléfono, chat web, WhatsApp y SMS atendidos 24/7, en español e inglés",
           "Agenda citas y califica clientes potenciales en todos los canales",
           "Redacta tus seguimientos, cotizaciones y respuestas en tu estilo, para que los apruebes",
           "Recordatorios de citas y recuperación de inasistencias que funcionan solos",
@@ -475,12 +499,9 @@ export default function QuizPage() {
   const totalScore = () =>
     QUESTIONS.reduce((acc, q) => acc + (answers[q.id] ?? 0), 0);
 
-  const weakestStage = (): Stage => {
-    const s = stageScores();
-    return (Object.keys(s) as Stage[]).reduce((min, k) =>
-      s[k] < s[min] ? k : min,
-    );
-  };
+  const orderedStages = (): Stage[] => stageSequence(stageScores());
+
+  const weakestStage = (): Stage => orderedStages()[0];
 
   const submitGate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -776,11 +797,7 @@ export default function QuizPage() {
                 const lvl = rc.levels[lvlKey];
                 const s = stageScores();
                 const weak = weakestStage();
-                const stageOrder: Stage[] = [
-                  "awareness",
-                  "conversion",
-                  "retention",
-                ];
+                const ordered = orderedStages();
                 const overallPct = Math.round((totalScore() / 24) * 100);
                 const R = 54;
                 const CIRC = 2 * Math.PI * R;
@@ -791,8 +808,100 @@ export default function QuizPage() {
                       {t.reportKicker}
                     </p>
 
-                    {/* Score gauge + level */}
-                    <div className="bg-card border border-border rounded-2xl p-8 mb-6 flex flex-col sm:flex-row items-center gap-8">
+                    {/* The deliverable: the order of work, weakest first. */}
+                    <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">
+                      {t.breakdownTitle}
+                    </h1>
+                    <p className="text-muted-foreground leading-relaxed mb-6">
+                      {t.sequenceIntro}
+                    </p>
+                    <div className="space-y-4 mb-8">
+                      {ordered.map((st, rank) => {
+                        const meta = { ...STAGE_STYLE[st], ...rc.stages[st] };
+                        const Icon = meta.icon;
+                        const pct = Math.round((s[st] / 8) * 100);
+                        const ins = rc.insights[st];
+                        const strong = s[st] >= 6;
+                        return (
+                          <div
+                            key={st}
+                            className="bg-card border border-border rounded-xl p-5"
+                          >
+                            <div className="flex items-start justify-between gap-3 mb-2">
+                              <div className="flex items-center gap-3">
+                                <div
+                                  className={`w-9 h-9 ${meta.color} rounded-md flex items-center justify-center shrink-0`}
+                                >
+                                  <Icon className="text-white w-4 h-4" />
+                                </div>
+                                <div>
+                                  <p
+                                    className={`text-xs font-semibold uppercase tracking-wider ${
+                                      rank === 0
+                                        ? "text-primary"
+                                        : "text-muted-foreground"
+                                    }`}
+                                  >
+                                    {t.rankLabels[rank]} · {t.rankHints[rank]}
+                                  </p>
+                                  <span className="font-semibold text-foreground">
+                                    {meta.label}
+                                  </span>
+                                </div>
+                              </div>
+                              <span className="text-sm text-muted-foreground shrink-0 mt-1">
+                                {s[st]}/8
+                              </span>
+                            </div>
+                            <Progress value={pct} className="h-2 mb-3" />
+                            <p className="text-sm text-muted-foreground leading-relaxed">
+                              {strong ? ins.strong : ins.weak}
+                            </p>
+                            {ins.stat && (
+                              <div className="mt-3 flex items-baseline gap-2 rounded-lg bg-muted/60 px-3 py-2">
+                                <span className="text-primary font-bold text-lg shrink-0">
+                                  {ins.stat.value}
+                                </span>
+                                <span className="text-xs text-muted-foreground leading-snug">
+                                  {ins.stat.label}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* By the numbers */}
+                    <h3 className="text-lg font-bold text-foreground mb-3">
+                      {t.numbersTitle}
+                    </h3>
+                    <div className="grid grid-cols-2 gap-3 mb-8">
+                      {rc.industryStats.map((stat, i) => {
+                        const Icon = INDUSTRY_STAT_ICONS[i];
+                        return (
+                          <div
+                            key={stat.value}
+                            className="bg-card border border-border rounded-xl p-4"
+                          >
+                            <Icon className="w-5 h-5 text-primary mb-2" />
+                            <p className="text-2xl font-bold text-foreground leading-none mb-1">
+                              {stat.value}
+                            </p>
+                            <p className="text-xs text-muted-foreground leading-snug">
+                              {stat.label}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Where you're starting from — context for the plan above,
+                        not the headline. */}
+                    <h3 className="text-lg font-bold text-foreground mb-3">
+                      {t.levelStripTitle}
+                    </h3>
+                                        <div className="bg-card border border-border rounded-2xl p-8 mb-6 flex flex-col sm:flex-row items-center gap-8">
                       <div className="relative shrink-0">
                         <svg width="140" height="140" viewBox="0 0 140 140">
                           <circle
@@ -840,9 +949,9 @@ export default function QuizPage() {
                         </svg>
                       </div>
                       <div className="text-center sm:text-left">
-                        <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-1">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-1">
                           {lvl.name}
-                        </h1>
+                        </h2>
                         <p className="text-primary font-medium mb-3">
                           {lvl.range}
                         </p>
@@ -861,85 +970,6 @@ export default function QuizPage() {
                       <p className="text-muted-foreground leading-relaxed">
                         {lvl.body}
                       </p>
-                    </div>
-
-                    {/* Stage breakdown with insights */}
-                    <h3 className="text-lg font-bold text-foreground mb-3">
-                      {t.breakdownTitle}
-                    </h3>
-                    <div className="space-y-4 mb-8">
-                      {stageOrder.map((st) => {
-                        const meta = { ...STAGE_STYLE[st], ...rc.stages[st] };
-                        const Icon = meta.icon;
-                        const pct = Math.round((s[st] / 8) * 100);
-                        const ins = rc.insights[st];
-                        const strong = s[st] >= 6;
-                        return (
-                          <div
-                            key={st}
-                            className="bg-card border border-border rounded-xl p-5"
-                          >
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <div
-                                  className={`w-8 h-8 ${meta.color} rounded-md flex items-center justify-center`}
-                                >
-                                  <Icon className="text-white w-4 h-4" />
-                                </div>
-                                <span className="font-semibold text-foreground">
-                                  {meta.label}
-                                </span>
-                                {st === weak && (
-                                  <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                                    {t.startHere}
-                                  </span>
-                                )}
-                              </div>
-                              <span className="text-sm text-muted-foreground">
-                                {s[st]}/8
-                              </span>
-                            </div>
-                            <Progress value={pct} className="h-2 mb-3" />
-                            <p className="text-sm text-muted-foreground leading-relaxed">
-                              {strong ? ins.strong : ins.weak}
-                            </p>
-                            {ins.stat && (
-                              <div className="mt-3 flex items-baseline gap-2 rounded-lg bg-muted/60 px-3 py-2">
-                                <span className="text-primary font-bold text-lg shrink-0">
-                                  {ins.stat.value}
-                                </span>
-                                <span className="text-xs text-muted-foreground leading-snug">
-                                  {ins.stat.label}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* By the numbers */}
-                    <h3 className="text-lg font-bold text-foreground mb-3">
-                      {t.numbersTitle}
-                    </h3>
-                    <div className="grid grid-cols-2 gap-3 mb-8">
-                      {rc.industryStats.map((stat, i) => {
-                        const Icon = INDUSTRY_STAT_ICONS[i];
-                        return (
-                          <div
-                            key={stat.value}
-                            className="bg-card border border-border rounded-xl p-4"
-                          >
-                            <Icon className="w-5 h-5 text-primary mb-2" />
-                            <p className="text-2xl font-bold text-foreground leading-none mb-1">
-                              {stat.value}
-                            </p>
-                            <p className="text-xs text-muted-foreground leading-snug">
-                              {stat.label}
-                            </p>
-                          </div>
-                        );
-                      })}
                     </div>
 
                     {/* Personalized reco */}

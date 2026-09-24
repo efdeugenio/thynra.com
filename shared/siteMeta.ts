@@ -30,14 +30,14 @@ const ROUTES: RouteMeta[] = [
     index: true,
     text: {
       en: {
-        title: "Thynra — AI that helps service businesses win and keep customers",
+        title: "Thynra — we fix one problem in your business at a time",
         description:
-          "Most service businesses lose customers in the same three places: they can't find you, nobody answers, they don't come back. Find yours in 2 minutes, then we automate it.",
+          "No six-month projects and no replacing the systems you already use. You start with whatever is costing you the most, built in two weeks at a fixed price. The free 2-minute check tells you which one that is.",
       },
       es: {
-        title: "Thynra — IA para que tu negocio consiga y conserve clientes",
+        title: "Thynra — arreglamos un problema de tu negocio a la vez",
         description:
-          "La mayoría de los negocios de servicios pierden clientes en los mismos tres puntos: no te encuentran, nadie les responde, no vuelven. Descubre dónde los pierde el tuyo en 2 minutos y lo automatizamos.",
+          "Sin proyectos de seis meses y sin cambiar los sistemas que ya usas. Empiezas por el que más te está costando, construido en dos semanas a precio fijo. El diagnóstico gratis de 2 minutos te dice cuál es.",
       },
     },
   },
@@ -47,14 +47,14 @@ const ROUTES: RouteMeta[] = [
     index: true,
     text: {
       en: {
-        title: "AI Readiness Check — Thynra",
+        title: "Which problem should you fix first? — Thynra",
         description:
-          "Six questions, two minutes. See where your business is losing customers and which workflow to automate first, with a free PDF plan.",
+          "Six questions, two minutes. Get the three stages where your business loses customers, put in the order we'd fix them, with a free PDF plan.",
       },
       es: {
-        title: "Diagnóstico de IA para tu negocio — Thynra",
+        title: "¿Qué problema arreglar primero? — Thynra",
         description:
-          "Seis preguntas, dos minutos. Descubre dónde está perdiendo clientes tu negocio y qué proceso automatizar primero, con un plan gratis en PDF.",
+          "Seis preguntas, dos minutos. Te devolvemos las tres etapas donde tu negocio pierde clientes, en el orden en que las arreglaríamos, con un plan gratis en PDF.",
       },
     },
   },
@@ -84,12 +84,6 @@ const ROUTES: RouteMeta[] = [
       en: { title: "Data Deletion — Thynra", description: "How to request deletion of your data from Thynra." },
       es: { title: "Eliminación de datos — Thynra", description: "Cómo solicitar que Thynra elimine tus datos." },
     },
-  },
-  {
-    path: "/pricing/ai-receptionist",
-    locales: ["en"],
-    index: true,
-    text: { en: { title: "AI Receptionist pricing — Thynra", description: "Plans for Thynra's AI Receptionist." } },
   },
   { path: "/checkout/*", locales: ["en"], index: false, text: {} },
   { path: "/onboarding/*", locales: ["en"], index: false, text: {} },
