@@ -980,6 +980,16 @@ const OG_LOCALE = { en: 'en_US', es: 'es_LA' };
 // One URL per page: the SPA shell's file name is never the canonical address.
 app.get('/index.html', (c) => c.redirect('/', 301));
 
+// The receptionist pricing pages are retired while that sale is on hold. The
+// client router also redirects these, but only after serving the shell with a
+// 200 — which leaves the retired URLs indexable. Answer at the edge instead.
+// Checkout and onboarding are deliberately not here: anyone mid-flow keeps
+// their page.
+app.get('/pricing', (c) => c.redirect('/', 301));
+app.get('/pricing/*', (c) => c.redirect('/', 301));
+app.get('/es/pricing', (c) => c.redirect('/es', 301));
+app.get('/es/pricing/*', (c) => c.redirect('/es', 301));
+
 // Google Search Console ownership verification for https://thynra.com/.
 // Served from here (not as a static file) so it can't be lost in a rebuild:
 // Google re-checks it periodically and unverifies the property if it 404s.
