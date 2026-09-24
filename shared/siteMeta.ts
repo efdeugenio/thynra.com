@@ -47,14 +47,14 @@ const ROUTES: RouteMeta[] = [
     index: true,
     text: {
       en: {
-        title: "AI Readiness Check — Thynra",
+        title: "Which problem should you fix first? — Thynra",
         description:
-          "Six questions, two minutes. See where your business is losing customers and which workflow to automate first, with a free PDF plan.",
+          "Six questions, two minutes. Get the three stages where your business loses customers, put in the order we'd fix them, with a free PDF plan.",
       },
       es: {
-        title: "Diagnóstico de IA para tu negocio — Thynra",
+        title: "¿Qué problema arreglar primero? — Thynra",
         description:
-          "Seis preguntas, dos minutos. Descubre dónde está perdiendo clientes tu negocio y qué proceso automatizar primero, con un plan gratis en PDF.",
+          "Seis preguntas, dos minutos. Te devolvemos las tres etapas donde tu negocio pierde clientes, en el orden en que las arreglaríamos, con un plan gratis en PDF.",
       },
     },
   },
