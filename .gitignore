@@ -14,3 +14,6 @@ deploy.sh
 .env.*.local
 # wrangler dev local state
 .wrangler/
+
+# wrangler dev local secrets
+.dev.vars

@@ -85,6 +85,20 @@ const ROUTES: RouteMeta[] = [
       es: { title: "Eliminación de datos — Thynra", description: "Cómo solicitar que Thynra elimine tus datos." },
     },
   },
+  {
+    // Unlisted until Onvo payments are live for it; flip index to true then.
+    path: "/diagnostico-express",
+    locales: ["es"],
+    index: false,
+    text: {
+      es: {
+        title: "Diagnóstico Express — Thynra",
+        description:
+          "Cuéntanos cómo funciona tu negocio hoy y te respondemos con un video de 5 minutos: los tres procesos que automatizaríamos primero, en orden.",
+      },
+    },
+  },
+  { path: "/diagnostico-express/*", locales: ["es"], index: false, text: {} },
   { path: "/checkout/*", locales: ["en"], index: false, text: {} },
   { path: "/onboarding/*", locales: ["en"], index: false, text: {} },
 ];

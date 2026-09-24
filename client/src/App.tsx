@@ -17,6 +17,7 @@ import OnboardingPage from "@/pages/onboarding";
 import OnboardingResendPage from "@/pages/onboarding-resend";
 import QuizPage from "@/pages/quiz";
 import ResourcePage from "@/pages/resource";
+import DiagnosticoPage, { DiagnosticoThanksPage } from "@/pages/diagnostico";
 
 // Pages that exist in both languages. Inside the "/es" nest these paths are
 // relative, so the same components serve /quiz and /es/quiz. Returned as a
@@ -41,6 +42,8 @@ function SpanishRouter() {
       <Switch>
         {sharedRoutes()}
         <Route path="/recursos/:slug" component={ResourcePage} />
+        <Route path="/diagnostico-express" component={DiagnosticoPage} />
+        <Route path="/diagnostico-express/gracias" component={DiagnosticoThanksPage} />
         {/* Retired while the receptionist sale is on hold. */}
         <Route path="/pricing" component={() => <Redirect to="/" />} />
         <Route path="/pricing/*" component={() => <Redirect to="/" />} />
@@ -64,6 +67,8 @@ function EnglishRouter() {
         <Route path="/onboarding/resend" component={OnboardingResendPage} />
         <Route path="/onboarding/:business_id" component={OnboardingPage} />
         <Route path="/recursos/:slug" component={() => <Redirect to={`/es${window.location.pathname}`} />} />
+        {/* Spanish-only offer (charged in colones with CR IVA): send English URLs there. */}
+        <Route path="/diagnostico-express" component={() => <Redirect to="~/es/diagnostico-express" />} />
         <Route component={NotFound} />
       </Switch>
     </LocaleProvider>
