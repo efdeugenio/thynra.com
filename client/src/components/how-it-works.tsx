@@ -4,66 +4,66 @@ import { defineCopy, useCopy } from "@/i18n";
 
 const copy = defineCopy({
   en: {
-    eyebrow: "How we work",
-    title: "You don't need an AI transformation. You need one workflow off your plate.",
+    eyebrow: "How we start",
+    title: "You don't need an AI transformation. You need one process off your plate.",
     subtitle:
-      "So we don't sell you a transformation. We find the one workflow costing you the most, automate it for a fixed price, and keep it running.",
+      "So we don't sell you a transformation. We find the process costing you the most, automate it for a fixed price, and keep it running while you decide what comes next.",
     steps: [
       {
-        title: "Take the readiness check",
+        title: "Take the check",
         duration: "2 minutes · free",
         description:
-          "Answer six questions about how you handle customers today. You get an instant diagnosis of the three stages where SMBs win or lose, and which gap is costing you the most.",
+          "Six questions about how you handle customers today. You get your weak points back instantly — in the order we'd fix them, not as a score.",
       },
       {
-        title: "Audit & plan",
+        title: "Plan stage one",
         duration: "30-minute call",
         description:
-          "We turn your result into a concrete plan: the one workflow to automate first, what it saves you, and what it costs to build. You leave with the roadmap whether or not we build it.",
+          "We turn your result into a concrete plan: which process goes first, what it saves you, what it costs, and what stage two would be. You keep the plan whether or not we build it.",
       },
       {
-        title: "Sprint",
+        title: "We build stage one",
         duration: "2 weeks · fixed price",
         description:
-          "We build, test, and hand over one working automation. Real integrations, real production tests. No open-ended hourly bills. You own everything we build.",
+          "We build, test and hand over one working automation. Real integrations, real production tests, no open-ended hourly bills. You own everything we build.",
       },
       {
-        title: "Keep it running",
+        title: "The next stage, when you say so",
         duration: "optional · monthly",
         description:
-          "We maintain the automation, fix anything that breaks, and add one improvement a month. The compounding layer — most clients start one workflow and expand from there.",
+          "We keep everything running and fix what breaks. When you're ready, the next stage starts — one a quarter, each one approved by you first.",
       },
     ],
   },
   es: {
-    eyebrow: "Cómo trabajamos",
+    eyebrow: "Cómo empezamos",
     title: "No necesitas una transformación con IA. Necesitas quitarte un proceso de encima.",
     subtitle:
-      "Por eso no te vendemos una transformación. Encontramos el proceso que más te está costando, lo automatizamos a precio fijo y lo mantenemos funcionando.",
+      "Por eso no te vendemos una transformación. Encontramos el proceso que más te está costando, lo automatizamos a precio fijo y lo mantenemos funcionando mientras decides el siguiente.",
     steps: [
       {
         title: "Haz el diagnóstico",
         duration: "2 minutos · gratis",
         description:
-          "Responde seis preguntas sobre cómo atiendes hoy a tus clientes. Recibes al instante un diagnóstico de las tres etapas donde los negocios ganan o pierden clientes, y de qué punto te está costando más.",
+          "Seis preguntas sobre cómo atiendes hoy a tus clientes. Recibes al instante tus puntos débiles, en el orden en que los arreglaríamos, no como una nota.",
       },
       {
-        title: "Auditoría y plan",
+        title: "Planeamos la etapa uno",
         duration: "Llamada de 30 minutos",
         description:
-          "Convertimos tu resultado en un plan concreto: el primer proceso a automatizar, cuánto te ahorra y cuánto cuesta construirlo. Te llevas el plan de trabajo, lo construyamos nosotros o no.",
+          "Convertimos tu resultado en un plan concreto: qué proceso va primero, cuánto te ahorra, cuánto cuesta y cuál sería la etapa dos. El plan es tuyo, lo construyamos nosotros o no.",
       },
       {
-        title: "Sprint de automatización",
+        title: "Construimos la etapa uno",
         duration: "2 semanas · precio fijo",
         description:
-          "Construimos, probamos y te entregamos una automatización funcionando. Integraciones reales, pruebas reales en producción. Nada de cobros por hora sin límite. Todo lo que construimos es tuyo.",
+          "Construimos, probamos y entregamos una automatización funcionando. Integraciones reales, pruebas reales en producción, nada de cobros por hora sin límite. Todo lo que construimos es tuyo.",
       },
       {
-        title: "Mantenimiento",
+        title: "La siguiente etapa, cuando tú digas",
         duration: "opcional · mensual",
         description:
-          "Mantenemos la automatización, arreglamos lo que falle y agregamos una mejora al mes. Aquí es donde los resultados se van sumando: la mayoría de los clientes empieza con un proceso y crece desde ahí.",
+          "Mantenemos todo funcionando y arreglamos lo que se rompa. Cuando estés listo, arranca la siguiente etapa: una por trimestre, y cada una la apruebas antes.",
       },
     ],
   },
@@ -82,7 +82,7 @@ export default function HowItWorks() {
   const steps = t.steps.map((text, index) => ({ ...stepConfig[index], ...text }));
 
   return (
-    <section id="how" className="py-20 bg-background">
+    <section id="how" className="py-20 bg-muted">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.span

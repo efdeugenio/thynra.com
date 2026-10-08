@@ -10,7 +10,7 @@ const copy = defineCopy({
       {
         question: "What exactly do you do?",
         answer:
-          "We build AI that handles the moments where you win or lose customers: getting found in search and reviews, answering calls and messages fast, following up, and winning back customers who drifted away — plus the reporting behind it. The parts that touch your customers and your revenue. Not bookkeeping, not internal-ops tools, not generic productivity AI.",
+          "We automate the moments where you win or lose customers — getting found in search and reviews, answering calls and messages fast, following up, winning back customers who drifted away, and the reporting behind it. One of them at a time, starting with whichever is costing you the most. The parts that touch your customers and your revenue: not bookkeeping, not internal-ops tools, not generic productivity AI.",
       },
       {
         question: "What's the AI readiness check?",
@@ -25,12 +25,12 @@ const copy = defineCopy({
       {
         question: "What's not in scope?",
         answer:
-          "Anything back-office. Bookkeeping, HR, internal automation, dev tooling, generic AI strategy decks. We don't sell single-feature tools either. We build systems where the customer's first call, first message, first form, and first follow-up all work together.",
+          "Anything back-office. Bookkeeping, HR, internal automation, dev tooling, generic AI strategy decks. We also don't sell a tool and leave you to run it, and we don't do six-month transformations. We build one working process at a time and keep it running.",
       },
       {
         question: "What does it cost?",
         answer:
-          "Most engagements are a fixed-price sprint to automate one workflow in about two weeks, with an optional monthly retainer to keep it running and add improvements. We scope exact pricing on the call, after we've diagnosed which workflow to start with — so you're pricing a specific outcome, not an open-ended hourly project.",
+          "Stage one is a fixed price for one process, agreed before we start and built in about two weeks. After that there's an optional monthly plan that keeps everything running and includes one new stage per quarter. We scope the exact number on the call, once we know which process goes first — so you're pricing a specific outcome, not an open-ended hourly project.",
       },
       {
         question: "Are you taking new clients right now?",
@@ -40,7 +40,7 @@ const copy = defineCopy({
       {
         question: "How is this different from the AI tools I've already tried?",
         answer:
-          "Most AI tools you've tried are point solutions. A chatbot. A voice agent. A scheduler. Each solves one problem. Ours is a system: voice, chat, web, follow-up, and reviews working together. The compounding effect is the point.",
+          "Most AI tools you've tried hand you a feature and leave the work to you: a chatbot, a voice agent, a scheduler — all set up, none of them finished. We deliver one process working end to end in your business, and then the next one builds on it. Stage two is cheaper because stage one already connected your data. That compounding is the point, and it's why we don't try to do it all at once.",
       },
       {
         question: "Do you build custom or use off-the-shelf vendors?",
@@ -60,7 +60,7 @@ const copy = defineCopy({
       {
         question: "¿Qué hacen exactamente?",
         answer:
-          "Creamos IA que se encarga de los momentos en que ganas o pierdes clientes: que te encuentren en búsquedas y reseñas, contestar llamadas y mensajes rápido, dar seguimiento y recuperar a los clientes que se alejaron, más los reportes que hay detrás. Las partes que tocan a tus clientes y tus ingresos. No contabilidad, no herramientas de operación interna, no IA genérica de productividad.",
+          "Automatizamos los momentos en que ganas o pierdes clientes: que te encuentren en búsquedas y reseñas, contestar llamadas y mensajes rápido, dar seguimiento, recuperar a los clientes que se alejaron y los reportes que hay detrás. Uno a la vez, empezando por el que más te esté costando. Las partes que tocan a tus clientes y tus ingresos: no contabilidad, no herramientas de operación interna, no IA genérica de productividad.",
       },
       {
         question: "¿Qué es el Diagnóstico de IA?",
@@ -75,12 +75,12 @@ const copy = defineCopy({
       {
         question: "¿Qué no incluye?",
         answer:
-          "Nada de la administración interna. Contabilidad, recursos humanos, automatización interna, herramientas para programadores, presentaciones genéricas de estrategia de IA. Tampoco vendemos herramientas de una sola función. Construimos sistemas donde la primera llamada, el primer mensaje, el primer formulario y el primer seguimiento del cliente funcionan juntos.",
+          "Nada de la administración interna. Contabilidad, recursos humanos, automatización interna, herramientas para programadores, presentaciones genéricas de estrategia de IA. Tampoco te vendemos una herramienta para que la manejes tú, ni hacemos transformaciones de seis meses. Construimos un proceso funcionando a la vez y lo mantenemos corriendo.",
       },
       {
         question: "¿Cuánto cuesta?",
         answer:
-          "La mayoría de los proyectos son un sprint de automatización a precio fijo para automatizar un proceso en unas dos semanas, con un mantenimiento mensual opcional para que siga funcionando y sumar mejoras. Definimos el precio exacto en la llamada, después de identificar con qué proceso empezar. Así pagas por un resultado concreto, no por un proyecto por horas sin final.",
+          "La etapa uno es un precio fijo por un proceso, acordado antes de empezar y construido en unas dos semanas. Después hay un plan mensual opcional que mantiene todo funcionando e incluye una etapa nueva por trimestre. El número exacto lo definimos en la llamada, una vez que sabemos qué proceso va primero. Así pagas por un resultado concreto, no por un proyecto por horas sin final.",
       },
       {
         question: "¿Están aceptando clientes nuevos?",
@@ -90,7 +90,7 @@ const copy = defineCopy({
       {
         question: "¿En qué se diferencia de las herramientas de IA que ya probé?",
         answer:
-          "La mayoría de las herramientas de IA que has probado resuelven una sola cosa. Un chatbot. Un agente de voz. Una agenda. Cada una resuelve un problema. Lo nuestro es un sistema: voz, chat, web, seguimiento y reseñas funcionando juntos. Ahí está la diferencia: cada parte potencia a las demás.",
+          "La mayoría de las herramientas de IA que has probado te entregan una función y te dejan el trabajo a ti: un chatbot, un agente de voz, una agenda. Todas configuradas, ninguna terminada. Nosotros entregamos un proceso funcionando de punta a punta en tu negocio, y el siguiente se apoya en ese. La etapa dos sale más barata porque la uno ya conectó tus datos. Eso es lo que se acumula, y por eso no intentamos hacerlo todo de una vez.",
       },
       {
         question: "¿Lo construyen a la medida o usan herramientas existentes?",

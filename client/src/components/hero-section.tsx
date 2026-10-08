@@ -6,22 +6,24 @@ import { defineCopy, useCopy } from "@/i18n";
 
 const copy = defineCopy({
   en: {
-    eyebrow: "AI that wins & keeps customers",
-    title: "Most service businesses lose customers in the same three places. Find yours in 2 minutes.",
+    eyebrow: "One problem at a time",
+    title: "We fix one problem in your business at a time. The first one, in two weeks.",
     subtitle:
-      "The lead nobody called back. The customer who never came back. The reviews nobody answers. Take the free 2-minute readiness check to see which gap is costing you the most — then we automate it.",
+      "No six-month projects, no replacing the systems you already use, no new hire. You start with whatever is costing you the most — the free 2-minute check tells you which one that is.",
     primaryCta: "Start the 2-min check",
-    secondaryCta: "Talk to Sofia now",
     subline: "Free · 2 minutes · instant results",
+    sofiaPrompt: "Rather talk to someone right now?",
+    sofiaCta: "Talk to Sofia",
   },
   es: {
-    eyebrow: "IA para conseguir y conservar clientes",
-    title: "Casi todos los negocios de servicios pierden clientes en los mismos tres puntos. Descubre dónde los pierde el tuyo en 2 minutos.",
+    eyebrow: "Un problema a la vez",
+    title: "Arreglamos un problema de tu negocio a la vez. El primero, en dos semanas.",
     subtitle:
-      "El cliente al que nadie le devolvió el mensaje. El que nunca volvió. Las reseñas que nadie responde. Haz el diagnóstico gratis de 2 minutos para ver qué punto te está costando más, y lo automatizamos.",
+      "Sin proyectos de seis meses, sin cambiar los sistemas que ya usas y sin contratar a nadie. Empiezas por el que más te está costando: el diagnóstico gratis de 2 minutos te dice cuál es.",
     primaryCta: "Empezar el diagnóstico",
-    secondaryCta: "Habla con Sofia ahora",
     subline: "Gratis · 2 minutos · resultados al instante",
+    sofiaPrompt: "¿Prefieres hablar con alguien ahora?",
+    sofiaCta: "Habla con Sofia",
   },
 });
 
@@ -65,27 +67,18 @@ export default function HeroSection() {
         </motion.p>
 
         <motion.div
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex justify-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <Button
             onClick={() => navigate("/quiz")}
-            className="gradient-bg text-white px-5 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-transform"
+            className="gradient-bg text-white px-6 py-3 rounded-lg text-base font-semibold hover:scale-105 transition-transform"
             data-testid="button-take-quiz-hero"
           >
             {t.primaryCta}
             <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
-          <Button
-            variant="outline"
-            onClick={talkToSofia}
-            className="px-5 py-2 rounded-lg text-sm font-semibold"
-            data-testid="button-talk-to-sofia-hero"
-          >
-            <Phone className="mr-2 w-4 h-4" />
-            {t.secondaryCta}
           </Button>
         </motion.div>
 
@@ -97,6 +90,23 @@ export default function HeroSection() {
           data-testid="text-hero-subline"
         >
           {t.subline}
+        </motion.p>
+
+        <motion.p
+          className="mt-6 text-sm text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+        >
+          {t.sofiaPrompt}{" "}
+          <button
+            onClick={talkToSofia}
+            className="inline-flex items-center font-semibold text-primary hover:underline"
+            data-testid="button-talk-to-sofia-hero"
+          >
+            <Phone className="mr-1.5 w-4 h-4" />
+            {t.sofiaCta}
+          </button>
         </motion.p>
       </div>
     </section>

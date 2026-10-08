@@ -23,7 +23,7 @@ const copy = defineCopy({
     subtitle: "Talk to Sofia now, or send a message. We usually reply within a day.",
     sofiaTitle: "Talk to Sofia now",
     sofiaBody:
-      "Live AI receptionist. No callback wait. Tell her about your business and she'll book a discovery call with the team if it's a fit.",
+      "Our own AI front desk — the kind of thing we build. No callback wait. Tell her about your business and she'll book a discovery call with the team if it's a fit.",
     sofiaCta: "Start the call",
     emailTitle: "Email us",
     emailBody:
@@ -59,7 +59,7 @@ const copy = defineCopy({
     subtitle: "Habla con Sofia ahora o envíanos un mensaje. Normalmente respondemos en un día.",
     sofiaTitle: "Habla con Sofia ahora",
     sofiaBody:
-      "Recepcionista con IA en vivo. Sin esperar a que te devuelvan la llamada. Cuéntale sobre tu negocio y, si encajamos, te agenda una llamada inicial con el equipo.",
+      "Es nuestra propia recepción con IA, del tipo de cosas que construimos. Sin esperar a que te devuelvan la llamada. Cuéntale sobre tu negocio y, si encajamos, te agenda una llamada inicial con el equipo.",
     sofiaCta: "Iniciar la llamada",
     emailTitle: "Escríbenos",
     emailBody:

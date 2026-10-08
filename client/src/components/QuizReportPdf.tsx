@@ -20,7 +20,6 @@ import {
 import { defineCopy, type Locale } from "@/i18n";
 import {
   STAGE_HEX,
-  STAGE_ORDER,
   reportCopy,
   type ReportData,
 } from "@/lib/quizReport";
@@ -31,8 +30,8 @@ const pdfCopy = defineCopy({
     documentSubject: "AI Readiness",
     kicker: "AI Readiness Report",
     preparedFor: (who: string) => `Prepared for ${who}`,
-    breakdownTitle: "Your stage-by-stage breakdown",
-    startHere: "START HERE",
+    breakdownTitle: "Your plan, in order",
+    rankLabels: ["STAGE ONE", "STAGE TWO", "STAGE THREE"],
     numbersTitle: "Why this matters — by the numbers",
     planTitle: (stage: string) => `Your 30 / 60 / 90-day plan — start with ${stage}`,
     ctaTitle: "Want a second set of eyes on this?",
@@ -54,8 +53,8 @@ const pdfCopy = defineCopy({
     documentSubject: "Diagnóstico de IA",
     kicker: "Reporte del Diagnóstico de IA",
     preparedFor: (who: string) => `Preparado para ${who}`,
-    breakdownTitle: "Tu resultado por etapa",
-    startHere: "EMPIEZA AQUÍ",
+    breakdownTitle: "Tu plan, en orden",
+    rankLabels: ["ETAPA UNO", "ETAPA DOS", "ETAPA TRES"],
     numbersTitle: "Por qué importa: los números",
     planTitle: (stage: string) => `Tu plan de 30 / 60 / 90 días — empieza por ${stage}`,
     ctaTitle: "¿Quieres una segunda opinión?",
@@ -272,7 +271,7 @@ export function QuizReportPdf({
 
         {/* Stage breakdown */}
         <Text style={styles.sectionTitle}>{t.breakdownTitle}</Text>
-        {STAGE_ORDER.map((st) => {
+        {data.sequence.map((st, rank) => {
           const meta = rc.stages[st];
           const hex = STAGE_HEX[st];
           const score = data.scores[st];
@@ -284,7 +283,7 @@ export function QuizReportPdf({
               <View style={styles.stageHead}>
                 <View style={[styles.dot, { backgroundColor: hex }]} />
                 <Text style={styles.stageLabel}>{meta.label}</Text>
-                {st === data.weakest ? <Text style={styles.startBadge}>{t.startHere}</Text> : null}
+                <Text style={styles.startBadge}>{t.rankLabels[rank]}</Text>
                 <Text style={styles.stageScore}>{score}/8</Text>
               </View>
               <View style={styles.barTrack}>

@@ -13,11 +13,11 @@ import PrivacyPage from "@/pages/privacy";
 import DataDeletionPage from "@/pages/data-deletion";
 import CheckoutSubscriptionPage from "@/pages/checkout-subscription";
 import CheckoutSuccessPage from "@/pages/checkout-success";
-import PricingPage from "@/pages/pricing";
 import OnboardingPage from "@/pages/onboarding";
 import OnboardingResendPage from "@/pages/onboarding-resend";
 import QuizPage from "@/pages/quiz";
 import ResourcePage from "@/pages/resource";
+import DiagnosticoPage, { DiagnosticoThanksPage } from "@/pages/diagnostico";
 
 // Pages that exist in both languages. Inside the "/es" nest these paths are
 // relative, so the same components serve /quiz and /es/quiz. Returned as a
@@ -42,8 +42,11 @@ function SpanishRouter() {
       <Switch>
         {sharedRoutes()}
         <Route path="/recursos/:slug" component={ResourcePage} />
-        {/* English-only flows: send Spanish URLs to the English page instead of a 404. */}
-        <Route path="/pricing/*?" component={() => <Redirect to="~/pricing/ai-receptionist" />} />
+        <Route path="/diagnostico-express" component={DiagnosticoPage} />
+        <Route path="/diagnostico-express/gracias" component={DiagnosticoThanksPage} />
+        {/* Retired while the receptionist sale is on hold. */}
+        <Route path="/pricing" component={() => <Redirect to="/" />} />
+        <Route path="/pricing/*" component={() => <Redirect to="/" />} />
         <Route component={NotFound} />
       </Switch>
     </LocaleProvider>
@@ -55,13 +58,17 @@ function EnglishRouter() {
     <LocaleProvider locale="en">
       <Switch>
         {sharedRoutes()}
-        <Route path="/pricing" component={() => <Redirect to="/pricing/ai-receptionist" />} />
-        <Route path="/pricing/ai-receptionist" component={PricingPage} />
+        {/* Retired while the receptionist sale is on hold. Checkout and
+            onboarding stay routed so anyone mid-flow is not stranded. */}
+        <Route path="/pricing" component={() => <Redirect to="/" />} />
+        <Route path="/pricing/*" component={() => <Redirect to="/" />} />
         <Route path="/checkout/sub/:id" component={CheckoutSubscriptionPage} />
         <Route path="/checkout/success" component={CheckoutSuccessPage} />
         <Route path="/onboarding/resend" component={OnboardingResendPage} />
         <Route path="/onboarding/:business_id" component={OnboardingPage} />
         <Route path="/recursos/:slug" component={() => <Redirect to={`/es${window.location.pathname}`} />} />
+        {/* Spanish-only offer (charged in colones with CR IVA): send English URLs there. */}
+        <Route path="/diagnostico-express" component={() => <Redirect to="~/es/diagnostico-express" />} />
         <Route component={NotFound} />
       </Switch>
     </LocaleProvider>

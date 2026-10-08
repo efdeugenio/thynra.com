@@ -1,9 +1,9 @@
 import Navigation from "@/components/navigation";
 import HeroSection from "@/components/hero-section";
 import BenefitsSection from "@/components/benefits-section";
-import PainSection from "@/components/pain-section";
-import Solutions from "@/components/solutions";
+import PainsAndFixes from "@/components/pains-and-fixes";
 import HowItWorks from "@/components/how-it-works";
+import Staircase from "@/components/staircase";
 import FAQSection from "@/components/faq-section";
 import ContactSection from "@/components/contact-section";
 import Footer from "@/components/footer";
@@ -14,9 +14,9 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       <BenefitsSection />
-      <PainSection />
-      <Solutions />
+      <PainsAndFixes />
       <HowItWorks />
+      <Staircase />
       <FAQSection />
       <ContactSection />
       <Footer />
