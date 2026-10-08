@@ -15,6 +15,22 @@ import {
 
 const app = new Hono();
 
+// One address per page. http:// and trailing-slash variants used to answer 200
+// with a canonical pointing elsewhere, which Search Console reports as
+// "Alternate page with proper canonical tag". 301 them to the canonical form.
+// Only on the production host, so wrangler dev on http://127.0.0.1 is untouched.
+app.use('*', async (c, next) => {
+  const method = c.req.method;
+  if (method !== 'GET' && method !== 'HEAD') return next();
+  const url = new URL(c.req.url);
+  if (url.hostname !== 'thynra.com' || url.pathname.startsWith('/api/')) return next();
+  const path = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, '') || '/' : url.pathname;
+  if (url.protocol === 'https:' && path === url.pathname) return next();
+  url.protocol = 'https:';
+  url.pathname = path;
+  return c.redirect(url.toString(), 301);
+});
+
 // Enable CORS
 app.use('*', cors());
 
