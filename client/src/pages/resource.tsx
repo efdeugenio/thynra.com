@@ -59,7 +59,7 @@ export default function ResourcePage() {
     <div className="min-h-screen bg-background">
       <div className="border-b border-border bg-card">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors text-sm">
+          <Link href="/negocios" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors text-sm">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Thynra
           </Link>

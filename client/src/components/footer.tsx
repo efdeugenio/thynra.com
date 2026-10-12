@@ -1,27 +1,29 @@
 import { Link } from "wouter";
-import { defineCopy, localePath, useCopy, useLocale, useRouteHref } from "@/i18n";
+import { defineCopy, localePath, useCopy, useLocale } from "@/i18n";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
 const copy = defineCopy({
   en: {
-    tagline: "AI in production, one process at a time",
+    tagline: "AI agents in production, one process at a time",
+    business: "For businesses",
+    enterprise: "Enterprise",
     what: "What",
     solutions: "Solutions",
     how: "How",
     quiz: "AI Readiness Check",
-    enterprise: "Enterprise",
     security: "Security",
     contact: "Contact",
     privacy: "Privacy",
     terms: "Terms",
   },
   es: {
-    tagline: "IA en producción, un proceso a la vez",
+    tagline: "Agentes de IA en producción, un proceso a la vez",
+    business: "Negocios",
+    enterprise: "Empresas",
     what: "Qué hacemos",
     solutions: "Soluciones",
     how: "Cómo trabajamos",
     quiz: "Diagnóstico de IA",
-    enterprise: "Empresas",
     security: "Seguridad",
     contact: "Contacto",
     privacy: "Privacidad",
@@ -29,81 +31,70 @@ const copy = defineCopy({
   },
 });
 
-// Route links use wouter <Link>, which resolves inside the "/es" nest, so they
-// already stay in the current locale. The home's section anchors point at the
-// home (not a bare "#…"), so they also work from /enterprise and /security.
-// variant="enterprise": the /enterprise and /security pages show only their own
-// links plus legal — no quiz, no home sections (no SMB references there).
-export default function Footer({ variant = "default" }: { variant?: "default" | "enterprise" }) {
+/**
+ * Three footers, one per door:
+ *  - "home"       neutral home: both doors, security, legal.
+ *  - "business"   /business (/es/negocios) and its flows: home sections, quiz,
+ *                 the enterprise door, legal.
+ *  - "enterprise" /enterprise and /security: only their own links and legal.
+ *                 No small-business references there (Eugenio, 2026-10-12).
+ *
+ * Plain <a> with absolute localized hrefs: section anchors need a full path to
+ * work from other pages, and "~"-free Link hrefs would get the /es nest prefix
+ * twice for translated slugs.
+ */
+export default function Footer({ variant = "business" }: { variant?: "home" | "business" | "enterprise" }) {
   const t = useCopy(copy);
-  const enterprise = variant === "enterprise";
   const locale = useLocale();
-  const home = localePath("/", locale);
-  const enterpriseHref = useRouteHref("/enterprise");
-  const securityHref = useRouteHref("/security");
+  const path = (p: string) => localePath(p, locale);
+  const business = path("/business");
+  const cls = "hover:text-primary transition-colors";
+
+  const links: { href: string; label: string; testid?: string }[] =
+    variant === "enterprise"
+      ? [
+          { href: path("/enterprise"), label: t.enterprise, testid: "link-footer-enterprise" },
+          { href: path("/security"), label: t.security, testid: "link-footer-security" },
+          { href: `${path("/enterprise")}#contact`, label: t.contact },
+        ]
+      : variant === "home"
+        ? [
+            { href: business, label: t.business, testid: "link-footer-business" },
+            { href: path("/enterprise"), label: t.enterprise, testid: "link-footer-enterprise" },
+            { href: path("/security"), label: t.security, testid: "link-footer-security" },
+          ]
+        : [
+            { href: `${business}#what`, label: t.what },
+            { href: `${business}#solutions`, label: t.solutions },
+            { href: `${business}#how`, label: t.how },
+            { href: path("/quiz"), label: t.quiz, testid: "link-footer-quiz" },
+            { href: path("/enterprise"), label: t.enterprise, testid: "link-footer-enterprise" },
+            { href: `${business}#contact`, label: t.contact },
+          ];
 
   return (
     <footer className="bg-card border-t border-border py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex flex-col" data-testid="text-footer-logo">
-            <span className="text-xl font-bold text-primary leading-tight">
-              Thynra
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {t.tagline}
-            </span>
-          </div>
+          <Link href={`~${path("/")}`} className="flex flex-col" data-testid="text-footer-logo">
+            <span className="text-xl font-bold text-primary leading-tight">Thynra</span>
+            <span className="text-xs text-muted-foreground">{t.tagline}</span>
+          </Link>
           <div
             className="flex flex-wrap gap-x-6 gap-y-2 text-muted-foreground text-sm justify-center"
             data-testid="nav-footer-links"
           >
-            {!enterprise && (
-            <>
-            <a href={`${home}#what`} className="hover:text-primary transition-colors">
-              {t.what}
-            </a>
-            <a
-              href={`${home}#solutions`}
-              className="hover:text-primary transition-colors"
-            >
-              {t.solutions}
-            </a>
-            <a href={`${home}#how`} className="hover:text-primary transition-colors">
-              {t.how}
-            </a>
-            <Link
-              href="/quiz"
-              className="hover:text-primary transition-colors"
-              data-testid="link-footer-quiz"
-            >
-              {t.quiz}
-            </Link>
-            </>
-            )}
-            <Link href={enterpriseHref} className="hover:text-primary transition-colors" data-testid="link-footer-enterprise">
-              {t.enterprise}
-            </Link>
-            <Link href={securityHref} className="hover:text-primary transition-colors" data-testid="link-footer-security">
-              {t.security}
-            </Link>
-            <a href={enterprise ? `${localePath("/enterprise", locale)}#contact` : `${home}#contact`} className="hover:text-primary transition-colors">
-              {t.contact}
-            </a>
-            <Link
-              href="/privacy"
-              className="hover:text-primary transition-colors"
-              data-testid="link-privacy"
-            >
+            {links.map((l) => (
+              <a key={l.href} href={l.href} className={cls} data-testid={l.testid}>
+                {l.label}
+              </a>
+            ))}
+            <a href={path("/privacy")} className={cls} data-testid="link-privacy">
               {t.privacy}
-            </Link>
-            <Link
-              href="/terms"
-              className="hover:text-primary transition-colors"
-              data-testid="link-terms"
-            >
+            </a>
+            <a href={path("/terms")} className={cls} data-testid="link-terms">
               {t.terms}
-            </Link>
+            </a>
           </div>
         </div>
         <div className="mt-6 pt-6 border-t border-border text-xs text-muted-foreground flex flex-col sm:flex-row items-center justify-center gap-3">

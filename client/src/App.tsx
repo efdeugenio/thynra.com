@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { LocaleProvider } from "@/i18n";
 import { resolveMeta } from "@shared/siteMeta";
 import Home from "@/pages/home";
+import BusinessPage from "@/pages/business";
 import NotFound from "@/pages/not-found";
 import TermsPage from "@/pages/terms";
 import PrivacyPage from "@/pages/privacy";
@@ -47,8 +48,10 @@ function SpanishRouter() {
         <Route path="/diagnostico-express" component={DiagnosticoPage} />
         <Route path="/diagnostico-express/gracias" component={DiagnosticoThanksPage} />
         {/* Translated slugs; English paths map here via shared/siteMeta.ts LOCALIZED_SLUGS. */}
+        <Route path="/negocios" component={BusinessPage} />
         <Route path="/empresas" component={EnterprisePage} />
         <Route path="/seguridad" component={SecurityPage} />
+        <Route path="/business" component={() => <Redirect to="/negocios" />} />
         <Route path="/enterprise" component={() => <Redirect to="/empresas" />} />
         <Route path="/security" component={() => <Redirect to="/seguridad" />} />
         {/* Retired while the receptionist sale is on hold. */}
@@ -76,9 +79,11 @@ function EnglishRouter() {
         <Route path="/recursos/:slug" component={() => <Redirect to={`/es${window.location.pathname}`} />} />
         {/* Spanish-only offer (charged in colones with CR IVA): send English URLs there. */}
         <Route path="/diagnostico-express" component={() => <Redirect to="~/es/diagnostico-express" />} />
+        <Route path="/business" component={BusinessPage} />
         <Route path="/enterprise" component={EnterprisePage} />
         <Route path="/security" component={SecurityPage} />
         {/* Spanish slugs typed without the /es prefix. */}
+        <Route path="/negocios" component={() => <Redirect to="~/es/negocios" />} />
         <Route path="/empresas" component={() => <Redirect to="~/es/empresas" />} />
         <Route path="/seguridad" component={() => <Redirect to="~/es/seguridad" />} />
         <Route component={NotFound} />

@@ -33,7 +33,7 @@ import {
   type Stage,
 } from "@/lib/quizReport";
 import { sofiaConfigured, talkToSofia, chatWithSofia, type QuizContext } from "@/lib/sofiaWidget";
-import { defineCopy, useCopy, useLocale } from "@/i18n";
+import { defineCopy, useCopy, useLocale, useRouteHref } from "@/i18n";
 
 const CALENDLY_URL = "https://calendly.com/efdeugenio/apply-ai";
 
@@ -441,6 +441,7 @@ export default function QuizPage() {
   const { toast } = useToast();
   const locale = useLocale();
   const t = useCopy(copy);
+  const businessHref = useRouteHref("/business");
   const rc = reportCopy[locale];
   const [step, setStep] = useState(0); // 0..QUESTIONS.length-1 = questions; then gate; then result
   const [answers, setAnswers] = useState<Record<string, number>>({});
@@ -588,7 +589,7 @@ export default function QuizPage() {
       <div className="border-b border-border bg-card">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <Link
-            href="/"
+            href={businessHref}
             className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors text-sm"
             data-testid="link-quiz-home"
           >

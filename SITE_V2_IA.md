@@ -136,3 +136,13 @@ All six items deployed to the `thynra` Cloudflare worker, live on thynra.com. `v
 
 **Known leftover:** several existing pages use `<Link href="/">`, which inside the `/es` nest resolves to `/es/` (edge 301s it to `/es`). Harmless, not fixed here.
 
+## 10. Neutral home + business door (Oct 2026, same branch)
+
+**Decision (Eugenio, 2026-10-12):** "/" is neither SMB nor enterprise. It says in the first line that Thynra builds **AI agents** (the old SMB H1 "Arreglamos un problema…" never said AI and read like process-improvement consulting), then sends each visitor to a door. This **reopens the §4 "LOCKED" H1**.
+
+- `/` ↔ `/es`: neutral home (`pages/home.tsx`). Eyebrow "Agentes de IA en producción"; two H1 candidates, A default, `?v=b` shows B — pick one and delete the other. Two doors in the hero (business card carries the quiz link, so SMBs stay one click from the quiz) and again at the bottom. "Qué hace un agente" cards: atiende a los clientes / revisa documentos / da seguimiento / arma el reporte. Anti-consultancy line: "No es un informe. Es un agente trabajando." No Sofia here.
+- `/business` ↔ `/es/negocios`: the former home, unchanged sections (`pages/business.tsx`). Its hero now names AI: "Un agente de IA trabajando en tu negocio en dos semanas. Un proceso a la vez." Sofia lives here.
+- Door memory: `lib/door.ts` stores the last door in localStorage; the home shows "Seguir en …". Never redirects, never guesses by IP.
+- Copy rule: mechanism (AI agents) first, result next to it. "Diagnóstico" stays tied to the quiz ("Diagnóstico de IA").
+- Footer has three variants: home, business, enterprise. Quiz/Diagnóstico Express/recursos back-links go to `/negocios`, not the neutral home.
+

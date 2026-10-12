@@ -1,9 +1,9 @@
-import { useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import thynraLogo from "@assets/Thynra logo_1760137533222.png";
 import { defineCopy, localePath, useCopy, useLocale, useRouteHref } from "@/i18n";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { useHideSofiaBubble, useRememberDoor } from "@/lib/door";
 
 // Header for the enterprise pages (/enterprise, /security). Deliberately not
 // the home navigation: no quiz button and no Sofia call. A visitor here is an
@@ -21,19 +21,10 @@ const copy = defineCopy({
   },
 });
 
-// Sofia (the receptionist demo) is injected site-wide by index.html as
-// #ai-receptionist-widget. On the enterprise pages she is off-message, so the
-// bubble is hidden while this header is mounted and restored on the way out.
-function useHideSofiaBubble() {
-  useEffect(() => {
-    document.documentElement.classList.add("hide-sofia");
-    return () => document.documentElement.classList.remove("hide-sofia");
-  }, []);
-}
-
 export default function EnterpriseHeader() {
   const t = useCopy(copy);
   useHideSofiaBubble();
+  useRememberDoor("enterprise");
   const locale = useLocale();
   const enterpriseHref = useRouteHref("/enterprise");
   const securityHref = useRouteHref("/security");

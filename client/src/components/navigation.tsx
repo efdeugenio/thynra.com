@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Phone, Sparkles } from "lucide-react";
 import thynraLogo from "@assets/Thynra logo_1760137533222.png";
-import { defineCopy, useCopy, useRouteHref } from "@/i18n";
+import { defineCopy, localePath, useCopy, useLocale, useRouteHref } from "@/i18n";
 import { LanguageSuggestion, LanguageSwitcher } from "@/components/language-switcher";
 
 const copy = defineCopy({
@@ -29,6 +29,7 @@ const copy = defineCopy({
 export default function Navigation() {
   const [, navigate] = useLocation();
   const t = useCopy(copy);
+  const locale = useLocale();
   const enterpriseHref = useRouteHref("/enterprise");
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -43,13 +44,13 @@ export default function Navigation() {
       <nav className="bg-card border-b border-border sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center" data-testid="logo">
+            <Link href={`~${localePath("/", locale)}`} className="flex items-center" data-testid="logo">
               <img
                 src={thynraLogo}
                 alt="Thynra"
                 className="h-12 w-auto object-contain"
               />
-            </div>
+            </Link>
             <div className="hidden md:flex items-center space-x-6">
               <button
                 onClick={() => scrollTo("solutions")}

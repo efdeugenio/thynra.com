@@ -6,10 +6,10 @@ import { defineCopy, useCopy, useRouteHref } from "@/i18n";
 
 const copy = defineCopy({
   en: {
-    eyebrow: "One problem at a time",
-    title: "We fix one problem in your business at a time. The first one, in two weeks.",
+    eyebrow: "AI agents for your business",
+    title: "An AI agent working in your business in two weeks. One process at a time.",
     subtitle:
-      "No six-month projects, no replacing the systems you already use, no new hire. You start with whatever is costing you the most — the free 2-minute check tells you which one that is.",
+      "It serves your customers, follows up and brings them back, connected to the tools you already use. No six-month projects, no new hire. You start with whatever is costing you the most — the free 2-minute check tells you which one that is.",
     primaryCta: "Start the 2-min check",
     subline: "Free · 2 minutes · instant results",
     sofiaPrompt: "Rather talk to someone right now?",
@@ -18,10 +18,10 @@ const copy = defineCopy({
     enterpriseCta: "AI for enterprise operations",
   },
   es: {
-    eyebrow: "Un problema a la vez",
-    title: "Arreglamos un problema de tu negocio a la vez. El primero, en dos semanas.",
+    eyebrow: "Agentes de IA para tu negocio",
+    title: "Un agente de IA trabajando en tu negocio en dos semanas. Un proceso a la vez.",
     subtitle:
-      "Sin proyectos de seis meses, sin cambiar los sistemas que ya usas y sin contratar a nadie. Empiezas por el que más te está costando: el diagnóstico gratis de 2 minutos te dice cuál es.",
+      "Atiende a tus clientes, les da seguimiento y los hace volver, conectado a las herramientas que ya usas. Sin proyectos de seis meses y sin contratar a nadie. Empiezas por lo que más te está costando: el diagnóstico gratis de 2 minutos te dice qué es.",
     primaryCta: "Empezar el diagnóstico",
     subline: "Gratis · 2 minutos · resultados al instante",
     sofiaPrompt: "¿Prefieres hablar con alguien ahora?",

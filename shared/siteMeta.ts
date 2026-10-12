@@ -14,6 +14,7 @@ export const SITE_ORIGIN = "https://thynra.com";
 // that follows "/es". Add a pair here and both the edge metadata and the
 // language switcher follow.
 export const LOCALIZED_SLUGS: Record<string, string> = {
+  "/business": "/negocios",
   "/enterprise": "/empresas",
   "/security": "/seguridad",
 };
@@ -48,14 +49,31 @@ const ROUTES: RouteMeta[] = [
     index: true,
     text: {
       en: {
-        title: "Thynra — we fix one problem in your business at a time",
+        title: "Thynra — AI agents in production, one process at a time",
         description:
-          "No six-month projects and no replacing the systems you already use. You start with whatever is costing you the most, built in two weeks at a fixed price. The free 2-minute check tells you which one that is.",
+          "AI agents that work inside your operation: they serve your customers, review documents, follow up and move work between systems, with a person approving what matters. For businesses and for enterprises.",
       },
       es: {
-        title: "Thynra — arreglamos un problema de tu negocio a la vez",
+        title: "Thynra — agentes de IA en producción, un proceso a la vez",
         description:
-          "Sin proyectos de seis meses y sin cambiar los sistemas que ya usas. Empiezas por el que más te está costando, construido en dos semanas a precio fijo. El diagnóstico gratis de 2 minutos te dice cuál es.",
+          "Agentes de IA que trabajan dentro de tu operación: atienden a tus clientes, revisan documentos, dan seguimiento y mueven trabajo entre sistemas, con una persona aprobando lo que importa. Para negocios y para empresas.",
+      },
+    },
+  },
+  {
+    path: "/business",
+    locales: ["en", "es"],
+    index: true,
+    text: {
+      en: {
+        title: "AI agents for your business, one process at a time — Thynra",
+        description:
+          "An AI agent working in your business in two weeks, at a fixed price: it serves your customers, follows up and brings them back. The free 2-minute check tells you where to start.",
+      },
+      es: {
+        title: "Agentes de IA para tu negocio, un proceso a la vez — Thynra",
+        description:
+          "Un agente de IA trabajando en tu negocio en dos semanas, a precio fijo: atiende a tus clientes, da seguimiento y los hace volver. El diagnóstico gratis de 2 minutos te dice por dónde empezar.",
       },
     },
   },
