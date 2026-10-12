@@ -32,8 +32,11 @@ const copy = defineCopy({
 // Route links use wouter <Link>, which resolves inside the "/es" nest, so they
 // already stay in the current locale. The home's section anchors point at the
 // home (not a bare "#…"), so they also work from /enterprise and /security.
-export default function Footer() {
+// variant="enterprise": the /enterprise and /security pages show only their own
+// links plus legal — no quiz, no home sections (no SMB references there).
+export default function Footer({ variant = "default" }: { variant?: "default" | "enterprise" }) {
   const t = useCopy(copy);
+  const enterprise = variant === "enterprise";
   const locale = useLocale();
   const home = localePath("/", locale);
   const enterpriseHref = useRouteHref("/enterprise");
@@ -55,6 +58,8 @@ export default function Footer() {
             className="flex flex-wrap gap-x-6 gap-y-2 text-muted-foreground text-sm justify-center"
             data-testid="nav-footer-links"
           >
+            {!enterprise && (
+            <>
             <a href={`${home}#what`} className="hover:text-primary transition-colors">
               {t.what}
             </a>
@@ -74,13 +79,15 @@ export default function Footer() {
             >
               {t.quiz}
             </Link>
+            </>
+            )}
             <Link href={enterpriseHref} className="hover:text-primary transition-colors" data-testid="link-footer-enterprise">
               {t.enterprise}
             </Link>
             <Link href={securityHref} className="hover:text-primary transition-colors" data-testid="link-footer-security">
               {t.security}
             </Link>
-            <a href={`${home}#contact`} className="hover:text-primary transition-colors">
+            <a href={enterprise ? `${localePath("/enterprise", locale)}#contact` : `${home}#contact`} className="hover:text-primary transition-colors">
               {t.contact}
             </a>
             <Link

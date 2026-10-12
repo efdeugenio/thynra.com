@@ -30,11 +30,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { withLeadContext } from "@/lib/attribution";
-import { defineCopy, localePath, useCopy, useLocale, useRouteHref } from "@/i18n";
+import { defineCopy, useCopy, useLocale, useRouteHref } from "@/i18n";
 
-// /enterprise and /es/empresas. Same method as the SMB home (one process to
-// production, fixed scope, then the next) in the register an operations or IT
-// lead reads: control, integration, audit. Rules for this page:
+// /enterprise and /es/empresas. One process to production, fixed scope, then
+// the next, in the register an operations or IT lead reads: control,
+// integration, audit. Rules for this page:
+//   - No references to small businesses, the quiz or Sofia (Eugenio, 2026-10-12).
 //   - No logos, client names, metrics or certifications we don't hold.
 //   - Industry cards are labelled as examples of application, not case studies.
 //   - Ownership: the client owns the code and the deployment; support is an
@@ -68,7 +69,7 @@ const copy = defineCopy({
     methodEyebrow: "How we work",
     methodTitle: "You don't need an AI transformation. You need one process in production.",
     methodSubtitle:
-      "The same staircase we use with small businesses, sized for an organization: each step has a fixed scope, a date and a deliverable you keep whether or not we continue.",
+      "Each step has a fixed scope, a date and a deliverable that stays with you, whether or not we continue.",
     steps: [
       {
         when: "2–4 weeks · fixed price",
@@ -203,12 +204,6 @@ const copy = defineCopy({
         answer:
           "The diagnostic is a fixed price agreed before it starts. The pilot is priced by milestone once the diagnostic has defined the process and the integrations. Support is a monthly subscription with a defined scope. We don't sell open-ended hourly projects.",
       },
-      {
-        question: "Do you also work with small businesses?",
-        answer:
-          "Yes — it is the same method, packaged for an owner-operated business.",
-        link: "See our small-business offer",
-      },
     ],
 
     contactEyebrow: "Next step",
@@ -269,7 +264,7 @@ const copy = defineCopy({
     methodEyebrow: "Cómo trabajamos",
     methodTitle: "No necesitan una transformación con IA. Necesitan un proceso en producción.",
     methodSubtitle:
-      "La misma escalera que usamos con pymes, dimensionada para una organización: cada paso tiene alcance fijo, fecha y un entregable que queda en sus manos, sigamos o no.",
+      "Cada paso tiene alcance fijo, fecha y un entregable que queda en sus manos, sigamos o no.",
     steps: [
       {
         when: "2 a 4 semanas · precio fijo",
@@ -403,11 +398,6 @@ const copy = defineCopy({
         question: "¿Cuánto cuesta?",
         answer:
           "El diagnóstico tiene un precio fijo acordado antes de empezar. El piloto se cotiza por hitos una vez que el diagnóstico definió el proceso y las integraciones. El soporte es una suscripción mensual con alcance definido. No vendemos proyectos por horas sin límite.",
-      },
-      {
-        question: "¿También trabajan con pymes?",
-        answer: "Sí. Es el mismo método, empaquetado para un negocio manejado por su dueño.",
-        link: "Ver la oferta para pymes",
       },
     ],
 
@@ -602,7 +592,6 @@ function EnterpriseContact({ t }: { t: EnterpriseCopy }) {
 
 function EnterpriseFAQ({ t }: { t: EnterpriseCopy }) {
   const [open, setOpen] = useState<number | null>(null);
-  const locale = useLocale();
   return (
     <section className="py-20 bg-muted">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -633,12 +622,6 @@ function EnterpriseFAQ({ t }: { t: EnterpriseCopy }) {
                   >
                     <div className="px-6 pb-6 text-muted-foreground leading-relaxed">
                       <p>{faq.answer}</p>
-                      {"link" in faq && faq.link && (
-                        <Link href={`~${localePath("/", locale)}`} className="inline-flex items-center mt-3 font-medium text-primary hover:underline">
-                          {faq.link}
-                          <ArrowRight className="ml-1.5 w-4 h-4" />
-                        </Link>
-                      )}
                     </div>
                   </motion.div>
                 )}
@@ -832,7 +815,7 @@ export default function EnterprisePage() {
 
       <EnterpriseFAQ t={t} />
       <EnterpriseContact t={t} />
-      <Footer />
+      <Footer variant="enterprise" />
     </div>
   );
 }

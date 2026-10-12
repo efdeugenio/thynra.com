@@ -130,7 +130,7 @@ All six items deployed to the `thynra` Cloudflare worker, live on thynra.com. `v
 
 **Ownership:** client owns the code and deployment in both segments; enterprise support is an optional subscription. Platform licensing deliberately NOT offered for now (Eugenio, 2026-10-12) — revisit later.
 
-**Enterprise rules:** usted register in Spanish; no logos/clients/metrics; industry cards labelled "examples of application"; no certifications claimed (security page says plainly we have none); Sofia's bubble hidden on enterprise pages (`html.hide-sofia`); enterprise form posts `kind: "enterprise"` → operator subject `ENTERPRISE lead`, Resend `source=enterprise`, never in the quiz segment.
+**Enterprise rules:** no references to SMBs/pymes, the quiz or Sofia anywhere on the enterprise pages (header, copy, FAQ, footer variant="enterprise"); usted register in Spanish; no logos/clients/metrics; industry cards labelled "examples of application"; no certifications claimed (security page says plainly we have none); Sofia's bubble hidden on enterprise pages (`html.hide-sofia`); enterprise form posts `kind: "enterprise"` → operator subject `ENTERPRISE lead`, Resend `source=enterprise`, never in the quiz segment.
 
 **Home changes:** hero gets a third line linking to enterprise; nav "Empresas/Enterprise"; footer tagline → "IA en producción, un proceso a la vez"; FAQ "¿Para quién es?", "¿Qué hacen?" and "¿Qué no incluye?" rewritten + new "¿Trabajan con empresas grandes?"; staircase adds a logistics example.
 

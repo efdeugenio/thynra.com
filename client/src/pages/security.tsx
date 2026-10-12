@@ -215,7 +215,7 @@ export default function SecurityPage() {
           </a>
         </div>
       </main>
-      <Footer />
+      <Footer variant="enterprise" />
     </div>
   );
 }

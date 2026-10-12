@@ -12,18 +12,16 @@ const copy = defineCopy({
   en: {
     overview: "Enterprise",
     security: "Security",
-    smb: "Small business",
     cta: "Book a conversation",
   },
   es: {
     overview: "Empresas",
     security: "Seguridad",
-    smb: "Pymes",
     cta: "Agendar conversación",
   },
 });
 
-// Sofia (the SMB receptionist demo) is injected site-wide by index.html as
+// Sofia (the receptionist demo) is injected site-wide by index.html as
 // #ai-receptionist-widget. On the enterprise pages she is off-message, so the
 // bubble is hidden while this header is mounted and restored on the way out.
 function useHideSofiaBubble() {
@@ -58,9 +56,6 @@ export default function EnterpriseHeader() {
             </Link>
             <Link href={securityHref} className="text-secondary-foreground hover:text-primary transition-colors text-sm" data-testid="nav-enterprise-security">
               {t.security}
-            </Link>
-            <Link href={homeHref} className="text-secondary-foreground hover:text-primary transition-colors text-sm" data-testid="nav-enterprise-smb">
-              {t.smb}
             </Link>
             <LanguageSwitcher />
             <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90" data-testid="nav-enterprise-cta">
