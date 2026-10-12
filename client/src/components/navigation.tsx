@@ -1,8 +1,8 @@
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Phone, Sparkles } from "lucide-react";
 import thynraLogo from "@assets/Thynra logo_1760137533222.png";
-import { defineCopy, useCopy } from "@/i18n";
+import { defineCopy, useCopy, useRouteHref } from "@/i18n";
 import { LanguageSuggestion, LanguageSwitcher } from "@/components/language-switcher";
 
 const copy = defineCopy({
@@ -10,6 +10,7 @@ const copy = defineCopy({
     solutions: "What we fix",
     how: "How we start",
     staircase: "The staircase",
+    enterprise: "Enterprise",
     talkToSofia: "Talk to Sofia",
     quiz: "Free 2-min check",
     quizMobile: "Free check",
@@ -18,6 +19,7 @@ const copy = defineCopy({
     solutions: "Qué arreglamos",
     how: "Cómo empezamos",
     staircase: "La escalera",
+    enterprise: "Empresas",
     talkToSofia: "Habla con Sofia",
     quiz: "Diagnóstico gratis",
     quizMobile: "Diagnóstico",
@@ -27,6 +29,7 @@ const copy = defineCopy({
 export default function Navigation() {
   const [, navigate] = useLocation();
   const t = useCopy(copy);
+  const enterpriseHref = useRouteHref("/enterprise");
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -69,6 +72,13 @@ export default function Navigation() {
               >
                 {t.staircase}
               </button>
+              <Link
+                href={enterpriseHref}
+                className="text-secondary-foreground hover:text-primary transition-colors text-sm"
+                data-testid="nav-enterprise"
+              >
+                {t.enterprise}
+              </Link>
               <button
                 onClick={talkToSofia}
                 className="text-secondary-foreground hover:text-primary transition-colors text-sm inline-flex items-center"

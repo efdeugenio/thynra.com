@@ -18,6 +18,8 @@ import OnboardingResendPage from "@/pages/onboarding-resend";
 import QuizPage from "@/pages/quiz";
 import ResourcePage from "@/pages/resource";
 import DiagnosticoPage, { DiagnosticoThanksPage } from "@/pages/diagnostico";
+import EnterprisePage from "@/pages/enterprise";
+import SecurityPage from "@/pages/security";
 
 // Pages that exist in both languages. Inside the "/es" nest these paths are
 // relative, so the same components serve /quiz and /es/quiz. Returned as a
@@ -44,6 +46,11 @@ function SpanishRouter() {
         <Route path="/recursos/:slug" component={ResourcePage} />
         <Route path="/diagnostico-express" component={DiagnosticoPage} />
         <Route path="/diagnostico-express/gracias" component={DiagnosticoThanksPage} />
+        {/* Translated slugs; English paths map here via shared/siteMeta.ts LOCALIZED_SLUGS. */}
+        <Route path="/empresas" component={EnterprisePage} />
+        <Route path="/seguridad" component={SecurityPage} />
+        <Route path="/enterprise" component={() => <Redirect to="/empresas" />} />
+        <Route path="/security" component={() => <Redirect to="/seguridad" />} />
         {/* Retired while the receptionist sale is on hold. */}
         <Route path="/pricing" component={() => <Redirect to="/" />} />
         <Route path="/pricing/*" component={() => <Redirect to="/" />} />
@@ -69,6 +76,11 @@ function EnglishRouter() {
         <Route path="/recursos/:slug" component={() => <Redirect to={`/es${window.location.pathname}`} />} />
         {/* Spanish-only offer (charged in colones with CR IVA): send English URLs there. */}
         <Route path="/diagnostico-express" component={() => <Redirect to="~/es/diagnostico-express" />} />
+        <Route path="/enterprise" component={EnterprisePage} />
+        <Route path="/security" component={SecurityPage} />
+        {/* Spanish slugs typed without the /es prefix. */}
+        <Route path="/empresas" component={() => <Redirect to="~/es/empresas" />} />
+        <Route path="/seguridad" component={() => <Redirect to="~/es/seguridad" />} />
         <Route component={NotFound} />
       </Switch>
     </LocaleProvider>

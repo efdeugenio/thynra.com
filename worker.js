@@ -267,6 +267,17 @@ const EMAIL_COPY = {
         ``,
         `— Thynra`,
       ].join('\n'),
+    enterpriseSubject: 'We received your request — Thynra',
+    enterpriseText: (name) =>
+      [
+        `Hi ${name || 'there'},`,
+        ``,
+        `Thank you for your interest in Thynra. We received your request and will reply within one business day to set a time for the conversation.`,
+        ``,
+        `If it helps to prepare, you can read how we handle security and data: https://thynra.com/security`,
+        ``,
+        `— Thynra`,
+      ].join('\n'),
   },
   es: {
     hi: (name) => (name ? `Hola, ${name}:` : 'Hola:'),
@@ -300,6 +311,18 @@ const EMAIL_COPY = {
         name ? `Hola, ${name}:` : 'Hola:',
         ``,
         `Gracias por escribirle a Thynra. Recibimos tu mensaje y te respondemos en menos de un día.`,
+        ``,
+        `— Thynra`,
+      ].join('\n'),
+    // Enterprise register: usted, not tú (matches /es/empresas).
+    enterpriseSubject: 'Recibimos su solicitud — Thynra',
+    enterpriseText: (name) =>
+      [
+        name ? `Hola, ${name}:` : 'Hola:',
+        ``,
+        `Gracias por su interés en Thynra. Recibimos su solicitud y le respondemos en un día hábil para coordinar la conversación.`,
+        ``,
+        `Si le sirve para prepararse, aquí explicamos cómo manejamos la seguridad y los datos: https://thynra.com/es/seguridad`,
         ``,
         `— Thynra`,
       ].join('\n'),
@@ -418,6 +441,9 @@ app.post('/api/contact', async (c) => {
   const email = typeof body?.email === 'string' ? body.email.trim().slice(0, 200) : '';
   const company = typeof body?.company === 'string' ? body.company.trim().slice(0, 120) : '';
   const phone = typeof body?.phone === 'string' ? body.phone.trim().slice(0, 40) : '';
+  // Enterprise form only (/enterprise, /es/empresas).
+  const role = typeof body?.role === 'string' ? body.role.trim().slice(0, 120) : '';
+  const systems = typeof body?.systems === 'string' ? body.systems.trim().slice(0, 500) : '';
   const message = typeof body?.message === 'string' ? body.message.trim().slice(0, 5000) : '';
   const locale = normalizeLocale(body?.locale);
   const attribution = sanitizeAttribution(body?.attribution);
@@ -464,20 +490,28 @@ app.post('/api/contact', async (c) => {
 
   const fromEmail = c.env.CONTACT_FROM_EMAIL || 'Thynra <hello@thynra.com>';
   const operatorTo = c.env.OPERATOR_NOTIFY_EMAIL || 'hello@thynra.com';
-  // The client sends kind: "quiz" | "contact". Older clients (and the English
-  // quiz summary) are still recognized by the header embedded in the message.
-  const isQuiz = body?.kind === 'quiz' || (body?.kind !== 'contact' && /Front-Office AI Readiness/i.test(message));
-  const subjectTag = isQuiz ? 'AI Readiness Check lead' : 'New contact';
+  // The client sends kind: "quiz" | "contact" | "enterprise". Older clients
+  // (and the English quiz summary) are still recognized by the header embedded
+  // in the message. Enterprise leads get their own subject tag and source so
+  // they never enter the SMB quiz nurture.
+  const isEnterprise = body?.kind === 'enterprise';
+  const isQuiz =
+    !isEnterprise && (body?.kind === 'quiz' || (body?.kind !== 'contact' && /Front-Office AI Readiness/i.test(message)));
+  const subjectTag = isEnterprise ? 'ENTERPRISE lead' : isQuiz ? 'AI Readiness Check lead' : 'New contact';
+  const kindLabel = isEnterprise ? 'enterprise' : isQuiz ? 'quiz' : 'contact';
 
   // 1) Operator notification — this is the lead capture.
   const operatorText = [
-    `New ${isQuiz ? 'quiz' : 'contact'} submission via thynra.com`,
+    `New ${kindLabel} submission via thynra.com`,
     ``,
     `Name:     ${name || '(not provided)'}`,
     `Email:    ${email}`,
     `Business: ${company || '(not provided)'}`,
+    ...(role ? [`Role:     ${role}`] : []),
     ...(phone ? [`Phone:    ${phone}`] : []),
+    ...(systems ? [`Systems:  ${systems}`] : []),
     ``,
+    ...(isEnterprise ? [`Process they want to start with:`] : []),
     message,
     ``,
     `— Source —`,
@@ -494,7 +528,11 @@ app.post('/api/contact', async (c) => {
 
   // 2) Confirmation to the submitter (best-effort; never blocks the response).
   const emailCopy = EMAIL_COPY[locale];
-  const confirmText = isQuiz ? emailCopy.quizText(name, message) : emailCopy.contactText(name);
+  const confirmText = isEnterprise
+    ? emailCopy.enterpriseText(name)
+    : isQuiz
+      ? emailCopy.quizText(name, message)
+      : emailCopy.contactText(name);
 
   const confirmHtml = isQuiz
     ? quizConfirmHtml({
@@ -517,7 +555,11 @@ app.post('/api/contact', async (c) => {
         from: fromEmail,
         to: email,
         replyTo: operatorTo,
-        subject: isQuiz ? emailCopy.quizSubject : emailCopy.contactSubject,
+        subject: isEnterprise
+          ? emailCopy.enterpriseSubject
+          : isQuiz
+            ? emailCopy.quizSubject
+            : emailCopy.contactSubject,
         text: confirmText,
         html: confirmHtml,
         attachments: confirmAttachments,
@@ -530,11 +572,13 @@ app.post('/api/contact', async (c) => {
         email,
         name,
         company,
-        source: isQuiz ? 'quiz' : 'contact',
+        source: kindLabel,
         // Segment on stable English names regardless of the visitor's language.
         level: levelKey ? LEVEL_NAMES.en[levelKey] : level,
         weakestStage: weakestStageKey ? STAGE_LABELS.en[weakestStageKey] : weakestStage,
         segmentId: isQuiz ? c.env.RESEND_QUIZ_SEGMENT_ID : undefined,
+        // Role and systems stay in the operator email only: an undefined Resend
+        // property would make the first attempt fail and drop attribution too.
         extraProperties: attributionProperties(attribution, locale),
       }),
     );

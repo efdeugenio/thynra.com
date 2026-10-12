@@ -120,3 +120,19 @@ Reorganize from "3 products by who-the-AI-talks-to" into **the customer journey 
 
 All six items deployed to the `thynra` Cloudflare worker, live on thynra.com. `vite build` + `tsc` clean.
 
+---
+
+## 9. Enterprise door (Oct 2026, branch `feat/empresas`)
+
+**Decision:** one brand, two doors. The *method* is shared (one process to production, fixed scope, then the next); the *entry* splits. SMBs keep the quiz + Sofia home. Larger companies get `/enterprise` ↔ `/es/empresas` and `/security` ↔ `/es/seguridad` (translated slugs: `shared/siteMeta.ts` `LOCALIZED_SLUGS`, used by the edge meta, sitemap, client `localePath`, and `useRouteHref`).
+
+**Scope redefined** (supersedes "front-office only / no back-office"): *repetitive processes where people, messages or documents are involved, connected to the systems you already use.* Still out: bookkeeping/accounting, HR/payroll, dev tooling, strategy decks with nothing built.
+
+**Ownership:** client owns the code and deployment in both segments; enterprise support is an optional subscription. Platform licensing deliberately NOT offered for now (Eugenio, 2026-10-12) — revisit later.
+
+**Enterprise rules:** usted register in Spanish; no logos/clients/metrics; industry cards labelled "examples of application"; no certifications claimed (security page says plainly we have none); Sofia's bubble hidden on enterprise pages (`html.hide-sofia`); enterprise form posts `kind: "enterprise"` → operator subject `ENTERPRISE lead`, Resend `source=enterprise`, never in the quiz segment.
+
+**Home changes:** hero gets a third line linking to enterprise; nav "Empresas/Enterprise"; footer tagline → "IA en producción, un proceso a la vez"; FAQ "¿Para quién es?", "¿Qué hacen?" and "¿Qué no incluye?" rewritten + new "¿Trabajan con empresas grandes?"; staircase adds a logistics example.
+
+**Known leftover:** several existing pages use `<Link href="/">`, which inside the `/es` nest resolves to `/es/` (edge 301s it to `/es`). Harmless, not fixed here.
+

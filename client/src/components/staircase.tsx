@@ -1,6 +1,7 @@
 import { Footprints, CalendarClock, Handshake, Check } from "lucide-react";
 import { motion } from "framer-motion";
-import { defineCopy, useCopy } from "@/i18n";
+import { Link } from "wouter";
+import { defineCopy, useCopy, useRouteHref } from "@/i18n";
 
 // The section that makes the broad promise concrete: not "we transform your
 // business", but "this is stage one, and this is what the next year looks like".
@@ -48,6 +49,10 @@ const copy = defineCopy({
     exampleLabel: "What a sequence looks like",
     example:
       "In a clinic, it usually goes: month 1, nobody's call or message goes unanswered. Month 4, appointment reminders and no-show recovery. Month 7, reactivating patients who are overdue. Month 10, the weekly report that shows what all of it did. Your order will be different — the check tells us where to start.",
+    enterpriseExampleLabel: "Example in a larger company",
+    enterpriseExample:
+      "In a logistics operation, it could go: first, pre-validating commercial invoices before they reach the customs specialist. Then, shipment status for customers. Then, draft quotes for a person to approve. Same staircase, with a fixed-price diagnostic instead of the 2-minute check.",
+    enterpriseExampleLink: "AI for enterprise operations",
     creditNote:
       "Each step credits toward the next: what you pay for the plan comes off stage one.",
   },
@@ -94,6 +99,10 @@ const copy = defineCopy({
     exampleLabel: "Cómo se ve una secuencia",
     example:
       "En una clínica suele ir así: mes 1, que ninguna llamada ni mensaje quede sin respuesta. Mes 4, recordatorios de cita y recuperación de inasistencias. Mes 7, reactivar a los pacientes a los que ya les tocaba volver. Mes 10, el reporte semanal que muestra qué logró todo lo anterior. Tu orden va a ser distinto: el diagnóstico nos dice por dónde empezar.",
+    enterpriseExampleLabel: "Ejemplo en una empresa más grande",
+    enterpriseExample:
+      "En una operación logística podría ir así: primero, prevalidar las facturas comerciales antes de que lleguen al especialista aduanero. Después, el estado de embarques para clientes. Después, borradores de cotización para que una persona apruebe. La misma escalera, con un diagnóstico de precio fijo en lugar del de 2 minutos.",
+    enterpriseExampleLink: "IA para operaciones empresariales",
     creditNote:
       "Cada paso se acredita al siguiente: lo que pagas por el plan se descuenta de la etapa uno.",
   },
@@ -108,6 +117,7 @@ const rungConfig = [
 
 export default function Staircase() {
   const t = useCopy(copy);
+  const enterpriseHref = useRouteHref("/enterprise");
   const rungs = t.rungs.map((text, index) => ({ ...rungConfig[index], ...text }));
 
   return (
@@ -198,6 +208,15 @@ export default function Staircase() {
             {t.exampleLabel}
           </span>
           <p className="text-muted-foreground leading-relaxed mt-3">{t.example}</p>
+          <div className="mt-6 pt-6 border-t border-border" data-testid="card-staircase-enterprise-example">
+            <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+              {t.enterpriseExampleLabel}
+            </span>
+            <p className="text-muted-foreground leading-relaxed mt-3">{t.enterpriseExample}</p>
+            <Link href={enterpriseHref} className="inline-block mt-3 text-sm font-medium text-primary hover:underline">
+              {t.enterpriseExampleLink} →
+            </Link>
+          </div>
           <p className="text-sm text-foreground font-medium mt-4 border-t border-border pt-4">
             {t.creditNote}
           </p>

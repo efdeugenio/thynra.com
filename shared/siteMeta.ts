@@ -8,6 +8,24 @@ import { findResource, isPublic, RESOURCES } from "./resources";
 export type SiteLocale = "en" | "es";
 export const SITE_ORIGIN = "https://thynra.com";
 
+// Pages whose Spanish URL is a translated slug instead of "/es" + the English
+// path. Keys are the English-style path used everywhere else in this file
+// (routes, alternates, the client's localePath); values are the Spanish slug
+// that follows "/es". Add a pair here and both the edge metadata and the
+// language switcher follow.
+export const LOCALIZED_SLUGS: Record<string, string> = {
+  "/enterprise": "/empresas",
+  "/security": "/seguridad",
+};
+
+/** English-style path for a path read under "/es" (e.g. "/empresas" → "/enterprise"). */
+export function canonicalPath(path: string): string {
+  for (const [en, es] of Object.entries(LOCALIZED_SLUGS)) {
+    if (path === es) return en;
+  }
+  return path;
+}
+
 interface PageText {
   title: string;
   description: string;
@@ -99,6 +117,40 @@ const ROUTES: RouteMeta[] = [
     },
   },
   { path: "/diagnostico-express/*", locales: ["es"], index: false, text: {} },
+  {
+    path: "/enterprise",
+    locales: ["en", "es"],
+    index: true,
+    text: {
+      en: {
+        title: "AI agents for enterprise operations — Thynra",
+        description:
+          "AI agents working inside your real processes and systems, with the identity, approvals and audit trail your IT team requires. One process to production first, measured, before anything scales.",
+      },
+      es: {
+        title: "Agentes de IA para operaciones empresariales — Thynra",
+        description:
+          "Agentes de IA dentro de sus procesos y sistemas reales, con la identidad, las aprobaciones y la trazabilidad que exige su equipo de TI. Primero un proceso en producción, medido, antes de escalar.",
+      },
+    },
+  },
+  {
+    path: "/security",
+    locales: ["en", "es"],
+    index: true,
+    text: {
+      en: {
+        title: "Security and data handling — Thynra",
+        description:
+          "How Thynra deploys AI agents: where data lives, how access is controlled, what needs human approval, what gets logged, and how to report an incident.",
+      },
+      es: {
+        title: "Seguridad y manejo de datos — Thynra",
+        description:
+          "Cómo despliega Thynra sus agentes de IA: dónde viven los datos, cómo se controla el acceso, qué requiere aprobación humana, qué queda registrado y cómo reportar un incidente.",
+      },
+    },
+  },
   { path: "/checkout/*", locales: ["en"], index: false, text: {} },
   { path: "/onboarding/*", locales: ["en"], index: false, text: {} },
 ];
@@ -122,13 +174,15 @@ const FALLBACK: Record<SiteLocale, PageText> = {
 
 export function localizePath(path: string, locale: SiteLocale): string {
   if (locale === "en") return path;
-  return path === "/" ? "/es" : `/es${path}`;
+  if (path === "/") return "/es";
+  return `/es${LOCALIZED_SLUGS[path] ?? path}`;
 }
 
+/** Splits an absolute pathname into its locale and the English-style path. */
 export function splitLocale(pathname: string): { locale: SiteLocale; path: string } {
   if (pathname === "/es" || pathname.startsWith("/es/")) {
     const rest = pathname.slice(3);
-    return { locale: "es", path: rest === "" ? "/" : rest };
+    return { locale: "es", path: rest === "" ? "/" : canonicalPath(rest.replace(/\/+$/, "") || "/") };
   }
   return { locale: "en", path: pathname || "/" };
 }

@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Phone, ArrowRight } from "lucide-react";
+import { Phone, ArrowRight, Building2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useLocation } from "wouter";
-import { defineCopy, useCopy } from "@/i18n";
+import { Link, useLocation } from "wouter";
+import { defineCopy, useCopy, useRouteHref } from "@/i18n";
 
 const copy = defineCopy({
   en: {
@@ -14,6 +14,8 @@ const copy = defineCopy({
     subline: "Free · 2 minutes · instant results",
     sofiaPrompt: "Rather talk to someone right now?",
     sofiaCta: "Talk to Sofia",
+    enterprisePrompt: "A larger company with several teams and its own systems?",
+    enterpriseCta: "AI for enterprise operations",
   },
   es: {
     eyebrow: "Un problema a la vez",
@@ -24,12 +26,15 @@ const copy = defineCopy({
     subline: "Gratis · 2 minutos · resultados al instante",
     sofiaPrompt: "¿Prefieres hablar con alguien ahora?",
     sofiaCta: "Habla con Sofia",
+    enterprisePrompt: "¿Empresa con varios equipos y sistemas propios?",
+    enterpriseCta: "IA para operaciones empresariales",
   },
 });
 
 export default function HeroSection() {
   const [, navigate] = useLocation();
   const t = useCopy(copy);
+  const enterpriseHref = useRouteHref("/enterprise");
   const talkToSofia = () =>
     (window as any).thynra?.startCall?.({ context: "screening" });
 
@@ -107,6 +112,23 @@ export default function HeroSection() {
             <Phone className="mr-1.5 w-4 h-4" />
             {t.sofiaCta}
           </button>
+        </motion.p>
+
+        <motion.p
+          className="mt-3 text-sm text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+        >
+          {t.enterprisePrompt}{" "}
+          <Link
+            href={enterpriseHref}
+            className="inline-flex items-center font-semibold text-primary hover:underline"
+            data-testid="link-enterprise-hero"
+          >
+            <Building2 className="mr-1.5 w-4 h-4" />
+            {t.enterpriseCta}
+          </Link>
         </motion.p>
       </div>
     </section>

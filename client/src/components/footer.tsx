@@ -1,24 +1,28 @@
 import { Link } from "wouter";
-import { defineCopy, useCopy } from "@/i18n";
+import { defineCopy, localePath, useCopy, useLocale, useRouteHref } from "@/i18n";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
 const copy = defineCopy({
   en: {
-    tagline: "AI that helps you get and keep more customers",
+    tagline: "AI in production, one process at a time",
     what: "What",
     solutions: "Solutions",
     how: "How",
     quiz: "AI Readiness Check",
+    enterprise: "Enterprise",
+    security: "Security",
     contact: "Contact",
     privacy: "Privacy",
     terms: "Terms",
   },
   es: {
-    tagline: "IA que te ayuda a conseguir y conservar más clientes",
+    tagline: "IA en producción, un proceso a la vez",
     what: "Qué hacemos",
     solutions: "Soluciones",
     how: "Cómo trabajamos",
     quiz: "Diagnóstico de IA",
+    enterprise: "Empresas",
+    security: "Seguridad",
     contact: "Contacto",
     privacy: "Privacidad",
     terms: "Términos",
@@ -26,9 +30,14 @@ const copy = defineCopy({
 });
 
 // Route links use wouter <Link>, which resolves inside the "/es" nest, so they
-// already stay in the current locale. Hash links are same-page anchors.
+// already stay in the current locale. The home's section anchors point at the
+// home (not a bare "#…"), so they also work from /enterprise and /security.
 export default function Footer() {
   const t = useCopy(copy);
+  const locale = useLocale();
+  const home = localePath("/", locale);
+  const enterpriseHref = useRouteHref("/enterprise");
+  const securityHref = useRouteHref("/security");
 
   return (
     <footer className="bg-card border-t border-border py-8">
@@ -46,16 +55,16 @@ export default function Footer() {
             className="flex flex-wrap gap-x-6 gap-y-2 text-muted-foreground text-sm justify-center"
             data-testid="nav-footer-links"
           >
-            <a href="#what" className="hover:text-primary transition-colors">
+            <a href={`${home}#what`} className="hover:text-primary transition-colors">
               {t.what}
             </a>
             <a
-              href="#solutions"
+              href={`${home}#solutions`}
               className="hover:text-primary transition-colors"
             >
               {t.solutions}
             </a>
-            <a href="#how" className="hover:text-primary transition-colors">
+            <a href={`${home}#how`} className="hover:text-primary transition-colors">
               {t.how}
             </a>
             <Link
@@ -65,7 +74,13 @@ export default function Footer() {
             >
               {t.quiz}
             </Link>
-            <a href="#contact" className="hover:text-primary transition-colors">
+            <Link href={enterpriseHref} className="hover:text-primary transition-colors" data-testid="link-footer-enterprise">
+              {t.enterprise}
+            </Link>
+            <Link href={securityHref} className="hover:text-primary transition-colors" data-testid="link-footer-security">
+              {t.security}
+            </Link>
+            <a href={`${home}#contact`} className="hover:text-primary transition-colors">
               {t.contact}
             </a>
             <Link

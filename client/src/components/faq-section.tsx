@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { defineCopy, useCopy } from "@/i18n";
+import { Link } from "wouter";
+import { defineCopy, useCopy, useRouteHref } from "@/i18n";
+
+interface Faq {
+  question: string;
+  answer: string;
+  /** Optional link under the answer, to the enterprise page. */
+  enterpriseLink?: string;
+}
 
 const copy = defineCopy({
   en: {
@@ -10,7 +18,7 @@ const copy = defineCopy({
       {
         question: "What exactly do you do?",
         answer:
-          "We automate the moments where you win or lose customers — getting found in search and reviews, answering calls and messages fast, following up, winning back customers who drifted away, and the reporting behind it. One of them at a time, starting with whichever is costing you the most. The parts that touch your customers and your revenue: not bookkeeping, not internal-ops tools, not generic productivity AI.",
+          "We put AI to work on repetitive processes where people, messages or documents are involved — connected to the systems you already use. For most businesses that starts with customers: getting found, answering fast, following up, winning back the ones who drifted, and the reporting behind it. One process at a time, starting with whichever is costing you the most.",
       },
       {
         question: "What's the AI readiness check?",
@@ -20,12 +28,13 @@ const copy = defineCopy({
       {
         question: "Who is this for?",
         answer:
-          "Owner-operated SMBs that have customer demand but can't keep up with it. Service businesses where the owner is still answering the phone. Teams where the front desk is the bottleneck. Most of our work is with service businesses where missed conversations directly cost revenue.",
+          "Two kinds of organizations, with the same method. Owner-operated service businesses that have demand but can't keep up with it — where the owner still answers the phone or the front desk is the bottleneck. And larger companies with several teams and their own systems, who want an AI agent working inside a real process with the security and approvals their IT team requires.",
+        enterpriseLink: "See how we work with larger companies",
       },
       {
         question: "What's not in scope?",
         answer:
-          "Anything back-office. Bookkeeping, HR, internal automation, dev tooling, generic AI strategy decks. We also don't sell a tool and leave you to run it, and we don't do six-month transformations. We build one working process at a time and keep it running.",
+          "Bookkeeping and accounting, HR and payroll, developer tooling, and AI strategy decks with nothing built behind them. We also don't sell a tool and leave you to run it, and we don't do six-month transformations. We build one working process at a time and keep it running.",
       },
       {
         question: "What does it cost?",
@@ -36,6 +45,12 @@ const copy = defineCopy({
         question: "Are you taking new clients right now?",
         answer:
           "Yes. We're actively engaging new clients, with a focus on service businesses where missed calls, slow follow-up, and lapsed customers are costing measurable revenue. The fastest way to find out if there's a fit is the free 2-minute readiness check, then a 30-minute call to turn the result into a plan.",
+      },
+      {
+        question: "Do you work with large companies?",
+        answer:
+          "Yes. It is the same method — one process to production, then the next — with the pieces a larger organization needs: deployment in your own cloud, identity and permissions per agent, human approval on irreversible actions, and a full audit trail. It starts with a fixed-price diagnostic instead of the 2-minute check.",
+        enterpriseLink: "AI for enterprise operations",
       },
       {
         question: "How is this different from the AI tools I've already tried?",
@@ -52,7 +67,7 @@ const copy = defineCopy({
         answer:
           "Thynra is based in Costa Rica and serves clients across LATAM and the US. Our solutions are built bilingual (English and Spanish) from day one, with more languages available on request.",
       },
-    ],
+    ] as Faq[],
   },
   es: {
     title: "Preguntas frecuentes",
@@ -60,7 +75,7 @@ const copy = defineCopy({
       {
         question: "¿Qué hacen exactamente?",
         answer:
-          "Automatizamos los momentos en que ganas o pierdes clientes: que te encuentren en búsquedas y reseñas, contestar llamadas y mensajes rápido, dar seguimiento, recuperar a los clientes que se alejaron y los reportes que hay detrás. Uno a la vez, empezando por el que más te esté costando. Las partes que tocan a tus clientes y tus ingresos: no contabilidad, no herramientas de operación interna, no IA genérica de productividad.",
+          "Ponemos a trabajar la IA en procesos repetitivos donde hay personas, mensajes o documentos de por medio, conectada a los sistemas que ya usas. En la mayoría de los negocios eso empieza por los clientes: que te encuentren, responder rápido, dar seguimiento, recuperar a los que se alejaron y los reportes que hay detrás. Un proceso a la vez, empezando por el que más te esté costando.",
       },
       {
         question: "¿Qué es el Diagnóstico de IA?",
@@ -70,12 +85,13 @@ const copy = defineCopy({
       {
         question: "¿Para quién es?",
         answer:
-          "Para negocios manejados por sus dueños que tienen clientes interesados pero no dan abasto. Negocios de servicios donde el dueño todavía contesta el teléfono. Equipos donde la recepción es el cuello de botella. La mayor parte de nuestro trabajo es con negocios de servicios donde cada conversación perdida cuesta dinero directamente.",
+          "Para dos tipos de organización, con el mismo método. Negocios de servicios manejados por sus dueños, que tienen clientes interesados pero no dan abasto: donde el dueño todavía contesta el teléfono o la recepción es el cuello de botella. Y empresas más grandes, con varios equipos y sistemas propios, que quieren un agente de IA dentro de un proceso real con la seguridad y las aprobaciones que exige su equipo de TI.",
+        enterpriseLink: "Ver cómo trabajamos con empresas",
       },
       {
         question: "¿Qué no incluye?",
         answer:
-          "Nada de la administración interna. Contabilidad, recursos humanos, automatización interna, herramientas para programadores, presentaciones genéricas de estrategia de IA. Tampoco te vendemos una herramienta para que la manejes tú, ni hacemos transformaciones de seis meses. Construimos un proceso funcionando a la vez y lo mantenemos corriendo.",
+          "Contabilidad, recursos humanos y planillas, herramientas para programadores, y presentaciones de estrategia de IA sin nada construido detrás. Tampoco te vendemos una herramienta para que la manejes tú, ni hacemos transformaciones de seis meses. Construimos un proceso funcionando a la vez y lo mantenemos corriendo.",
       },
       {
         question: "¿Cuánto cuesta?",
@@ -86,6 +102,12 @@ const copy = defineCopy({
         question: "¿Están aceptando clientes nuevos?",
         answer:
           "Sí. Estamos tomando clientes nuevos, sobre todo negocios de servicios donde las llamadas perdidas, el seguimiento lento y los clientes que dejaron de venir están costando dinero que se puede medir. La forma más rápida de saber si encajamos es el Diagnóstico de IA gratis de 2 minutos y, después, una llamada de 30 minutos para convertir el resultado en un plan.",
+      },
+      {
+        question: "¿Trabajan con empresas grandes?",
+        answer:
+          "Sí. Es el mismo método (un proceso en producción y después el siguiente) con lo que necesita una organización más grande: despliegue en su propia nube, identidad y permisos por agente, aprobación humana en las acciones irreversibles y trazabilidad completa. Empieza con un diagnóstico de precio fijo en lugar del de 2 minutos.",
+        enterpriseLink: "IA para operaciones empresariales",
       },
       {
         question: "¿En qué se diferencia de las herramientas de IA que ya probé?",
@@ -102,7 +124,7 @@ const copy = defineCopy({
         answer:
           "Thynra está en Costa Rica y atiende clientes en toda Latinoamérica y Estados Unidos. Nuestras soluciones son bilingües (inglés y español) desde el primer día, y podemos sumar más idiomas si los necesitas.",
       },
-    ],
+    ] as Faq[],
   },
 });
 
@@ -110,6 +132,7 @@ export default function FAQSection() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const t = useCopy(copy);
   const faqs = t.faqs;
+  const enterpriseHref = useRouteHref("/enterprise");
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -165,6 +188,11 @@ export default function FAQSection() {
                       <p className="text-muted-foreground leading-relaxed">
                         {faq.answer}
                       </p>
+                      {faq.enterpriseLink && (
+                        <Link href={enterpriseHref} className="inline-block mt-3 font-medium text-primary hover:underline">
+                          {faq.enterpriseLink} →
+                        </Link>
+                      )}
                     </div>
                   </motion.div>
                 )}
