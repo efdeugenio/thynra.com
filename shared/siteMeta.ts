@@ -49,12 +49,12 @@ const ROUTES: RouteMeta[] = [
     index: true,
     text: {
       en: {
-        title: "Thynra — AI agents in production, one process at a time",
+        title: "Thynra — we build AI agents that help your operation do more with the same team",
         description:
           "AI agents that work inside your operation: they serve your customers, review documents, follow up and move work between systems, with a person approving what matters. For businesses and for enterprises.",
       },
       es: {
-        title: "Thynra — agentes de IA en producción, un proceso a la vez",
+        title: "Thynra — desarrollamos agentes de IA para que tu operación haga más con el mismo equipo",
         description:
           "Agentes de IA que trabajan dentro de tu operación: atienden a tus clientes, revisan documentos, dan seguimiento y mueven trabajo entre sistemas, con una persona aprobando lo que importa. Para negocios y para empresas.",
       },

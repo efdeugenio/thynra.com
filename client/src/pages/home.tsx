@@ -28,14 +28,12 @@ import { readDoor, useHideSofiaBubble, type Door } from "@/lib/door";
 // Spanish avoids both tú and usted where it can, since this page speaks to
 // both audiences; the doors themselves are first person.
 //
-// Two H1 candidates while Eugenio picks: default is A; ?v=b shows B.
 const copy = defineCopy({
   en: {
     eyebrow: "AI agents in production",
-    titleA: "AI agents that work inside your operation. In production, not in a demo.",
-    titleB: "We put AI agents to work in your operation. One process at a time, in production.",
+    title: "We build AI agents that help your operation do more with the same team.",
     subtitle:
-      "They serve customers, review documents, follow up and move work between systems — with a person approving what matters. One process at a time, connected to the systems already in place.",
+      "They serve customers, review documents, follow up and move work between systems, with a person approving what matters. In production, not in a demo.",
     doorsLabel: "Where do you want to start?",
     businessDoor: {
       title: "I have a business",
@@ -77,7 +75,7 @@ const copy = defineCopy({
     howTitle: "One process at a time.",
     steps: [
       { title: "We pick the process", body: "The one costing you the most, with the clearest result." },
-      { title: "We put an agent in production", body: "Connected to the real systems, with a fixed scope and a date." },
+      { title: "We build the agent and put it in production", body: "Connected to the real systems, with a fixed scope and a date." },
       { title: "We keep it running", body: "Monitored and adjusted, and then the next process builds on it." },
     ],
     controlEyebrow: "Under control",
@@ -92,10 +90,9 @@ const copy = defineCopy({
   },
   es: {
     eyebrow: "Agentes de IA en producción",
-    titleA: "Agentes de IA que trabajan dentro de tu operación. En producción, no en una demo.",
-    titleB: "Ponemos agentes de IA a trabajar en tu operación. Un proceso a la vez, en producción.",
+    title: "Desarrollamos agentes de IA que ayudan a tu operación a hacer más con el mismo equipo.",
     subtitle:
-      "Atienden clientes, revisan documentos, dan seguimiento y mueven trabajo entre sistemas, con una persona aprobando lo que importa. Un proceso a la vez, conectados a los sistemas que ya existen.",
+      "Atienden clientes, revisan documentos, dan seguimiento y mueven trabajo entre sistemas, con una persona aprobando lo que importa. En producción, no en una demo.",
     doorsLabel: "¿Por dónde empezamos?",
     businessDoor: {
       title: "Tengo un negocio",
@@ -137,7 +134,7 @@ const copy = defineCopy({
     howTitle: "Un proceso a la vez.",
     steps: [
       { title: "Elegimos el proceso", body: "El que más está costando y con el resultado más claro." },
-      { title: "Ponemos un agente en producción", body: "Conectado a los sistemas reales, con alcance fijo y fecha." },
+      { title: "Desarrollamos el agente y lo ponemos en producción", body: "Conectado a los sistemas reales, con alcance fijo y fecha." },
       { title: "Lo mantenemos funcionando", body: "Monitoreado y ajustado, y el siguiente proceso se construye encima." },
     ],
     controlEyebrow: "Bajo control",
@@ -245,7 +242,6 @@ export default function HomePage() {
   const securityHref = useRouteHref("/security");
   const businessHref = useRouteHref("/business");
   const enterpriseHref = useRouteHref("/enterprise");
-  const variant = new URLSearchParams(window.location.search).get("v") === "b" ? "b" : "a";
   const [door, setDoor] = useState<Door | null>(null);
   useEffect(() => setDoor(readDoor()), []);
 
@@ -281,9 +277,8 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             data-testid="text-home-title"
-            data-variant={variant}
           >
-            {variant === "b" ? t.titleB : t.titleA}
+            {t.title}
           </motion.h1>
           <motion.p
             className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed"
