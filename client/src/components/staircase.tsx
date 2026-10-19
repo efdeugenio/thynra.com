@@ -48,7 +48,7 @@ const copy = defineCopy({
     ],
     exampleLabel: "What a sequence looks like",
     example:
-      "In a clinic, it usually goes: month 1, nobody's call or message goes unanswered. Month 4, appointment reminders and no-show recovery. Month 7, reactivating patients who are overdue. Month 10, the weekly report that shows what all of it did. Your order will be different — the check tells us where to start.",
+      "In a clinic, it usually goes: first, nobody's call or message goes unanswered. Month 4, appointment reminders and no-show recovery. Month 7, reactivating patients who are overdue. Month 10, the weekly report that shows what all of it did. Your order will be different — the check tells us where to start.",
     enterpriseExampleLabel: "Example in a larger company",
     enterpriseExample:
       "In a logistics operation, it could go: first, pre-validating commercial invoices before they reach the customs specialist. Then, shipment status for customers. Then, draft quotes for a person to approve. Same staircase, with a fixed-price diagnostic instead of the 2-minute check.",
@@ -98,7 +98,7 @@ const copy = defineCopy({
     ],
     exampleLabel: "Cómo se ve una secuencia",
     example:
-      "En una clínica suele ir así: mes 1, que ninguna llamada ni mensaje quede sin respuesta. Mes 4, recordatorios de cita y recuperación de inasistencias. Mes 7, reactivar a los pacientes a los que ya les tocaba volver. Mes 10, el reporte semanal que muestra qué logró todo lo anterior. Tu orden va a ser distinto: el diagnóstico nos dice por dónde empezar.",
+      "En una clínica suele ir así: primero, que ninguna llamada ni mensaje quede sin respuesta. Mes 4, recordatorios de cita y recuperación de inasistencias. Mes 7, reactivar a los pacientes a los que ya les tocaba volver. Mes 10, el reporte semanal que muestra qué logró todo lo anterior. Tu orden va a ser distinto: el diagnóstico nos dice por dónde empezar.",
     enterpriseExampleLabel: "Ejemplo en una empresa más grande",
     enterpriseExample:
       "En una operación logística podría ir así: primero, prevalidar las facturas comerciales antes de que lleguen al especialista aduanero. Después, el estado de embarques para clientes. Después, borradores de cotización para que una persona apruebe. La misma escalera, con un diagnóstico de precio fijo en lugar del de 2 minutos.",
