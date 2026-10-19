@@ -1,33 +1,40 @@
 import { Button } from "@/components/ui/button";
-import { Phone, ArrowRight } from "lucide-react";
+import { Phone, ArrowRight, Building2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useLocation } from "wouter";
-import { defineCopy, useCopy } from "@/i18n";
+import { Link, useLocation } from "wouter";
+import { defineCopy, useCopy, useRouteHref } from "@/i18n";
 
 const copy = defineCopy({
   en: {
-    eyebrow: "AI that wins & keeps customers",
-    title: "Most service businesses lose customers in the same three places. Find yours in 2 minutes.",
+    eyebrow: "AI agents for your business",
+    title: "An AI agent working in your business. One process at a time.",
     subtitle:
-      "The lead nobody called back. The customer who never came back. The reviews nobody answers. Take the free 2-minute readiness check to see which gap is costing you the most — then we automate it.",
+      "It serves your customers, follows up and brings them back, connected to the tools you already use. No six-month projects, no new hire. You start with whatever is costing you the most — the free 2-minute check tells you which one that is.",
     primaryCta: "Start the 2-min check",
-    secondaryCta: "Talk to Sofia now",
     subline: "Free · 2 minutes · instant results",
+    sofiaPrompt: "Rather talk to someone right now?",
+    sofiaCta: "Talk to Sofia",
+    enterprisePrompt: "A larger company with several teams and its own systems?",
+    enterpriseCta: "AI for enterprise operations",
   },
   es: {
-    eyebrow: "IA para conseguir y conservar clientes",
-    title: "Casi todos los negocios de servicios pierden clientes en los mismos tres puntos. Descubre dónde los pierde el tuyo en 2 minutos.",
+    eyebrow: "Agentes de IA para tu negocio",
+    title: "Un agente de IA trabajando en tu negocio. Un proceso a la vez.",
     subtitle:
-      "El cliente al que nadie le devolvió el mensaje. El que nunca volvió. Las reseñas que nadie responde. Haz el diagnóstico gratis de 2 minutos para ver qué punto te está costando más, y lo automatizamos.",
+      "Atiende a tus clientes, les da seguimiento y los hace volver, conectado a las herramientas que ya usas. Sin proyectos de seis meses y sin contratar a nadie. Empiezas por lo que más te está costando: el diagnóstico gratis de 2 minutos te dice qué es.",
     primaryCta: "Empezar el diagnóstico",
-    secondaryCta: "Habla con Sofia ahora",
     subline: "Gratis · 2 minutos · resultados al instante",
+    sofiaPrompt: "¿Prefieres hablar con alguien ahora?",
+    sofiaCta: "Habla con Sofia",
+    enterprisePrompt: "¿Empresa con varios equipos y sistemas propios?",
+    enterpriseCta: "IA para operaciones empresariales",
   },
 });
 
 export default function HeroSection() {
   const [, navigate] = useLocation();
   const t = useCopy(copy);
+  const enterpriseHref = useRouteHref("/enterprise");
   const talkToSofia = () =>
     (window as any).thynra?.startCall?.({ context: "screening" });
 
@@ -65,27 +72,18 @@ export default function HeroSection() {
         </motion.p>
 
         <motion.div
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex justify-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <Button
             onClick={() => navigate("/quiz")}
-            className="gradient-bg text-white px-5 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-transform"
+            className="gradient-bg text-white px-6 py-3 rounded-lg text-base font-semibold hover:scale-105 transition-transform"
             data-testid="button-take-quiz-hero"
           >
             {t.primaryCta}
             <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
-          <Button
-            variant="outline"
-            onClick={talkToSofia}
-            className="px-5 py-2 rounded-lg text-sm font-semibold"
-            data-testid="button-talk-to-sofia-hero"
-          >
-            <Phone className="mr-2 w-4 h-4" />
-            {t.secondaryCta}
           </Button>
         </motion.div>
 
@@ -97,6 +95,40 @@ export default function HeroSection() {
           data-testid="text-hero-subline"
         >
           {t.subline}
+        </motion.p>
+
+        <motion.p
+          className="mt-6 text-sm text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+        >
+          {t.sofiaPrompt}{" "}
+          <button
+            onClick={talkToSofia}
+            className="inline-flex items-center font-semibold text-primary hover:underline"
+            data-testid="button-talk-to-sofia-hero"
+          >
+            <Phone className="mr-1.5 w-4 h-4" />
+            {t.sofiaCta}
+          </button>
+        </motion.p>
+
+        <motion.p
+          className="mt-3 text-sm text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+        >
+          {t.enterprisePrompt}{" "}
+          <Link
+            href={enterpriseHref}
+            className="inline-flex items-center font-semibold text-primary hover:underline"
+            data-testid="link-enterprise-hero"
+          >
+            <Building2 className="mr-1.5 w-4 h-4" />
+            {t.enterpriseCta}
+          </Link>
         </motion.p>
       </div>
     </section>

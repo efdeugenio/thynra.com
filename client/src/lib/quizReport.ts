@@ -43,6 +43,8 @@ export interface ReportCopy {
     result: (level: string, total: number) => string;
     stages: (scores: Record<Stage, number>, labels: Record<Stage, string>) => string;
     weakest: (stage: string) => string;
+    /** The stages in the order we would fix them — the actual deliverable. */
+    sequence: (labels: string[]) => string;
   };
 }
 
@@ -214,6 +216,7 @@ export const reportCopy = defineCopy<ReportCopy>({
       stages: (s, l) =>
         `${l.awareness} ${s.awareness}/8, ${l.conversion} ${s.conversion}/8, ${l.retention} ${s.retention}/8`,
       weakest: (stage) => `Weakest stage: ${stage}`,
+      sequence: (labels) => `Order we'd fix them: 1) ${labels[0]}, 2) ${labels[1]}, 3) ${labels[2]}`,
     },
   },
   es: {
@@ -378,6 +381,7 @@ export const reportCopy = defineCopy<ReportCopy>({
       stages: (s, l) =>
         `${l.awareness} ${s.awareness}/8, ${l.conversion} ${s.conversion}/8, ${l.retention} ${s.retention}/8`,
       weakest: (stage) => `Etapa más débil: ${stage}`,
+      sequence: (labels) => `Orden en que las arreglaríamos: 1) ${labels[0]}, 2) ${labels[1]}, 3) ${labels[2]}`,
     },
   },
 });
@@ -397,6 +401,17 @@ export interface ReportData {
   levelKey: LevelKey;
   scores: Record<Stage, number>; // each 0..8
   weakest: Stage;
+  /** Weakest first: the order we would fix the stages in. sequence[0] === weakest. */
+  sequence: Stage[];
+}
+
+// The quiz answers "in what order", not "what grade". Ties break on STAGE_ORDER
+// so the same answers always produce the same plan.
+export function stageSequence(scores: Record<Stage, number>): Stage[] {
+  return [...STAGE_ORDER].sort((a, b) => {
+    const diff = (scores[a] ?? 0) - (scores[b] ?? 0);
+    return diff !== 0 ? diff : STAGE_ORDER.indexOf(a) - STAGE_ORDER.indexOf(b);
+  });
 }
 
 // Build the full report model from raw per-stage scores. Centralizing this
@@ -406,9 +421,7 @@ export function buildReport(
   meta: { name: string; company: string },
 ): ReportData {
   const total = STAGE_ORDER.reduce((acc, s) => acc + (scores[s] ?? 0), 0);
-  const weakest = STAGE_ORDER.reduce((min, s) =>
-    (scores[s] ?? 0) < (scores[min] ?? 0) ? s : min,
-  );
+  const sequence = stageSequence(scores);
   return {
     name: meta.name,
     company: meta.company,
@@ -416,7 +429,8 @@ export function buildReport(
     overallPct: Math.round((total / 24) * 100),
     levelKey: levelForScore(total),
     scores,
-    weakest,
+    weakest: sequence[0],
+    sequence,
   };
 }
 
@@ -432,6 +446,7 @@ export function reportSummaryText(r: ReportData, locale: Locale): string {
     `${c.summary.header}\n` +
     `${c.summary.result(c.levels[r.levelKey].name, r.total)}\n` +
     `${c.summary.stages(r.scores, labels)}\n` +
-    c.summary.weakest(c.stages[r.weakest].label)
+    `${c.summary.weakest(c.stages[r.weakest].label)}\n` +
+    c.summary.sequence(r.sequence.map((st) => c.stages[st].label))
   );
 }

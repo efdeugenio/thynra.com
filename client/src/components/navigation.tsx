@@ -1,25 +1,27 @@
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Phone, Sparkles } from "lucide-react";
 import thynraLogo from "@assets/Thynra logo_1760137533222.png";
-import { defineCopy, useCopy } from "@/i18n";
+import { defineCopy, localePath, useCopy, useLocale, useRouteHref } from "@/i18n";
 import { LanguageSuggestion, LanguageSwitcher } from "@/components/language-switcher";
 
 const copy = defineCopy({
   en: {
-    what: "What",
-    solutions: "Solutions",
-    how: "How",
+    solutions: "What we fix",
+    how: "How we start",
+    staircase: "The staircase",
+    enterprise: "Enterprise",
     talkToSofia: "Talk to Sofia",
-    quiz: "AI Readiness Check",
-    quizMobile: "Readiness Check",
+    quiz: "Free 2-min check",
+    quizMobile: "Free check",
   },
   es: {
-    what: "Qué hacemos",
-    solutions: "Soluciones",
-    how: "Cómo trabajamos",
+    solutions: "Qué arreglamos",
+    how: "Cómo empezamos",
+    staircase: "La escalera",
+    enterprise: "Empresas",
     talkToSofia: "Habla con Sofia",
-    quiz: "Diagnóstico de IA",
+    quiz: "Diagnóstico gratis",
     quizMobile: "Diagnóstico",
   },
 });
@@ -27,6 +29,8 @@ const copy = defineCopy({
 export default function Navigation() {
   const [, navigate] = useLocation();
   const t = useCopy(copy);
+  const locale = useLocale();
+  const enterpriseHref = useRouteHref("/enterprise");
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -40,21 +44,14 @@ export default function Navigation() {
       <nav className="bg-card border-b border-border sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center" data-testid="logo">
+            <Link href={`~${localePath("/", locale)}`} className="flex items-center" data-testid="logo">
               <img
                 src={thynraLogo}
                 alt="Thynra"
                 className="h-12 w-auto object-contain"
               />
-            </div>
+            </Link>
             <div className="hidden md:flex items-center space-x-6">
-              <button
-                onClick={() => scrollTo("what")}
-                className="text-secondary-foreground hover:text-primary transition-colors text-sm"
-                data-testid="nav-what"
-              >
-                {t.what}
-              </button>
               <button
                 onClick={() => scrollTo("solutions")}
                 className="text-secondary-foreground hover:text-primary transition-colors text-sm"
@@ -69,6 +66,20 @@ export default function Navigation() {
               >
                 {t.how}
               </button>
+              <button
+                onClick={() => scrollTo("staircase")}
+                className="text-secondary-foreground hover:text-primary transition-colors text-sm"
+                data-testid="nav-staircase"
+              >
+                {t.staircase}
+              </button>
+              <Link
+                href={enterpriseHref}
+                className="text-secondary-foreground hover:text-primary transition-colors text-sm"
+                data-testid="nav-enterprise"
+              >
+                {t.enterprise}
+              </Link>
               <button
                 onClick={talkToSofia}
                 className="text-secondary-foreground hover:text-primary transition-colors text-sm inline-flex items-center"

@@ -8,6 +8,25 @@ import { findResource, isPublic, RESOURCES } from "./resources";
 export type SiteLocale = "en" | "es";
 export const SITE_ORIGIN = "https://thynra.com";
 
+// Pages whose Spanish URL is a translated slug instead of "/es" + the English
+// path. Keys are the English-style path used everywhere else in this file
+// (routes, alternates, the client's localePath); values are the Spanish slug
+// that follows "/es". Add a pair here and both the edge metadata and the
+// language switcher follow.
+export const LOCALIZED_SLUGS: Record<string, string> = {
+  "/business": "/negocios",
+  "/enterprise": "/empresas",
+  "/security": "/seguridad",
+};
+
+/** English-style path for a path read under "/es" (e.g. "/empresas" → "/enterprise"). */
+export function canonicalPath(path: string): string {
+  for (const [en, es] of Object.entries(LOCALIZED_SLUGS)) {
+    if (path === es) return en;
+  }
+  return path;
+}
+
 interface PageText {
   title: string;
   description: string;
@@ -30,14 +49,31 @@ const ROUTES: RouteMeta[] = [
     index: true,
     text: {
       en: {
-        title: "Thynra — AI that helps service businesses win and keep customers",
+        title: "Thynra — we build AI agents that help your operation do more with the same team",
         description:
-          "Most service businesses lose customers in the same three places: they can't find you, nobody answers, they don't come back. Find yours in 2 minutes, then we automate it.",
+          "AI agents that work inside your operation: they serve your customers, review documents, follow up and move work between systems, with a person approving what matters. For businesses and for enterprises.",
       },
       es: {
-        title: "Thynra — IA para que tu negocio consiga y conserve clientes",
+        title: "Thynra — desarrollamos agentes de IA para que tu operación haga más con el mismo equipo",
         description:
-          "La mayoría de los negocios de servicios pierden clientes en los mismos tres puntos: no te encuentran, nadie les responde, no vuelven. Descubre dónde los pierde el tuyo en 2 minutos y lo automatizamos.",
+          "Agentes de IA que trabajan dentro de tu operación: atienden a tus clientes, revisan documentos, dan seguimiento y mueven trabajo entre sistemas, con una persona aprobando lo que importa. Para negocios y para empresas.",
+      },
+    },
+  },
+  {
+    path: "/business",
+    locales: ["en", "es"],
+    index: true,
+    text: {
+      en: {
+        title: "AI agents for your business, one process at a time — Thynra",
+        description:
+          "An AI agent working in your business, at a fixed price: it serves your customers, follows up and brings them back. The free 2-minute check tells you where to start.",
+      },
+      es: {
+        title: "Agentes de IA para tu negocio, un proceso a la vez — Thynra",
+        description:
+          "Un agente de IA trabajando en tu negocio, a precio fijo: atiende a tus clientes, da seguimiento y los hace volver. El diagnóstico gratis de 2 minutos te dice por dónde empezar.",
       },
     },
   },
@@ -47,14 +83,14 @@ const ROUTES: RouteMeta[] = [
     index: true,
     text: {
       en: {
-        title: "AI Readiness Check — Thynra",
+        title: "Which problem should you fix first? — Thynra",
         description:
-          "Six questions, two minutes. See where your business is losing customers and which workflow to automate first, with a free PDF plan.",
+          "Six questions, two minutes. Get the three stages where your business loses customers, put in the order we'd fix them, with a free PDF plan.",
       },
       es: {
-        title: "Diagnóstico de IA para tu negocio — Thynra",
+        title: "¿Qué problema arreglar primero? — Thynra",
         description:
-          "Seis preguntas, dos minutos. Descubre dónde está perdiendo clientes tu negocio y qué proceso automatizar primero, con un plan gratis en PDF.",
+          "Seis preguntas, dos minutos. Te devolvemos las tres etapas donde tu negocio pierde clientes, en el orden en que las arreglaríamos, con un plan gratis en PDF.",
       },
     },
   },
@@ -86,10 +122,52 @@ const ROUTES: RouteMeta[] = [
     },
   },
   {
-    path: "/pricing/ai-receptionist",
-    locales: ["en"],
+    // Unlisted until Onvo payments are live for it; flip index to true then.
+    path: "/diagnostico-express",
+    locales: ["es"],
+    index: false,
+    text: {
+      es: {
+        title: "Diagnóstico Express — Thynra",
+        description:
+          "Cuéntanos cómo funciona tu negocio hoy y te respondemos con un video de 5 minutos: los tres procesos que automatizaríamos primero, en orden.",
+      },
+    },
+  },
+  { path: "/diagnostico-express/*", locales: ["es"], index: false, text: {} },
+  {
+    path: "/enterprise",
+    locales: ["en", "es"],
     index: true,
-    text: { en: { title: "AI Receptionist pricing — Thynra", description: "Plans for Thynra's AI Receptionist." } },
+    text: {
+      en: {
+        title: "AI agents for enterprise operations — Thynra",
+        description:
+          "AI agents working inside your real processes and systems, with the identity, approvals and audit trail your IT team requires. One process to production first, measured, before anything scales.",
+      },
+      es: {
+        title: "Agentes de IA para operaciones empresariales — Thynra",
+        description:
+          "Agentes de IA dentro de sus procesos y sistemas reales, con la identidad, las aprobaciones y la trazabilidad que exige su equipo de TI. Primero un proceso en producción, medido, antes de escalar.",
+      },
+    },
+  },
+  {
+    path: "/security",
+    locales: ["en", "es"],
+    index: true,
+    text: {
+      en: {
+        title: "Security and data handling — Thynra",
+        description:
+          "How Thynra deploys AI agents: where data lives, how access is controlled, what needs human approval, what gets logged, and how to report an incident.",
+      },
+      es: {
+        title: "Seguridad y manejo de datos — Thynra",
+        description:
+          "Cómo despliega Thynra sus agentes de IA: dónde viven los datos, cómo se controla el acceso, qué requiere aprobación humana, qué queda registrado y cómo reportar un incidente.",
+      },
+    },
   },
   { path: "/checkout/*", locales: ["en"], index: false, text: {} },
   { path: "/onboarding/*", locales: ["en"], index: false, text: {} },
@@ -114,13 +192,15 @@ const FALLBACK: Record<SiteLocale, PageText> = {
 
 export function localizePath(path: string, locale: SiteLocale): string {
   if (locale === "en") return path;
-  return path === "/" ? "/es" : `/es${path}`;
+  if (path === "/") return "/es";
+  return `/es${LOCALIZED_SLUGS[path] ?? path}`;
 }
 
+/** Splits an absolute pathname into its locale and the English-style path. */
 export function splitLocale(pathname: string): { locale: SiteLocale; path: string } {
   if (pathname === "/es" || pathname.startsWith("/es/")) {
     const rest = pathname.slice(3);
-    return { locale: "es", path: rest === "" ? "/" : rest };
+    return { locale: "es", path: rest === "" ? "/" : canonicalPath(rest.replace(/\/+$/, "") || "/") };
   }
   return { locale: "en", path: pathname || "/" };
 }

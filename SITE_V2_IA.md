@@ -120,3 +120,29 @@ Reorganize from "3 products by who-the-AI-talks-to" into **the customer journey 
 
 All six items deployed to the `thynra` Cloudflare worker, live on thynra.com. `vite build` + `tsc` clean.
 
+---
+
+## 9. Enterprise door (Oct 2026, branch `feat/empresas`)
+
+**Decision:** one brand, two doors. The *method* is shared (one process to production, fixed scope, then the next); the *entry* splits. SMBs keep the quiz + Sofia home. Larger companies get `/enterprise` ↔ `/es/empresas` and `/security` ↔ `/es/seguridad` (translated slugs: `shared/siteMeta.ts` `LOCALIZED_SLUGS`, used by the edge meta, sitemap, client `localePath`, and `useRouteHref`).
+
+**Scope redefined** (supersedes "front-office only / no back-office"): *repetitive processes where people, messages or documents are involved, connected to the systems you already use.* Still out: bookkeeping/accounting, HR/payroll, dev tooling, strategy decks with nothing built.
+
+**Ownership:** client owns the code and deployment in both segments; enterprise support is an optional subscription. Platform licensing deliberately NOT offered for now (Eugenio, 2026-10-12) — revisit later.
+
+**Enterprise rules:** no references to SMBs/pymes, the quiz or Sofia anywhere on the enterprise pages (header, copy, FAQ, footer variant="enterprise"); usted register in Spanish; no logos/clients/metrics; industry cards labelled "examples of application"; no certifications claimed (security page says plainly we have none); Sofia's bubble hidden on enterprise pages (`html.hide-sofia`); enterprise form posts `kind: "enterprise"` → operator subject `ENTERPRISE lead`, Resend `source=enterprise`, never in the quiz segment.
+
+**Home changes:** hero gets a third line linking to enterprise; nav "Empresas/Enterprise"; footer tagline → "IA en producción, un proceso a la vez"; FAQ "¿Para quién es?", "¿Qué hacen?" and "¿Qué no incluye?" rewritten + new "¿Trabajan con empresas grandes?"; staircase adds a logistics example.
+
+**Known leftover:** several existing pages use `<Link href="/">`, which inside the `/es` nest resolves to `/es/` (edge 301s it to `/es`). Harmless, not fixed here.
+
+## 10. Neutral home + business door (Oct 2026, same branch)
+
+**Decision (Eugenio, 2026-10-12):** "/" is neither SMB nor enterprise. It says in the first line that Thynra builds **AI agents** (the old SMB H1 "Arreglamos un problema…" never said AI and read like process-improvement consulting), then sends each visitor to a door. This **reopens the §4 "LOCKED" H1**.
+
+- `/` ↔ `/es`: neutral home (`pages/home.tsx`). Eyebrow "Agentes de IA en producción"; H1 (picked 2026-10-12) "Desarrollamos agentes de IA que ayudan a tu operación a hacer más con el mismo equipo." / "We build AI agents that help your operation do more with the same team." "Con el mismo equipo", not "sin sumar personal" (reads as replacing people in enterprise). Two doors in the hero (business card carries the quiz link, so SMBs stay one click from the quiz) and again at the bottom. "Qué hace un agente" cards: atiende a los clientes / revisa documentos / da seguimiento / arma el reporte. Anti-consultancy line: "No es un informe. Es un agente trabajando." No Sofia here.
+- `/business` ↔ `/es/negocios`: the former home, unchanged sections (`pages/business.tsx`). Its hero now names AI: "Un agente de IA trabajando en tu negocio en dos semanas. Un proceso a la vez." Sofia lives here.
+- Door memory: `lib/door.ts` stores the last door in localStorage; the home shows "Seguir en …". Never redirects, never guesses by IP.
+- Copy rule: mechanism (AI agents) first, result next to it. "Diagnóstico" stays tied to the quiz ("Diagnóstico de IA").
+- Footer has three variants: home, business, enterprise. Quiz/Diagnóstico Express/recursos back-links go to `/negocios`, not the neutral home.
+

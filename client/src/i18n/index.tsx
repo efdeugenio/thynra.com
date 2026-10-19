@@ -1,4 +1,5 @@
 import { createContext, useContext, type ReactNode } from "react";
+import { LOCALIZED_SLUGS, localizePath, splitLocale } from "@shared/siteMeta";
 
 // Locales live in the URL: English at "/", Spanish under "/es/". The router
 // nests the Spanish tree under "/es" (see App.tsx), so inside a page
@@ -33,20 +34,29 @@ export function useCopy<T>(copy: { en: T; es: T }): T {
   return copy[useLocale()];
 }
 
-/** Absolute path for `path` (an English-style path like "/quiz") in `locale`. */
+/**
+ * Router-relative href for an English-style path, for wouter <Link> and
+ * navigate(). Inside the "/es" nest it returns the Spanish slug when the page
+ * has one ("/enterprise" → "/empresas"); everywhere else the path unchanged.
+ */
+export function useRouteHref(path: string): string {
+  const locale = useLocale();
+  return locale === "es" ? (LOCALIZED_SLUGS[path] ?? path) : path;
+}
+
+/**
+ * Absolute path for `path` (an English-style path like "/quiz") in `locale`.
+ * Pages with a translated Spanish slug (shared/siteMeta.ts LOCALIZED_SLUGS)
+ * map to it: "/enterprise" → "/es/empresas".
+ */
 export function localePath(path: string, locale: Locale): string {
   const clean = path.startsWith("/") ? path : `/${path}`;
-  if (locale === "en") return clean;
-  return clean === "/" ? "/es" : `/es${clean}`;
+  return localizePath(clean, locale);
 }
 
 /** Splits an absolute pathname into its locale and the English-style path. */
 export function parseLocalePath(pathname: string): { locale: Locale; path: string } {
-  if (pathname === "/es" || pathname.startsWith("/es/")) {
-    const rest = pathname.slice(3);
-    return { locale: "es", path: rest === "" ? "/" : rest };
-  }
-  return { locale: "en", path: pathname || "/" };
+  return splitLocale(pathname);
 }
 
 /** The same page in the other language, keeping query string and hash. */

@@ -4,10 +4,10 @@ import { defineCopy, useCopy } from "@/i18n";
 
 const copy = defineCopy({
   en: {
-    eyebrow: "What we cover",
-    title: "Three stages where you win customers — plus the operations behind them.",
+    eyebrow: "The map",
+    title: "Four fronts where customers are won or lost. Almost nobody attacks all four at once.",
     subtitle:
-      "We handle every point where you win or lose a customer — getting found, answering fast, and keeping them coming back — plus the operations behind them. That's where AI changes how you compete.",
+      "Getting found, answering fast, bringing them back, and the operations behind all three. You don't need all four — you need to know which one is leaking.",
     stages: [
       {
         label: "Awareness",
@@ -26,7 +26,7 @@ const copy = defineCopy({
         description:
           "When a customer reaches out by call, chat, form, or DM. The window is short. The result decides everything.",
         bullets: [
-          "AI receptionist answers calls 24/7",
+          "Calls, chat and WhatsApp answered 24/7",
           "Books, qualifies, hands off only when needed",
           "Replies to DMs and form-fills instantly",
         ],
@@ -56,10 +56,10 @@ const copy = defineCopy({
     ],
   },
   es: {
-    eyebrow: "Lo que cubrimos",
-    title: "Tres etapas donde ganas clientes, más la operación que las sostiene.",
+    eyebrow: "El mapa",
+    title: "Cuatro frentes donde se ganan o se pierden los clientes. Casi nadie los ataca todos a la vez.",
     subtitle:
-      "Nos encargamos de cada punto donde ganas o pierdes un cliente: que te encuentren, responder rápido y lograr que vuelvan, más la operación que hay detrás. Ahí es donde la IA cambia tu forma de competir.",
+      "Que te encuentren, responder rápido, lograr que vuelvan, y la operación que sostiene las tres. No necesitas los cuatro: necesitas saber por cuál se te está fugando el tuyo.",
     stages: [
       {
         label: "Visibilidad",
@@ -78,7 +78,7 @@ const copy = defineCopy({
         description:
           "Cuando un cliente te contacta por llamada, chat, formulario o mensaje directo. El margen es corto. El resultado lo decide todo.",
         bullets: [
-          "Recepcionista con IA que contesta llamadas 24/7",
+          "Llamadas, chat y WhatsApp atendidos 24/7",
           "Agenda, filtra y pasa a una persona solo cuando hace falta",
           "Responde mensajes directos y formularios al instante",
         ],
