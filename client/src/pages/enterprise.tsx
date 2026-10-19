@@ -195,11 +195,6 @@ const copy = defineCopy({
           "Yes. We sign an NDA before any detailed conversation about your processes and answer your vendor security questionnaire as part of the diagnostic.",
       },
       {
-        question: "Do you have security certifications?",
-        answer:
-          "Not at this time, and we won't claim otherwise. What we offer instead is an architecture where your data stays in your environment under your own controls, and full transparency on how each agent is built and what it can do.",
-      },
-      {
         question: "What does it cost?",
         answer:
           "The diagnostic is a fixed price agreed before it starts. The pilot is priced by milestone once the diagnostic has defined the process and the integrations. Support is a monthly subscription with a defined scope. We don't sell open-ended hourly projects.",
@@ -388,11 +383,6 @@ const copy = defineCopy({
         question: "¿Firman acuerdos de confidencialidad y cuestionarios de seguridad?",
         answer:
           "Sí. Firmamos un acuerdo de confidencialidad antes de cualquier conversación detallada sobre sus procesos, y respondemos su cuestionario de seguridad de proveedores como parte del diagnóstico.",
-      },
-      {
-        question: "¿Tienen certificaciones de seguridad?",
-        answer:
-          "Por ahora no, y no vamos a decir lo contrario. Lo que ofrecemos es una arquitectura donde sus datos se quedan en su entorno, bajo sus propios controles, y total transparencia sobre cómo está construido cada agente y qué puede hacer.",
       },
       {
         question: "¿Cuánto cuesta?",
