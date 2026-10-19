@@ -7,7 +7,7 @@ import { defineCopy, useCopy, useRouteHref } from "@/i18n";
 const copy = defineCopy({
   en: {
     eyebrow: "AI agents for your business",
-    title: "An AI agent working in your business in two weeks. One process at a time.",
+    title: "An AI agent working in your business. One process at a time.",
     subtitle:
       "It serves your customers, follows up and brings them back, connected to the tools you already use. No six-month projects, no new hire. You start with whatever is costing you the most — the free 2-minute check tells you which one that is.",
     primaryCta: "Start the 2-min check",
@@ -19,7 +19,7 @@ const copy = defineCopy({
   },
   es: {
     eyebrow: "Agentes de IA para tu negocio",
-    title: "Un agente de IA trabajando en tu negocio en dos semanas. Un proceso a la vez.",
+    title: "Un agente de IA trabajando en tu negocio. Un proceso a la vez.",
     subtitle:
       "Atiende a tus clientes, les da seguimiento y los hace volver, conectado a las herramientas que ya usas. Sin proyectos de seis meses y sin contratar a nadie. Empiezas por lo que más te está costando: el diagnóstico gratis de 2 minutos te dice qué es.",
     primaryCta: "Empezar el diagnóstico",

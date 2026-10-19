@@ -37,7 +37,7 @@ const copy = defineCopy({
     doorsLabel: "Where do you want to start?",
     businessDoor: {
       title: "I have a business",
-      body: "An AI agent working in your business in two weeks, at a fixed price.",
+      body: "An AI agent working in your business, at a fixed price.",
       cta: "See it for businesses",
       quiz: "Or take the free 2-minute check",
     },
@@ -96,7 +96,7 @@ const copy = defineCopy({
     doorsLabel: "¿Por dónde empezamos?",
     businessDoor: {
       title: "Tengo un negocio",
-      body: "Un agente de IA trabajando en tu negocio en dos semanas, a precio fijo.",
+      body: "Un agente de IA trabajando en tu negocio, a precio fijo.",
       cta: "Ver para negocios",
       quiz: "O haz el diagnóstico gratis de 2 minutos",
     },

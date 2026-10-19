@@ -23,7 +23,7 @@ const copy = defineCopy({
       },
       {
         title: "We build stage one",
-        duration: "2 weeks · fixed price",
+        duration: "Fixed price",
         description:
           "We build, test and hand over one working automation. Real integrations, real production tests, no open-ended hourly bills. You own everything we build.",
       },
@@ -55,7 +55,7 @@ const copy = defineCopy({
       },
       {
         title: "Construimos la etapa uno",
-        duration: "2 semanas · precio fijo",
+        duration: "Precio fijo",
         description:
           "Construimos, probamos y entregamos una automatización funcionando. Integraciones reales, pruebas reales en producción, nada de cobros por hora sin límite. Todo lo que construimos es tuyo.",
       },

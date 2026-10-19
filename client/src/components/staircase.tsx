@@ -13,10 +13,10 @@ const copy = defineCopy({
       "We don't sell a transformation. We sell stage one — and we tell you what stage two would be, so you always know where you are.",
     rungs: [
       {
-        when: "Month 1",
+        when: "First",
         title: "Stage one — the first process",
         description:
-          "The gap costing you the most, automated and handed over working. Fixed price agreed before we start, two weeks, real production tests. You own everything we build.",
+          "The gap costing you the most, automated and handed over working. Fixed price agreed before we start, real production tests. You own everything we build.",
         points: [
           "One process, not a platform",
           "Fixed price, known before day one",
@@ -63,10 +63,10 @@ const copy = defineCopy({
       "No vendemos una transformación. Vendemos la etapa uno, y te decimos cuál sería la dos, para que siempre sepas dónde estás parado.",
     rungs: [
       {
-        when: "Mes 1",
+        when: "Primero",
         title: "Etapa uno — el primer proceso",
         description:
-          "El punto que más te está costando, automatizado y entregado funcionando. Precio fijo acordado antes de empezar, dos semanas, pruebas reales en producción. Todo lo que construimos es tuyo.",
+          "El punto que más te está costando, automatizado y entregado funcionando. Precio fijo acordado antes de empezar, pruebas reales en producción. Todo lo que construimos es tuyo.",
         points: [
           "Un proceso, no una plataforma",
           "Precio fijo, conocido antes del día uno",

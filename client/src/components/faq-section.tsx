@@ -39,7 +39,7 @@ const copy = defineCopy({
       {
         question: "What does it cost?",
         answer:
-          "Stage one is a fixed price for one process, agreed before we start and built in about two weeks. After that there's an optional monthly plan that keeps everything running and includes one new stage per quarter. We scope the exact number on the call, once we know which process goes first — so you're pricing a specific outcome, not an open-ended hourly project.",
+          "Stage one is a fixed price for one process, agreed before we start. After that there's an optional monthly plan that keeps everything running and includes one new stage per quarter. We scope the exact number on the call, once we know which process goes first — so you're pricing a specific outcome, not an open-ended hourly project.",
       },
       {
         question: "Are you taking new clients right now?",
@@ -96,7 +96,7 @@ const copy = defineCopy({
       {
         question: "¿Cuánto cuesta?",
         answer:
-          "La etapa uno es un precio fijo por un proceso, acordado antes de empezar y construido en unas dos semanas. Después hay un plan mensual opcional que mantiene todo funcionando e incluye una etapa nueva por trimestre. El número exacto lo definimos en la llamada, una vez que sabemos qué proceso va primero. Así pagas por un resultado concreto, no por un proyecto por horas sin final.",
+          "La etapa uno es un precio fijo por un proceso, acordado antes de empezar. Después hay un plan mensual opcional que mantiene todo funcionando e incluye una etapa nueva por trimestre. El número exacto lo definimos en la llamada, una vez que sabemos qué proceso va primero. Así pagas por un resultado concreto, no por un proyecto por horas sin final.",
       },
       {
         question: "¿Están aceptando clientes nuevos?",

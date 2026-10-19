@@ -68,12 +68,12 @@ const ROUTES: RouteMeta[] = [
       en: {
         title: "AI agents for your business, one process at a time — Thynra",
         description:
-          "An AI agent working in your business in two weeks, at a fixed price: it serves your customers, follows up and brings them back. The free 2-minute check tells you where to start.",
+          "An AI agent working in your business, at a fixed price: it serves your customers, follows up and brings them back. The free 2-minute check tells you where to start.",
       },
       es: {
         title: "Agentes de IA para tu negocio, un proceso a la vez — Thynra",
         description:
-          "Un agente de IA trabajando en tu negocio en dos semanas, a precio fijo: atiende a tus clientes, da seguimiento y los hace volver. El diagnóstico gratis de 2 minutos te dice por dónde empezar.",
+          "Un agente de IA trabajando en tu negocio, a precio fijo: atiende a tus clientes, da seguimiento y los hace volver. El diagnóstico gratis de 2 minutos te dice por dónde empezar.",
       },
     },
   },
